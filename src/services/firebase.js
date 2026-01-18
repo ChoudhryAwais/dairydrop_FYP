@@ -3,12 +3,12 @@
 import { initializeApp } from "firebase/app";
 // Replace with your actual Firebase project config
 export const firebaseConfig = {
-  apiKey: "AIzaSyBtm4XKRKxd8BcQQ8r40B5Jj3EvZzZZWPE",
-  authDomain: "dairydrop-ea442.firebaseapp.com",
-  projectId: "dairydrop-ea442",
-  storageBucket: "dairydrop-ea442.firebasestorage.app",
-  messagingSenderId: "369154631972",
-  appId: "1:369154631972:web:2058a04ad74874ddd7abb1"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 // Initialize Firebase
