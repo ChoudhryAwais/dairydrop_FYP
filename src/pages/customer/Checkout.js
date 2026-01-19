@@ -1,7 +1,17 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/myContext';
+import { createOrder } from '../../services/orders/orderService';
 
 const Checkout = () => {
+  const { cartItems, clearCart, calculateTotals } = useCart();
+  const { subtotal, tax, total } = calculateTotals();
+  const { currentUser, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -9,19 +19,49 @@ const Checkout = () => {
     address: '',
     city: '',
     postalCode: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Firebase integration will be added here
-    console.log('Order submitted:', formData);
+    if (cartItems.length === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+
+    if (!isAuthenticated) {
+      alert('Please log in to place an order');
+      navigate('/login');
+      return;
+    }
+
+    setLoading(true);
+
+    const orderData = {
+      userId: currentUser.uid,
+      items: cartItems,
+      customerInfo: formData,
+      subtotal: parseFloat(subtotal.toFixed(2)),
+      tax: parseFloat(tax.toFixed(2)),
+      total: parseFloat(total.toFixed(2)),
+      paymentMethod: 'COD',
+      status: 'Pending',
+    };
+
+    const result = await createOrder(orderData);
+
+    if (result.success) {
+      clearCart();
+      navigate(`/order-confirmation/${result.orderId}`);
+    } else {
+      alert('Failed to place order. Please try again.');
+      console.error('[v0] Order creation error:', result.error);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -117,56 +157,22 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Payment Information */}
+            {/* Payment Method */}
             <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Information</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
-                  <input
-                    type="text"
-                    name="cardNumber"
-                    value={formData.cardNumber}
-                    onChange={handleChange}
-                    placeholder="1234 5678 9012 3456"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
-                    <input
-                      type="text"
-                      name="expiryDate"
-                      value={formData.expiryDate}
-                      onChange={handleChange}
-                      placeholder="MM/YY"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">CVV</label>
-                    <input
-                      type="text"
-                      name="cvv"
-                      value={formData.cvv}
-                      onChange={handleChange}
-                      placeholder="123"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Method</h2>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800">
+                  <strong>Cash on Delivery (COD):</strong> Pay when your order arrives at your doorstep.
+                </p>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-bold text-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+              disabled={loading || cartItems.length === 0}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-bold text-lg transition-colors duration-200 shadow-lg hover:shadow-xl disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              Place Order
+              {loading ? 'Processing...' : 'Place Order'}
             </button>
           </form>
         </div>
@@ -175,26 +181,44 @@ const Checkout = () => {
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
-            <div className="space-y-3 mb-6">
-              <div className="flex justify-between text-gray-600">
-                <span>Subtotal</span>
-                <span className="font-medium">$18.97</span>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Shipping</span>
-                <span className="font-medium">$5.00</span>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Tax</span>
-                <span className="font-medium">$1.90</span>
-              </div>
-              <div className="border-t border-gray-200 pt-3">
-                <div className="flex justify-between text-gray-900">
-                  <span className="text-lg font-bold">Total</span>
-                  <span className="text-2xl font-bold text-green-600">$25.87</span>
+            {cartItems.length > 0 ? (
+              <>
+                <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
+                  {cartItems.map((item) => (
+                    <div key={item.id} className="flex justify-between text-sm text-gray-600">
+                      <span>{item.name} x{item.quantity}</span>
+                      <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
                 </div>
+                <div className="space-y-3 mb-6 border-t border-gray-200 pt-3">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal</span>
+                    <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Tax (10%)</span>
+                    <span className="font-medium">${tax.toFixed(2)}</span>
+                  </div>
+                  <div className="border-t border-gray-200 pt-3">
+                    <div className="flex justify-between text-gray-900">
+                      <span className="text-lg font-bold">Total</span>
+                      <span className="text-2xl font-bold text-green-600">${total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">Your cart is empty</p>
+                <Link 
+                  to="/products"
+                  className="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Continue Shopping
+                </Link>
               </div>
-            </div>
+            )}
             <div className="border-t border-gray-200 pt-4">
               <Link 
                 to="/cart"

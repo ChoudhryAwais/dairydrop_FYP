@@ -1,16 +1,12 @@
+'use client';
+
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
 
 const Cart = () => {
-  // Sample cart items - will be replaced with Firebase state
-  const cartItems = [
-    { id: 1, name: 'Fresh Milk', price: 4.99, quantity: 2 },
-    { id: 2, name: 'Cheddar Cheese', price: 8.99, quantity: 1 },
-  ];
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const tax = subtotal * 0.1;
-  const total = subtotal + tax;
+  const { cartItems, removeFromCart, updateCartItem, calculateTotals } = useCart();
+  const { subtotal, tax, total } = calculateTotals();
 
   return (
     <div className="space-y-8">
@@ -32,15 +28,24 @@ const Cart = () => {
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center border border-gray-300 rounded-lg">
-                      <button className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors">
+                      <button 
+                        onClick={() => updateCartItem(item.id, Math.max(1, item.quantity - 1))}
+                        className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                      >
                         -
                       </button>
                       <span className="px-4 py-1 border-x border-gray-300 font-medium">{item.quantity}</span>
-                      <button className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors">
+                      <button 
+                        onClick={() => updateCartItem(item.id, item.quantity + 1)}
+                        className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                      >
                         +
                       </button>
                     </div>
-                    <button className="text-red-500 hover:text-red-700 transition-colors p-2">
+                    <button 
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-red-500 hover:text-red-700 transition-colors p-2"
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
