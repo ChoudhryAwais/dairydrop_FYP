@@ -1,7 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/myContext';
+import { logoutUser } from '../services/auth/authService';
 
 const Header = () => {
+  const { isAuthenticated, currentUser, userDetails } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logoutUser();
+    navigate('/login');
+  };
+
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 max-w-7xl">
@@ -36,6 +46,26 @@ const Header = () => {
               </svg>
               <span>Cart</span>
             </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-700 font-medium">
+                  Welcome, {userDetails?.name || currentUser?.displayName || 'User'}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="text-red-600 hover:text-red-700 font-medium transition-colors duration-200"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link 
+                to="/login" 
+                className="text-gray-700 hover:text-green-600 font-medium transition-colors duration-200 hover:underline"
+              >
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       </div>
