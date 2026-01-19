@@ -16,13 +16,17 @@ export default function SignUp() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userDetails } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
+    if (isAuthenticated && userDetails) {
+      if (userDetails.role === 'admin') {
+        navigate('/admin/AdminDashboard');
+      } else {
+        navigate('/');
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, userDetails, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

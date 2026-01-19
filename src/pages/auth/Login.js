@@ -13,11 +13,17 @@ export default function Login() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
+  const { userDetails } = useAuth();
+
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
+    if (isAuthenticated && userDetails) {
+      if (userDetails.role === 'admin') {
+        navigate('/admin/AdminDashboard');
+      } else {
+        navigate('/');
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, userDetails, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +39,7 @@ export default function Login() {
     const result = await loginUser(email, password);
 
     if (result.success) {
-      navigate('/');
+      // Role-based routing is handled by the useEffect above
     } else {
       setError(result.error || 'Failed to login');
     }
