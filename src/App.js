@@ -12,6 +12,8 @@ import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
 import Checkout from './pages/customer/Checkout';
 import OrderConfirmation from './pages/customer/OrderConfirmation';
+import Profile from './pages/customer/Profile';
+import OrderHistory from './pages/customer/OrderHistory';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import AdminDashboard from './pages/admin/AdminDashBoard';
@@ -53,6 +55,16 @@ function AppContent() {
           <Route path="/order-confirmation/:orderId" element={
             <ProtectedRoute>
               <OrderConfirmation />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/order-history" element={
+            <ProtectedRoute>
+              <OrderHistory />
             </ProtectedRoute>
           } />
           <Route path="/login" element={<Login />} />

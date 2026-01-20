@@ -50,9 +50,10 @@ const OrderHistory = () => {
   const getStatusColor = (status) => {
     const statusColors = {
       'Pending': 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      'Packed': 'bg-blue-50 border-blue-200 text-blue-800',
-      'Out for Delivery': 'bg-purple-50 border-purple-200 text-purple-800',
+      'Processing': 'bg-blue-50 border-blue-200 text-blue-800',
+      'Shipped': 'bg-purple-50 border-purple-200 text-purple-800',
       'Delivered': 'bg-green-50 border-green-200 text-green-800',
+      'Cancelled': 'bg-red-50 border-red-200 text-red-800',
     };
     return statusColors[status] || 'bg-gray-50 border-gray-200 text-gray-800';
   };
@@ -60,21 +61,12 @@ const OrderHistory = () => {
   const getStatusIcon = (status) => {
     const icons = {
       'Pending': '📋',
-      'Packed': '📦',
-      'Out for Delivery': '🚚',
+      'Processing': '⚙️',
+      'Shipped': '🚚',
       'Delivered': '✅',
+      'Cancelled': '❌',
     };
     return icons[status] || '❓';
-  };
-
-  const getStatusStep = (status) => {
-    const steps = {
-      'Pending': 0,
-      'Packed': 1,
-      'Out for Delivery': 2,
-      'Delivered': 3,
-    };
-    return steps[status] || 0;
   };
 
   const formatDate = (dateString) => {
@@ -87,11 +79,22 @@ const OrderHistory = () => {
     });
   };
 
+  const getStatusStep = (status) => {
+    const steps = {
+      'Pending': 0,
+      'Processing': 1,
+      'Shipped': 2,
+      'Delivered': 3,
+      'Cancelled': -1, // Cancelled is not shown in timeline
+    };
+    return steps[status] ?? 0;
+  };
+
   const filteredOrders = filterStatus === 'all'
     ? orders
     : orders.filter(order => order.status === filterStatus);
 
-  const statusOptions = ['all', 'Pending', 'Packed', 'Out for Delivery', 'Delivered'];
+  const statusOptions = ['all', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
   if (loading) {
     return (
@@ -213,37 +216,52 @@ const OrderHistory = () => {
                 {/* Status Timeline */}
                 {expandedOrderId === order.id && (
                   <div className="border-t border-gray-200 px-6 sm:px-8 py-8">
-                    {/* Timeline Steps */}
-                    <div className="mb-8">
-                      <h4 className="text-sm font-semibold text-gray-900 mb-6">Delivery Progress</h4>
-                      <div className="flex justify-between relative">
-                        {/* Timeline Line */}
-                        <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 z-0">
-                          <div
-                            className="h-full bg-green-600 transition-all duration-500"
-                            style={{
-                              width: `${(getStatusStep(order.status) / 3) * 100}%`,
-                            }}
-                          />
-                        </div>
-
-                        {/* Timeline Steps */}
-                        {['Pending', 'Packed', 'Out for Delivery', 'Delivered'].map((step, index) => (
-                          <div key={step} className="flex flex-col items-center z-10">
+                    {/* Timeline Steps - Only show if not cancelled */}
+                    {order.status !== 'Cancelled' && (
+                      <div className="mb-8">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-6">Delivery Progress</h4>
+                        <div className="flex justify-between relative">
+                          {/* Timeline Line */}
+                          <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 z-0">
                             <div
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-300 ${
-                                getStatusStep(order.status) >= index
-                                  ? 'bg-green-600 text-white shadow-lg'
-                                  : 'bg-gray-200 text-gray-600'
-                              }`}
-                            >
-                              {getStatusStep(order.status) > index ? '✓' : index + 1}
-                            </div>
-                            <p className="text-xs font-medium text-gray-700 mt-3 text-center">{step}</p>
+                              className="h-full bg-green-600 transition-all duration-500"
+                              style={{
+                                width: `${(getStatusStep(order.status) / 3) * 100}%`,
+                              }}
+                            />
                           </div>
-                        ))}
+
+                          {/* Timeline Steps */}
+                          {['Pending', 'Processing', 'Shipped', 'Delivered'].map((step, index) => (
+                            <div key={step} className="flex flex-col items-center z-10">
+                              <div
+                                className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-300 ${
+                                  getStatusStep(order.status) >= index
+                                    ? 'bg-green-600 text-white shadow-lg'
+                                    : 'bg-gray-200 text-gray-600'
+                                }`}
+                              >
+                                {getStatusStep(order.status) > index ? '✓' : index + 1}
+                              </div>
+                              <p className="text-xs font-medium text-gray-700 mt-3 text-center">{step}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Cancelled Notice */}
+                    {order.status === 'Cancelled' && (
+                      <div className="mb-8 bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">❌</span>
+                          <div>
+                            <h4 className="text-sm font-semibold text-red-900">Order Cancelled</h4>
+                            <p className="text-sm text-red-800">This order has been cancelled and will not be delivered.</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Order Details */}
                     <div className="border-t border-gray-200 pt-8">

@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/myContext';
-import { 
-  getUserProfile, 
-  updateUserProfile, 
-  addAddress, 
-  removeAddress 
+import {
+  getUserProfile,
+  updateUserProfile,
+  addAddress,
+  removeAddress
 } from '../../services/users/userService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -15,7 +15,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 const Profile = () => {
   const navigate = useNavigate();
   const { currentUser, isAuthenticated } = useAuth();
-  
+
   // State management
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -29,6 +29,7 @@ const Profile = () => {
   // Form states
   const [profileForm, setProfileForm] = useState({
     displayName: '',
+    name: '',
     phone: '',
     email: ''
   });
@@ -63,18 +64,19 @@ const Profile = () => {
     try {
       setLoading(true);
       const result = await getUserProfile(currentUser.uid);
-      
+
       if (result.success) {
         const userData = result.user;
         setUserProfile(userData);
-        
+
         // Populate profile form
         setProfileForm({
           displayName: userData.displayName || '',
+          name: userData.name || '',
           phone: userData.phone || '',
           email: userData.email || currentUser.email || ''
         });
-        
+
         // Set addresses
         setAddresses(userData.addresses || []);
       } else {
@@ -152,7 +154,7 @@ const Profile = () => {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
-    
+
     if (!validateProfileForm()) {
       return;
     }
@@ -164,6 +166,7 @@ const Profile = () => {
     try {
       const result = await updateUserProfile(currentUser.uid, {
         displayName: profileForm.displayName,
+        name: profileForm.name,
         phone: profileForm.phone
       });
 
@@ -290,21 +293,19 @@ const Profile = () => {
         <div className="mb-8 bg-white rounded-xl shadow-md p-1 flex gap-2 sm:gap-4">
           <button
             onClick={() => setActiveTab('profile')}
-            className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-200 text-sm sm:text-base ${
-              activeTab === 'profile'
-                ? 'bg-green-600 text-white shadow-md'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
+            className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-200 text-sm sm:text-base ${activeTab === 'profile'
+              ? 'bg-green-600 text-white shadow-md'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
           >
             Account Info
           </button>
           <button
             onClick={() => setActiveTab('addresses')}
-            className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-200 text-sm sm:text-base ${
-              activeTab === 'addresses'
-                ? 'bg-green-600 text-white shadow-md'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
+            className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-200 text-sm sm:text-base ${activeTab === 'addresses'
+              ? 'bg-green-600 text-white shadow-md'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
           >
             Delivery Addresses
           </button>
@@ -326,6 +327,19 @@ const Profile = () => {
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-600 cursor-not-allowed"
                 />
                 <p className="mt-1 text-xs text-gray-500">Email cannot be changed</p>
+              </div>
+
+              {/* Real Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={profileForm.name}
+                  onChange={handleProfileChange}
+                  placeholder="John Doe"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all"
+                />
               </div>
 
               {/* Display Name */}
@@ -359,7 +373,7 @@ const Profile = () => {
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-xs text-gray-600 font-medium">Member Since</p>
                   <p className="mt-1 text-lg font-bold text-gray-900">
-                    {userProfile?.createdAt 
+                    {userProfile?.createdAt
                       ? new Date(userProfile.createdAt.seconds * 1000).toLocaleDateString()
                       : 'N/A'
                     }
