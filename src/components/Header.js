@@ -37,6 +37,22 @@ const Header = () => {
             >
               Products
             </Link>
+            {isAuthenticated && (
+              <>
+                <Link 
+                  to="/order-history" 
+                  className="text-gray-700 hover:text-green-600 font-medium transition-colors duration-200 hover:underline"
+                >
+                  Orders
+                </Link>
+                <Link 
+                  to="/profile" 
+                  className="text-gray-700 hover:text-green-600 font-medium transition-colors duration-200 hover:underline"
+                >
+                  Profile
+                </Link>
+              </>
+            )}
             <Link 
               to="/cart" 
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md flex items-center space-x-1"
@@ -49,7 +65,7 @@ const Header = () => {
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <span className="text-gray-700 font-medium">
-                  Welcome, {userDetails?.name || currentUser?.displayName || 'User'}
+                  Welcome, {userDetails?.displayName || 'User'}
                 </span>
                 <button
                   onClick={handleLogout}

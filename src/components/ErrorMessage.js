@@ -94,30 +94,30 @@ const ErrorMessage = ({
 
   return (
     <div
-      className={`border rounded-lg p-4 ${style.container} flex gap-3`}
+      className={`border rounded-lg p-3 sm:p-4 ${style.container} flex flex-col sm:flex-row gap-2 sm:gap-3 w-full overflow-hidden`}
       role="alert"
     >
       {/* Icon */}
-      <div className={`flex-shrink-0 flex items-center justify-center h-5 w-5 ${style.icon}`}>
+      <div className={`flex-shrink-0 flex items-center justify-center h-5 w-5 mt-0.5 ${style.icon}`}>
         {icons[type]}
       </div>
 
       {/* Content */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {title && (
-          <h3 className={`font-semibold mb-1 ${style.title}`}>
+          <h3 className={`font-semibold mb-1 text-sm sm:text-base break-words ${style.title}`}>
             {title}
           </h3>
         )}
-        <p className={`text-sm ${style.message}`}>
+        <p className={`text-xs sm:text-sm break-words ${style.message}`}>
           {message}
         </p>
 
         {/* Error Details (if provided) */}
         {details.length > 0 && (
-          <ul className={`mt-2 ml-5 text-sm list-disc ${style.message}`}>
+          <ul className={`mt-2 ml-4 sm:ml-5 text-xs sm:text-sm list-disc ${style.message}`}>
             {details.map((detail, index) => (
-              <li key={index} className="mt-1">
+              <li key={index} className="mt-1 break-words">
                 {detail}
               </li>
             ))}
@@ -129,10 +129,10 @@ const ErrorMessage = ({
       {dismissible && (
         <button
           onClick={handleDismiss}
-          className={`flex-shrink-0 inline-flex rounded-md p-1.5 transition-colors ${style.button}`}
+          className={`flex-shrink-0 inline-flex rounded-md p-1 sm:p-1.5 transition-colors self-start sm:self-center ${style.button}`}
           aria-label="Dismiss error"
         >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -155,8 +155,8 @@ export const FieldError = ({ message, visible = true }) => {
   }
 
   return (
-    <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+    <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-center gap-1 break-words">
+      <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
         <path
           fillRule="evenodd"
           d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -190,10 +190,10 @@ export class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-          <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
+          <div className="max-w-sm w-full bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <div className="text-center">
               <svg
-                className="w-16 h-16 text-red-600 mx-auto mb-4"
+                className="w-12 h-12 sm:w-16 sm:h-16 text-red-600 mx-auto mb-3 sm:mb-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -205,15 +205,15 @@ export class ErrorBoundary extends React.Component {
                   d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 break-words">
                 Oops! Something went wrong
               </h1>
-              <p className="text-gray-600 mb-6">
+              <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 break-words">
                 We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
               </p>
               <button
                 onClick={() => window.location.reload()}
-                className="w-full px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
               >
                 Refresh Page
               </button>
