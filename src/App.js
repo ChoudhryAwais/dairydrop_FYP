@@ -16,6 +16,9 @@ import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import AdminDashboard from './pages/admin/AdminDashBoard';
 import ProductsManagement from './pages/admin/ProductsManagement';
+import OrdersManagement from './pages/admin/OrdersManagement';
+import UsersManagement from './pages/admin/UsersManagement';
+import ReviewsManagement from './pages/admin/ReviewsManagement';
 import './App.css';
 
 // Protected Route Component
@@ -54,7 +57,7 @@ function AppContent() {
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
-          <Route path="/admin/AdminDashboard" element={
+          <Route path="/admin/dashboard" element={
             <ProtectedRoute>
               <AdminDashboard />
             </ProtectedRoute>
@@ -62,6 +65,21 @@ function AppContent() {
           <Route path="/admin/products" element={
             <ProtectedRoute>
               <ProductsManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/orders" element={
+            <ProtectedRoute>
+              <OrdersManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/users" element={
+            <ProtectedRoute>
+              <UsersManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/reviews" element={
+            <ProtectedRoute>
+              <ReviewsManagement />
             </ProtectedRoute>
           } />
         </Routes>

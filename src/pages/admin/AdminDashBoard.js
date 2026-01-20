@@ -1,49 +1,82 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/Sidebar';
+import { getAllUsers } from '../../services/users/userService';
+import { getAllOrders } from '../../services/orders/orderService';
+import { getProducts } from '../../services/products/productService';
 
 const AdminDashboard = () => {
-  // Mock data for statistics
-  const stats = [
-    {
-      label: 'Total Orders',
-      value: '1,234',
-      icon: '📦',
-      bgColor: 'bg-blue-50',
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-600',
-    },
-    {
-      label: 'Total Revenue',
-      value: '$45,678',
-      icon: '💰',
-      bgColor: 'bg-green-50',
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-600',
-    },
-    {
-      label: 'Total Customers',
-      value: '567',
-      icon: '👥',
-      bgColor: 'bg-purple-50',
-      iconBg: 'bg-purple-100',
-      iconColor: 'text-purple-600',
-    },
-    {
-      label: 'Products Listed',
-      value: '89',
-      icon: '🛒',
-      bgColor: 'bg-orange-50',
-      iconBg: 'bg-orange-100',
-      iconColor: 'text-orange-600',
-    },
-  ];
+  const [stats, setStats] = useState([
+    { label: 'Total Orders', value: '0', icon: '📦', bgColor: 'bg-blue-50', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
+    { label: 'Total Revenue', value: '$0', icon: '💰', bgColor: 'bg-green-50', iconBg: 'bg-green-100', iconColor: 'text-green-600' },
+    { label: 'Total Customers', value: '0', icon: '👥', bgColor: 'bg-purple-50', iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+    { label: 'Products Listed', value: '0', icon: '🛒', bgColor: 'bg-orange-50', iconBg: 'bg-orange-100', iconColor: 'text-orange-600' },
+  ]);
 
-  const recentOrders = [
-    { id: '#001', customer: 'John Doe', amount: '$125.50', status: 'Delivered', date: '2024-01-18' },
-    { id: '#002', customer: 'Jane Smith', amount: '$89.99', status: 'In Transit', date: '2024-01-17' },
-    { id: '#003', customer: 'Mike Johnson', amount: '$245.00', status: 'Processing', date: '2024-01-16' },
-    { id: '#004', customer: 'Sarah Wilson', amount: '$67.50', status: 'Delivered', date: '2024-01-15' },
-  ];
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        
+        const [usersResult, ordersResult, productsResult] = await Promise.all([
+          getAllUsers(),
+          getAllOrders(),
+          getProducts()
+        ]);
+
+        let totalOrders = 0;
+        let totalRevenue = 0;
+        let totalCustomers = 0;
+        let totalProducts = 0;
+
+        if (usersResult.success) {
+          totalCustomers = usersResult.users.filter(u => u.role !== 'admin').length;
+        }
+
+        if (ordersResult.success) {
+          totalOrders = ordersResult.orders.length;
+          totalRevenue = ordersResult.orders.reduce((sum, order) => {
+            const amount = parseFloat(order.totalAmount) || 0;
+            return sum + amount;
+          }, 0);
+
+          const recentOrdersList = ordersResult.orders
+            .slice(0, 4)
+            .map(order => ({
+              id: order.id || '#000',
+              customer: order.customerName || 'Unknown',
+              amount: `$${(parseFloat(order.totalAmount) || 0).toFixed(2)}`,
+              status: order.status || 'Pending',
+              date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'
+            }));
+          
+          setRecentOrders(recentOrdersList);
+        }
+
+        if (productsResult.success) {
+          totalProducts = productsResult.products.length;
+        }
+
+        setStats([
+          { label: 'Total Orders', value: totalOrders.toString(), icon: '📦', bgColor: 'bg-blue-50', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
+          { label: 'Total Revenue', value: `$${totalRevenue.toFixed(2)}`, icon: '💰', bgColor: 'bg-green-50', iconBg: 'bg-green-100', iconColor: 'text-green-600' },
+          { label: 'Total Customers', value: totalCustomers.toString(), icon: '👥', bgColor: 'bg-purple-50', iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+          { label: 'Products Listed', value: totalProducts.toString(), icon: '🛒', bgColor: 'bg-orange-50', iconBg: 'bg-orange-100', iconColor: 'text-orange-600' },
+        ]);
+
+      } catch (error) {
+        console.error('[v0] Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -76,7 +109,7 @@ const AdminDashboard = () => {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className={`${stat.bgColor} p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border border-gray-200`}
+                className={`${stat.bgColor} p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border border-gray-200 ${loading ? 'animate-pulse' : ''}`}
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-gray-600 font-medium text-sm">{stat.label}</h3>
@@ -84,7 +117,7 @@ const AdminDashboard = () => {
                     <span className={`text-2xl`}>{stat.icon}</span>
                   </div>
                 </div>
-                <p className="text-3xl font-bold text-gray-800">{stat.value}</p>
+                <p className="text-3xl font-bold text-gray-800">{loading ? '...' : stat.value}</p>
               </div>
             ))}
           </div>
@@ -132,19 +165,36 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentOrders.map((order, index) => (
-                    <tr key={index} className="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-800">{order.id}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{order.customer}</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-gray-800">{order.amount}</td>
-                      <td className="px-6 py-4 text-sm">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                          {order.status}
-                        </span>
+                  {loading ? (
+                    <tr>
+                      <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                          <span className="ml-2">Loading orders...</span>
+                        </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{order.date}</td>
                     </tr>
-                  ))}
+                  ) : recentOrders.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                        No orders yet
+                      </td>
+                    </tr>
+                  ) : (
+                    recentOrders.map((order, index) => (
+                      <tr key={index} className="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-800">{order.id.substring(0, 8)}...</td>
+                        <td className="px-6 py-4 text-sm text-gray-700">{order.customer}</td>
+                        <td className="px-6 py-4 text-sm font-semibold text-gray-800">{order.amount}</td>
+                        <td className="px-6 py-4 text-sm">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{order.date}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
