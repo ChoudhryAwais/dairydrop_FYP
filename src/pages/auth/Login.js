@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../../services/auth/authService';
-import { useAuth } from '../../context/myContext';
-
+import { useAuth } from '../../context/myContext';import ErrorMessage from '../../components/ErrorMessage';
+import { InlineSpinner } from '../../components/LoadingSpinner';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +18,7 @@ export default function Login() {
   useEffect(() => {
     if (isAuthenticated && userDetails) {
       if (userDetails.role === 'admin') {
-        navigate('/admin/AdminDashboard');
+        navigate('/admin/dashboard');
       } else {
         navigate('/');
       }
@@ -56,9 +56,12 @@ export default function Login() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm">{error}</p>
-          </div>
+          <ErrorMessage
+            message={error}
+            type="error"
+            dismissible={true}
+            onDismiss={() => setError('')}
+          />
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -93,8 +96,9 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
+            {loading && <InlineSpinner size="sm" color="white" />}
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>

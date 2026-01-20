@@ -6,6 +6,8 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/myContext';
 import { getProductById } from '../../services/products/productService';
 import { getProductReviews, addReview } from '../../services/reviews/reviewService';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -77,11 +79,11 @@ const ProductDetail = () => {
   };
 
   if (loading) {
-    return <div className="text-center py-12"><p className="text-gray-600">Loading product...</p></div>;
+    return <LoadingSpinner size="md" message="Loading product..." />;
   }
 
   if (error || !product) {
-    return <div className="text-center py-12"><p className="text-red-600">{error}</p></div>;
+    return <ErrorMessage message={error || 'Product not found'} type="error" />;
   }
 
   return (

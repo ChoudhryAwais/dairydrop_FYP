@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { getProducts } from '../../services/products/productService';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ErrorMessage from '../../components/ErrorMessage';
+import ProductCard from '../../components/ProductCard';
 
 const Products = () => {
   const { addToCart } = useCart();
@@ -110,13 +113,9 @@ const Products = () => {
 
       {/* Products Grid */}
       {loading ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 text-lg">Loading products...</p>
-        </div>
+        <LoadingSpinner size="md" message="Loading products..." />
       ) : error ? (
-        <div className="text-center py-12">
-          <p className="text-red-600 text-lg">{error}</p>
-        </div>
+        <ErrorMessage message={error} type="error" />
       ) : products.length === 0 ? (
         /* No products at all */
         <div className="text-center py-12">
@@ -143,41 +142,14 @@ const Products = () => {
         /* Products Grid */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
-            <div
+            <ProductCard
               key={product.id}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group"
-            >
-              <div className="h-48 bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center">
-                <div className="text-6xl">🥛</div>
-              </div>
-              <div className="p-5">
-                <span className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full mb-2">
-                  {product.category}
-                </span>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{product.name}</h3>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-green-600">${product.price}</span>
-                  <span className="text-sm text-gray-500">per unit</span>
-                </div>
-                <div className="flex gap-2">
-                  <Link
-                    to={`/products/${product.id}`}
-                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-center py-2 rounded-lg font-medium transition-colors duration-200"
-                  >
-                    View Details
-                  </Link>
-                  <button
-                    onClick={() => handleAddToCart(product)}
-                    className={`flex-1 py-2 rounded-lg font-medium transition-colors duration-200 ${addedNotification === product.id
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-green-600 hover:bg-green-700 text-white'
-                      }`}
-                  >
-                    {addedNotification === product.id ? '✓ Added' : 'Add to Cart'}
-                  </button>
-                </div>
-              </div>
-            </div>
+              product={product}
+              onAddToCart={() => handleAddToCart(product)}
+              showAddToCart={true}
+              showViewDetails={true}
+              isAdmin={false}
+            />
           ))}
         </div>
       )}

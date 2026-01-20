@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
+import ErrorMessage from '../../components/ErrorMessage';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllReviews, deleteReview, approveReview, updateReviewContent } from '../../services/reviews/reviewService';
 
 const ReviewsManagement = () => {
@@ -223,16 +225,22 @@ const ReviewsManagement = () => {
 
           {/* Success Message */}
           {successMessage && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-green-700 text-sm">{successMessage}</p>
-            </div>
+            <ErrorMessage 
+              message={successMessage} 
+              type="info" 
+              dismissible={true}
+              onDismiss={() => setSuccessMessage('')}
+            />
           )}
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
+            <ErrorMessage 
+              message={error} 
+              type="error" 
+              dismissible={true}
+              onDismiss={() => setError('')}
+            />
           )}
 
           {/* Filters and Search */}
@@ -268,8 +276,8 @@ const ReviewsManagement = () => {
 
           {/* Loading State */}
           {loading ? (
-            <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200 text-center">
-              <p className="text-gray-600 text-lg">Loading reviews...</p>
+            <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200">
+              <LoadingSpinner size="md" message="Loading reviews..." />
             </div>
           ) : filteredReviews.length === 0 ? (
             <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200 text-center">

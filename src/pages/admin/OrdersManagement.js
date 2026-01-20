@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
+import ErrorMessage from '../../components/ErrorMessage';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllOrders, updateOrderStatus } from '../../services/orders/orderService';
 
 const OrdersManagement = () => {
@@ -157,9 +159,12 @@ const OrdersManagement = () => {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
+            <ErrorMessage 
+              message={error} 
+              type="error" 
+              dismissible={true}
+              onDismiss={() => setError('')}
+            />
           )}
 
           {/* Filters and Search */}
@@ -198,8 +203,8 @@ const OrdersManagement = () => {
 
           {/* Loading State */}
           {loading ? (
-            <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200 text-center">
-              <p className="text-gray-600 text-lg">Loading orders...</p>
+            <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200">
+              <LoadingSpinner size="md" message="Loading orders..." />
             </div>
           ) : filteredOrders.length === 0 ? (
             <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200 text-center">

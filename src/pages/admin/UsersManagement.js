@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { getAllUsers, updateUserRole, disableUserAccount } from '../../services/users/userService';
 import Sidebar from '../../components/Sidebar';
+import ErrorMessage from '../../components/ErrorMessage';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const UsersManagement = () => {
   const [users, setUsers] = useState([]);
@@ -120,10 +122,7 @@ const UsersManagement = () => {
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar />
         <div className="flex-1 p-8 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="text-gray-600 mt-4">Loading users...</p>
-          </div>
+          <LoadingSpinner size="lg" message="Loading users..." />
         </div>
       </div>
     );
@@ -143,9 +142,12 @@ const UsersManagement = () => {
 
           {/* Error Alert */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700">{error}</p>
-            </div>
+            <ErrorMessage 
+              message={error} 
+              type="error" 
+              dismissible={true}
+              onDismiss={() => setError(null)}
+            />
           )}
 
           {/* Statistics Cards */}

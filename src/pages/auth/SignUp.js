@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../../services/auth/authService';
 import { useAuth } from '../../context/myContext';
+import ErrorMessage from '../../components/ErrorMessage';
+import { InlineSpinner } from '../../components/LoadingSpinner';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -21,7 +23,7 @@ export default function SignUp() {
   useEffect(() => {
     if (isAuthenticated && userDetails) {
       if (userDetails.role === 'admin') {
-        navigate('/admin/AdminDashboard');
+        navigate('/admin/dashboard');
       } else {
         navigate('/');
       }
@@ -83,9 +85,12 @@ export default function SignUp() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm">{error}</p>
-          </div>
+          <ErrorMessage
+            message={error}
+            type="error"
+            dismissible={true}
+            onDismiss={() => setError('')}
+          />
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -167,8 +172,9 @@ export default function SignUp() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed mt-6 flex items-center justify-center gap-2"
           >
+            {loading && <InlineSpinner size="sm" color="white" />}
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>

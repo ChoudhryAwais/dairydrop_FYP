@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/Sidebar';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllUsers } from '../../services/users/userService';
 import { getAllOrders } from '../../services/orders/orderService';
 import { getProducts } from '../../services/products/productService';
@@ -168,10 +169,7 @@ const AdminDashboard = () => {
                   {loading ? (
                     <tr>
                       <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                        <div className="flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-                          <span className="ml-2">Loading orders...</span>
-                        </div>
+                        <LoadingSpinner size="sm" message="Loading orders..." />
                       </td>
                     </tr>
                   ) : recentOrders.length === 0 ? (

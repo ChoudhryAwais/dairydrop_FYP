@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getOrderById } from '../../services/orders/orderService';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
@@ -33,19 +35,24 @@ const OrderConfirmation = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-600 text-lg">Loading order details...</p>
+      <div className="py-12">
+        <LoadingSpinner size="md" message="Loading order details..." />
       </div>
     );
   }
 
   if (error || !order) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-600 text-lg">{error}</p>
-        <Link to="/products" className="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-          Back to Products
-        </Link>
+      <div className="py-12">
+        <ErrorMessage 
+          message={error || 'Order not found'}
+          type="error"
+        />
+        <div className="text-center mt-6">
+          <Link to="/products" className="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+            Back to Products
+          </Link>
+        </div>
       </div>
     );
   }

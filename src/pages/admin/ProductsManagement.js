@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../../services/products/productService';
 import Sidebar from '../../components/Sidebar';
+import ErrorMessage from '../../components/ErrorMessage';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ProductCard from '../../components/ProductCard';
 
 const ProductsManagement = () => {
   const [products, setProducts] = useState([]);
@@ -160,10 +163,7 @@ const ProductsManagement = () => {
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar />
         <div className="flex-1 p-8 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-            <p className="text-gray-600 mt-4">Loading products...</p>
-          </div>
+          <LoadingSpinner size="lg" message="Loading products..." />
         </div>
       </div>
     );
@@ -184,9 +184,12 @@ const ProductsManagement = () => {
 
           {/* Error Alert */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700">{error}</p>
-            </div>
+            <ErrorMessage 
+              message={error} 
+              type="error" 
+              dismissible={true}
+              onDismiss={() => setError(null)}
+            />
           )}
 
           {/* Action Bar */}
@@ -361,51 +364,15 @@ const ProductsManagement = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map(product => (
-                <div key={product.id} className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200">
-                  {/* Product Image */}
-                  {product.imageUrl && (
-                    <div className="h-48 bg-gray-200 overflow-hidden">
-                      <img 
-                        src={product.imageUrl} 
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-
-                  {/* Product Info */}
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">{product.name}</h3>
-                    
-                    <div className="mb-3 space-y-1">
-                      <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
-                          {product.category}
-                        </span>
-                        <span className="text-sm text-gray-500">Stock: {product.quantity || 0}</span>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-gray-200 pt-3 flex justify-between items-center">
-                      <span className="text-2xl font-bold text-green-600">${product.price?.toFixed(2)}</span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(product)}
-                          className="px-3 py-1 bg-blue-50 text-blue-600 font-medium rounded hover:bg-blue-100 transition-colors duration-200 text-sm"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product.id, product.imageUrl)}
-                          className="px-3 py-1 bg-red-50 text-red-600 font-medium rounded hover:bg-red-100 transition-colors duration-200 text-sm"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  showAddToCart={false}
+                  showViewDetails={false}
+                  isAdmin={true}
+                  onEdit={() => handleEdit(product)}
+                  onDelete={() => handleDelete(product.id, product.imageUrl)}
+                />
               ))}
             </div>
           )}
