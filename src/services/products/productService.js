@@ -104,3 +104,26 @@ export const getProductById = async (productId) => {
     return { success: false, error: error.message };
   }
 };
+
+export const updateProductQuantity = async (productId, quantityChange) => {
+  try {
+    const productRef = doc(db, PRODUCTS_COLLECTION, productId);
+    const docSnap = await getDoc(productRef);
+    
+    if (!docSnap.exists()) {
+      return { success: false, error: "Product not found" };
+    }
+
+    const currentQuantity = docSnap.data().quantity || 0;
+    const newQuantity = Math.max(0, currentQuantity + quantityChange);
+
+    await updateDoc(productRef, {
+      quantity: newQuantity,
+      updatedAt: new Date().toISOString()
+    });
+
+    return { success: true, newQuantity };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};

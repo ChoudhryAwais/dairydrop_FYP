@@ -5,8 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/myContext';
 import { createOrder } from '../../services/orders/orderService';
+import { updateProductQuantity } from '../../services/products/productService';
 import ErrorMessage from '../../components/ErrorMessage';
 import { InlineSpinner } from '../../components/LoadingSpinner';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../services/firebase'; // adjust path to your firebase config
 
 const Checkout = () => {
   const { cartItems, clearCart, calculateTotals } = useCart();
@@ -25,12 +28,50 @@ const Checkout = () => {
     postalCode: '',
   });
 
+
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
     }
   }, [isAuthenticated, navigate]);
+
+  const fetchUserContact = async (uid) => {
+    if (!uid) return null;
+
+    try {
+      const docRef = doc(db, 'users', uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data(); // { name, phone, ... }
+      }
+    } catch (err) {
+      console.error('[v0] Error fetching user contact info:', err);
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+
+    const loadUserContact = async () => {
+      const userInfo = await fetchUserContact(currentUser.uid);
+
+      if (userInfo) {
+        setFormData(prev => ({
+          ...prev,
+          fullName: userInfo.name || '',
+          email: currentUser.email || '', // from auth
+          phone: userInfo.phone || '',
+        }));
+      }
+    };
+
+    loadUserContact();
+  }, [currentUser]);
+
 
   // Validate form fields
   const validateForm = () => {
@@ -108,6 +149,18 @@ const Checkout = () => {
       const result = await createOrder(orderData);
 
       if (result.success) {
+        // Decrease product quantities
+        try {
+          await Promise.all(
+            cartItems.map(item => 
+              updateProductQuantity(item.id, -item.quantity)
+            )
+          );
+        } catch (quantityError) {
+          console.error('[v0] Error updating product quantities:', quantityError);
+          // Continue with order completion even if quantity update fails
+        }
+
         setSuccessMessage('Order placed successfully! Redirecting...');
         clearCart();
         setTimeout(() => {
@@ -196,9 +249,8 @@ const Checkout = () => {
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${
-                        errors.fullName ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${errors.fullName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
                       placeholder="John Doe"
                     />
                     {errors.fullName && <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>}
@@ -211,9 +263,8 @@ const Checkout = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${
-                        errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
                       placeholder="john@example.com"
                     />
                     {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
@@ -226,9 +277,8 @@ const Checkout = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${
-                        errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
                       placeholder="+1 (555) 123-4567"
                     />
                     {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
@@ -253,9 +303,8 @@ const Checkout = () => {
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${
-                        errors.address ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${errors.address ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
                       placeholder="123 Main Street"
                     />
                     {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
@@ -269,9 +318,8 @@ const Checkout = () => {
                         name="city"
                         value={formData.city}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${
-                          errors.city ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${errors.city ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                          }`}
                         placeholder="New York"
                       />
                       {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
@@ -284,9 +332,8 @@ const Checkout = () => {
                         name="postalCode"
                         value={formData.postalCode}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${
-                          errors.postalCode ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all ${errors.postalCode ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                          }`}
                         placeholder="10001"
                       />
                       {errors.postalCode && <p className="mt-1 text-sm text-red-600">{errors.postalCode}</p>}

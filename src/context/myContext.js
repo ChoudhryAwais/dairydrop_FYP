@@ -22,16 +22,20 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
-        
+
         // Fetch user details from Firestore
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
-            setUserDetails(userDoc.data());
+            const data = userDoc.data();
+            // merge displayName and name into userDetails
+            setUserDetails({
+              ...data,
+              displayName: data.displayName || data.name || ''
+            });
           }
         } catch (error) {
           console.error('Error fetching user details:', error);
@@ -43,9 +47,9 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return unsubscribe;
   }, []);
+
 
   const value = {
     currentUser,
