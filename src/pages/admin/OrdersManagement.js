@@ -53,8 +53,8 @@ const OrdersManagement = () => {
       filtered = filtered.filter(
         order =>
           order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (order.customerEmail && order.customerEmail.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (order.customerName && order.customerName.toLowerCase().includes(searchTerm.toLowerCase()))
+          (order.customerInfo.email && order.customerInfo.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (order.customerInfo.fullName && order.customerInfo.fullName.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
@@ -234,8 +234,8 @@ const OrdersManagement = () => {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-700">
                           <div>
-                            <p className="font-medium">{order.customerName || 'Unknown'}</p>
-                            <p className="text-gray-500 text-xs">{order.customerEmail || 'N/A'}</p>
+                            <p className="font-medium">{order.customerInfo.fullName || 'Unknown'}</p>
+                            <p className="text-gray-500 text-xs">{order.customerInfo.email || 'N/A'}</p>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm font-semibold text-gray-800">
@@ -308,19 +308,19 @@ const OrdersManagement = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-gray-600 text-sm font-medium">Name</p>
-                    <p className="text-gray-800">{selectedOrder.customerName || 'N/A'}</p>
+                    <p className="text-gray-800">{selectedOrder.customerInfo.fullName || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm font-medium">Email</p>
-                    <p className="text-gray-800">{selectedOrder.customerEmail || 'N/A'}</p>
+                    <p className="text-gray-800">{selectedOrder.customerInfo.email || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm font-medium">Phone</p>
-                    <p className="text-gray-800">{selectedOrder.customerPhone || 'N/A'}</p>
+                    <p className="text-gray-800">{selectedOrder.customerInfo.phone || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm font-medium">Delivery Address</p>
-                    <p className="text-gray-800 text-sm">{selectedOrder.shippingAddress || 'N/A'}</p>
+                    <p className="text-gray-800 text-sm">{selectedOrder.customerInfo.address || 'N/A'}</p>
                   </div>
                 </div>
               </div>

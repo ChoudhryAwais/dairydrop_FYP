@@ -49,7 +49,7 @@ const AdminDashboard = () => {
             .slice(0, 4)
             .map(order => ({
               id: order.id || '#000',
-              customer: order.customerName || 'Unknown',
+              customer: order.customerInfo.fullName || 'Unknown',
               amount: `$${(parseFloat(order.totalAmount) || 0).toFixed(2)}`,
               status: order.status || 'Pending',
               date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'
