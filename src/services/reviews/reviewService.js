@@ -6,7 +6,8 @@ import {
   getDocs,
   query,
   where,
-  orderBy
+  orderBy,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -68,6 +69,30 @@ export const getAllReviews = async () => {
     }));
 
     return { success: true, reviews };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
+export const approveReview = async (reviewId) => {
+  try {
+    await updateDoc(doc(db, REVIEWS_COLLECTION, reviewId), {
+      approved: true,
+      approvedAt: new Date().toISOString()
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
+export const updateReviewContent = async (reviewId, newContent) => {
+  try {
+    await updateDoc(doc(db, REVIEWS_COLLECTION, reviewId), {
+      comment: newContent,
+      updatedAt: new Date().toISOString()
+    });
+    return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
   }
