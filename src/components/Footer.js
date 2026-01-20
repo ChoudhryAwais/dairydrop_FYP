@@ -1,6 +1,24 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Footer = () => {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin');
+
+  // Simplified footer for admin pages
+  if (isAdminPage) {
+    return (
+      <footer className=" bg-white border-t border-gray-200 mt-auto">
+        <div className="container mx-auto px-4 py-4 max-w-7xl">
+          <p className=" text-sm text-center font-medium">
+            &copy; 2026 DairyDrop. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    );
+  }
+
+  // Full footer for customer pages
   return (
     <footer className="bg-white border-t border-gray-200 mt-auto">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
