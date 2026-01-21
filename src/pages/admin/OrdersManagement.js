@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../../components/Sidebar';
 import ErrorMessage from '../../components/ErrorMessage';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllOrders, updateOrderStatus } from '../../services/orders/orderService';
@@ -113,8 +112,7 @@ const OrdersManagement = () => {
   const statusOptions = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
+    <>
 
       {/* Main Content */}
       <div className="flex-1 p-8 transition-all duration-300">
@@ -373,7 +371,7 @@ const OrdersManagement = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -22,15 +22,16 @@ import OrdersManagement from './pages/admin/OrdersManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import ReviewsManagement from './pages/admin/ReviewsManagement';
 import './App.css';
+import AdminLayout from './layout/AdminLayout';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return children;
 };
 
@@ -69,31 +70,17 @@ function AppContent() {
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
-          <Route path="/admin/dashboard" element={
+          <Route path="/admin/*" element={
             <ProtectedRoute>
-              <AdminDashboard />
+              <AdminLayout />
             </ProtectedRoute>
-          } />
-          <Route path="/admin/products" element={
-            <ProtectedRoute>
-              <ProductsManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/orders" element={
-            <ProtectedRoute>
-              <OrdersManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/users" element={
-            <ProtectedRoute>
-              <UsersManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/reviews" element={
-            <ProtectedRoute>
-              <ReviewsManagement />
-            </ProtectedRoute>
-          } />
+          }>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="products" element={<ProductsManagement />} />
+            <Route path="orders" element={<OrdersManagement />} />
+            <Route path="users" element={<UsersManagement />} />
+            <Route path="reviews" element={<ReviewsManagement />} />
+          </Route>
         </Routes>
       </main>
       {!isAuthPage && <Footer />}

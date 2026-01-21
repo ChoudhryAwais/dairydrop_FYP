@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../../components/Sidebar';
 import ErrorMessage from '../../components/ErrorMessage';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllReviews, deleteReview, approveReview, updateReviewContent } from '../../services/reviews/reviewService';
@@ -172,9 +171,7 @@ const ReviewsManagement = () => {
     : 0;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-
+    <>
       {/* Main Content */}
       <div className="flex-1 p-8 transition-all duration-300">
         <div className="max-w-7xl mx-auto">
@@ -418,7 +415,7 @@ const ReviewsManagement = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

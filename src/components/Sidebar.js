@@ -11,18 +11,21 @@ const Sidebar = () => {
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1024;
-      setIsMobile(mobile);
-      if (!mobile) {
-        setIsOpen(true);
-      } else {
-        setIsOpen(false);
-      }
+
+      setIsMobile((prev) => {
+        // Only react when breakpoint changes
+        if (prev !== mobile) {
+          setIsOpen(!mobile); // desktop = open, mobile = closed
+        }
+        return mobile;
+      });
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -44,7 +47,6 @@ const Sidebar = () => {
     { path: '/admin/orders', label: 'Orders', icon: '📦' },
     { path: '/admin/users', label: 'Users', icon: '👥' },
     { path: '/admin/reviews', label: 'Reviews', icon: '⭐' },
-    { path: '/', label: 'Back to Store', icon: '🏠' },
   ];
 
   return (
@@ -75,8 +77,8 @@ const Sidebar = () => {
       {/* Sidebar */}
       <div
         className={`fixed left-0 bg-gradient-to-b from-green-600 to-emerald-600 text-white transition-all duration-300 shadow-2xl
-          ${isMobile 
-            ? `z-40 w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'}` 
+          ${isMobile
+            ? `z-40 w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`
             : `z-30 ${isOpen ? 'w-64' : 'w-20'}`
           }`}
         style={isMobile ? { top: '100px', height: 'calc(100vh - 100px)' } : { top: '64px', height: 'calc(100vh - 64px)' }}
@@ -120,12 +122,11 @@ const Sidebar = () => {
             <Link
               key={item.path}
               to={item.path}
-              onClick={closeSidebar}
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 ${
-                isActive(item.path)
+              onClick={isMobile ? closeSidebar : undefined}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 ${isActive(item.path)
                   ? 'bg-white text-green-600 shadow-lg'
                   : 'text-white hover:bg-green-500'
-              }`}
+                }`}
             >
               <span className="text-xl flex-shrink-0">{item.icon}</span>
               {isOpen && <span className="font-medium">{item.label}</span>}

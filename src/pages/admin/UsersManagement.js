@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { getAllUsers, updateUserRole, disableUserAccount } from '../../services/users/userService';
-import Sidebar from '../../components/Sidebar';
 import ErrorMessage from '../../components/ErrorMessage';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -119,18 +118,16 @@ const UsersManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-50">
-        <Sidebar />
+      <>
         <div className="flex-1 p-4 sm:p-6 md:p-8 flex items-center justify-center">
           <LoadingSpinner size="lg" message="Loading users..." />
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
+    <>
 
       <div className="flex-1 p-4 sm:p-6 md:p-8">
         <div className="max-w-7xl mx-auto">
@@ -449,7 +446,7 @@ const UsersManagement = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

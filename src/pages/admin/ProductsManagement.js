@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../../services/products/productService';
-import Sidebar from '../../components/Sidebar';
 import ErrorMessage from '../../components/ErrorMessage';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ProductCard from '../../components/ProductCard';
@@ -160,18 +159,16 @@ const ProductsManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-50">
-        <Sidebar />
+      <>
         <div className="flex-1 p-8 flex items-center justify-center">
           <LoadingSpinner size="lg" message="Loading products..." />
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
+    <>
 
       {/* Main Content */}
       <div className="flex-1 p-8">
@@ -378,7 +375,7 @@ const ProductsManagement = () => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

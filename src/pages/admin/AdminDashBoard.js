@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllUsers } from '../../services/users/userService';
 import { getAllOrders } from '../../services/orders/orderService';
@@ -93,9 +92,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-
+    <>
       {/* Main Content */}
       <div className="flex-1 p-8 transition-all duration-300">
         <div className="max-w-7xl mx-auto">
@@ -205,7 +202,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
