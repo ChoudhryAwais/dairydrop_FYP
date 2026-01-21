@@ -81,7 +81,17 @@ const OrderConfirmation = () => {
                 {order.items.map((item, index) => (
                   <div key={index} className="flex justify-between items-center p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center space-x-4">
-                      <div className="text-4xl">🥛</div>
+                      <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-200 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                        {item.imageUrl ? (
+                          <img 
+                            src={item.imageUrl} 
+                            alt={item.name} 
+                            className="w-full h-full object-contain p-1"
+                          />
+                        ) : (
+                          <div className="text-4xl">🥛</div>
+                        )}
+                      </div>
                       <div>
                         <h3 className="font-semibold text-gray-800">{item.name}</h3>
                         <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>

@@ -10,8 +10,7 @@ import {
   where,
   orderBy
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { db, storage } from "../firebase";
+import { db } from "../firebase";
 
 const PRODUCTS_COLLECTION = "products";
 
@@ -20,9 +19,13 @@ export const addProduct = async (productData, imageFile) => {
     let imageUrl = "";
     
     if (imageFile) {
-      const imageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
-      await uploadBytes(imageRef, imageFile);
-      imageUrl = await getDownloadURL(imageRef);
+      // Convert image to Base64
+      const reader = new FileReader();
+      imageUrl = await new Promise((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(imageFile);
+      });
     }
 
     const docRef = await addDoc(collection(db, PRODUCTS_COLLECTION), {
@@ -44,9 +47,13 @@ export const updateProduct = async (productId, productData, imageFile) => {
     let updateData = { ...productData, updatedAt: new Date().toISOString() };
 
     if (imageFile) {
-      const imageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
-      await uploadBytes(imageRef, imageFile);
-      updateData.imageUrl = await getDownloadURL(imageRef);
+      // Convert image to Base64
+      const reader = new FileReader();
+      updateData.imageUrl = await new Promise((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(imageFile);
+      });
     }
 
     await updateDoc(productRef, updateData);
@@ -58,11 +65,7 @@ export const updateProduct = async (productId, productData, imageFile) => {
 
 export const deleteProduct = async (productId, imageUrl) => {
   try {
-    if (imageUrl) {
-      const imageRef = ref(storage, imageUrl);
-      await deleteObject(imageRef);
-    }
-
+    // No need to delete from storage since images are Base64 strings in Firestore
     await deleteDoc(doc(db, PRODUCTS_COLLECTION, productId));
     return { success: true };
   } catch (error) {

@@ -50,10 +50,31 @@ const ProductsManagement = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file');
+        return;
+      }
+      
+      // Check file size (limit to 1MB for Base64 storage)
+      if (file.size > 1024 * 1024) {
+        setError('Image size should be less than 1MB');
+        return;
+      }
+      
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        const base64String = reader.result;
+        setImagePreview(base64String);
+        // Store Base64 in formData
+        setFormData(prev => ({
+          ...prev,
+          imageUrl: base64String
+        }));
+      };
+      reader.onerror = () => {
+        setError('Failed to read image file');
       };
       reader.readAsDataURL(file);
     }
@@ -99,6 +120,7 @@ const ProductsManagement = () => {
 
       if (editingId) {
         // Update existing product
+        // Only pass imageFile if a new image was selected
         const result = await updateProduct(editingId, productPayload, imageFile);
         if (result.success) {
           setError(null);
@@ -309,7 +331,7 @@ const ProductsManagement = () => {
                 {/* Image Upload */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Product Image
+                    Product Image (Max 1MB)
                   </label>
                   <div className="flex gap-4">
                     <div className="flex-1">
@@ -319,13 +341,14 @@ const ProductsManagement = () => {
                         onChange={handleImageChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
                       />
+                      <p className="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (max 1MB)</p>
                     </div>
                     {imagePreview && (
-                      <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-300">
+                      <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-gray-300 bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center">
                         <img 
                           src={imagePreview} 
                           alt="Preview" 
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain p-1"
                         />
                       </div>
                     )}

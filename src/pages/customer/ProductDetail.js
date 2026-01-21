@@ -114,8 +114,16 @@ const ProductDetail = () => {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
           {/* Product Image */}
-          <div className="bg-gradient-to-br from-green-100 to-emerald-200 rounded-xl flex items-center justify-center h-96">
-            <div className="text-9xl">🥛</div>
+          <div className="bg-gradient-to-br from-green-100 to-emerald-200 rounded-xl flex items-center justify-center h-96 overflow-hidden">
+            {product.imageUrl ? (
+              <img 
+                src={product.imageUrl} 
+                alt={product.name} 
+                className="w-full h-full object-contain p-4"
+              />
+            ) : (
+              <div className="text-9xl">🥛</div>
+            )}
           </div>
 
           {/* Product Info */}

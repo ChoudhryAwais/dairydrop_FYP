@@ -35,8 +35,16 @@ const Cart = () => {
             {cartItems.map((item) => (
               <div key={item.id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-center space-x-6">
-                  <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-emerald-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-4xl">🥛</span>
+                  <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-emerald-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {item.imageUrl ? (
+                      <img 
+                        src={item.imageUrl} 
+                        alt={item.name} 
+                        className="w-full h-full object-contain p-1"
+                      />
+                    ) : (
+                      <span className="text-4xl">🥛</span>
+                    )}
                   </div>
                   <div className="flex-grow">
                     <h3 className="text-xl font-bold text-gray-800 mb-1">{item.name}</h3>
