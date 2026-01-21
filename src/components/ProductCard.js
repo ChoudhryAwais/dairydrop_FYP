@@ -38,9 +38,11 @@ const ProductCard = ({
     if (onAddToCart) {
       setIsLoading(true);
       try {
-        await onAddToCart(product);
-        setIsAdded(true);
-        setTimeout(() => setIsAdded(false), 2000);
+        const result = await onAddToCart(product);
+        if (result && result.success) {
+          setIsAdded(true);
+          setTimeout(() => setIsAdded(false), 2000);
+        }
       } catch (error) {
         console.error('[v0] Error adding to cart:', error);
       } finally {

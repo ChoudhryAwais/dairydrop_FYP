@@ -15,6 +15,8 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Products');
   const [searchTerm, setSearchTerm] = useState('');
   const [addedNotification, setAddedNotification] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState('success');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -65,13 +67,32 @@ const Products = () => {
   }, [selectedCategory, searchTerm, products]);
 
   const handleAddToCart = (product) => {
-    addToCart(product, 1);
-    setAddedNotification(product.id);
-    setTimeout(() => setAddedNotification(null), 2000);
+    const result = addToCart(product, 1);
+    if (result.success) {
+      setAddedNotification(product.id);
+      setNotificationMessage(result.message);
+      setNotificationType('success');
+    } else {
+      setNotificationMessage(result.message);
+      setNotificationType('error');
+    }
+    setTimeout(() => {
+      setAddedNotification(null);
+      setNotificationMessage('');
+    }, 3000);
   };
 
   return (
     <div className="space-y-8">
+      {/* Notification */}
+      {notificationMessage && (
+        <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${
+          notificationType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+        }`}>
+          {notificationMessage}
+        </div>
+      )}
+      
       {/* Header */}
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Our Dairy Products</h1>

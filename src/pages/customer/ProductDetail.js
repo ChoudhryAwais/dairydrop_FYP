@@ -11,13 +11,15 @@ import ErrorMessage from '../../components/ErrorMessage';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   const { isAuthenticated, currentUser } = useAuth();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [addedNotification, setAddedNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState('success');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
@@ -90,6 +92,15 @@ const ProductDetail = () => {
 
   return (
     <div className="space-y-6">
+      {/* Notification */}
+      {notificationMessage && (
+        <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${
+          notificationType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+        }`}>
+          {notificationMessage}
+        </div>
+      )}
+      
       {/* Breadcrumb */}
       <nav className="flex items-center space-x-2 text-sm text-gray-600">
         <Link to="/" className="hover:text-green-600 transition-colors">Home</Link>
@@ -138,6 +149,27 @@ const ProductDetail = () => {
                   <span className="text-red-600 font-medium">Out of Stock</span>
                 )}
               </div>
+              {(() => {
+                const cartItem = cartItems.find(item => item.id === product.id);
+                const currentCartQty = cartItem ? cartItem.quantity : 0;
+                return currentCartQty > 0 && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">In your cart:</span>
+                    <span className="text-blue-600 font-medium">{currentCartQty} item(s)</span>
+                  </div>
+                );
+              })()}
+              {(() => {
+                const cartItem = cartItems.find(item => item.id === product.id);
+                const currentCartQty = cartItem ? cartItem.quantity : 0;
+                const remaining = product.quantity - currentCartQty;
+                return currentCartQty > 0 && remaining > 0 && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Can still add:</span>
+                    <span className="text-amber-600 font-medium">{remaining} more</span>
+                  </div>
+                );
+              })()}
             </div>
 
             <div className="flex items-center space-x-4">
@@ -150,27 +182,51 @@ const ProductDetail = () => {
                 </button>
                 <span className="px-6 py-2 border-x border-gray-300 font-medium">{quantity}</span>
                 <button 
-                  onClick={() => setQuantity(Math.min(product.quantity, quantity + 1))}
+                  onClick={() => {
+                    const cartItem = cartItems.find(item => item.id === product.id);
+                    const currentCartQty = cartItem ? cartItem.quantity : 0;
+                    const maxAllowed = product.quantity - currentCartQty;
+                    setQuantity(Math.min(maxAllowed, quantity + 1));
+                  }}
                   className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                  disabled={(() => {
+                    const cartItem = cartItems.find(item => item.id === product.id);
+                    const currentCartQty = cartItem ? cartItem.quantity : 0;
+                    return quantity >= (product.quantity - currentCartQty);
+                  })()}
                 >
                   +
                 </button>
               </div>
               <button 
                 onClick={() => {
-                  addToCart(product, quantity);
-                  setAddedNotification(true);
-                  setTimeout(() => {
-                    setAddedNotification(false);
-                    navigate('/cart');
-                  }, 1500);
+                  const result = addToCart(product, quantity);
+                  if (result.success) {
+                    setAddedNotification(true);
+                    setNotificationMessage(result.message);
+                    setNotificationType('success');
+                    setTimeout(() => {
+                      setAddedNotification(false);
+                      navigate('/cart');
+                    }, 1500);
+                  } else {
+                    setNotificationMessage(result.message);
+                    setNotificationType('error');
+                    setTimeout(() => {
+                      setNotificationMessage('');
+                    }, 3000);
+                  }
                 }}
                 className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed ${
                   addedNotification
                     ? 'bg-emerald-600 text-white'
                     : 'bg-green-600 hover:bg-green-700 text-white'
                 }`}
-                disabled={product.quantity <= 0}
+                disabled={product.quantity <= 0 || (() => {
+                  const cartItem = cartItems.find(item => item.id === product.id);
+                  const currentCartQty = cartItem ? cartItem.quantity : 0;
+                  return currentCartQty >= product.quantity;
+                })()}
               >
                 {addedNotification ? '✓ Added to Cart' : 'Add to Cart'}
               </button>

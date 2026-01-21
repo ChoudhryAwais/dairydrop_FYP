@@ -1,16 +1,32 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateCartItem, calculateTotals } = useCart();
   const { subtotal, tax, total } = calculateTotals();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleQuantityUpdate = (itemId, newQuantity) => {
+    const result = updateCartItem(itemId, newQuantity);
+    if (!result.success) {
+      setErrorMessage(result.message);
+      setTimeout(() => setErrorMessage(''), 3000);
+    }
+  };
 
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-bold text-gray-800">Shopping Cart</h1>
+      {/* Error Notification */}
+      {errorMessage && (
+        <div className="fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg bg-red-600 text-white animate-fade-in">
+          {errorMessage}
+        </div>
+      )}
+      
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">Shopping Cart</h1>
 
       {cartItems.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -29,15 +45,16 @@ const Cart = () => {
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center border border-gray-300 rounded-lg">
                       <button 
-                        onClick={() => updateCartItem(item.id, Math.max(1, item.quantity - 1))}
+                        onClick={() => handleQuantityUpdate(item.id, Math.max(1, item.quantity - 1))}
                         className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
                       >
                         -
                       </button>
                       <span className="px-4 py-1 border-x border-gray-300 font-medium">{item.quantity}</span>
                       <button 
-                        onClick={() => updateCartItem(item.id, item.quantity + 1)}
+                        onClick={() => handleQuantityUpdate(item.id, item.quantity + 1)}
                         className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                        title={`Available: ${item.quantity || 0}`}
                       >
                         +
                       </button>
