@@ -38,8 +38,9 @@ export const deleteReview = async (reviewId) => {
 export const getProductReviews = async (productId) => {
   try {
     const q = query(
-      collection(db, REVIEWS_COLLECTION),
+      collection(db, "reviews"),
       where("productId", "==", productId),
+      where("approved", "==", true),
       orderBy("createdAt", "desc")
     );
 
@@ -54,6 +55,7 @@ export const getProductReviews = async (productId) => {
     return { success: false, error: error.message };
   }
 };
+
 
 export const getAllReviews = async () => {
   try {

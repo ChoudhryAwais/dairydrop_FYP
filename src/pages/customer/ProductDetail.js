@@ -35,6 +35,7 @@ const ProductDetail = () => {
         }
 
         const reviewsResult = await getProductReviews(id);
+        console.log("Reviews result:", reviewsResult);
         if (reviewsResult.success) {
           setReviews(reviewsResult.reviews);
         }
@@ -63,6 +64,7 @@ const ProductDetail = () => {
       userName: currentUser.email,
       rating: reviewForm.rating,
       comment: reviewForm.comment,
+      approved: false // Reviews need admin approval
     };
 
     const result = await addReview(reviewData);
