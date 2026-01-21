@@ -53,25 +53,55 @@ const Checkout = () => {
     return null;
   };
 
+  const fetchDefaultAddress = async (uid) => {
+    if (!uid) return null;
+
+    try {
+      const docRef = doc(db, 'users', uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const addresses = data.addresses || [];
+
+        return addresses.find(addr => addr.isDefault) || null;
+      }
+    } catch (err) {
+      console.error('Error fetching default address:', err);
+    }
+
+    return null;
+  };
+
+
   useEffect(() => {
     if (!currentUser?.uid) return;
 
-    const loadUserContact = async () => {
+    const loadCheckoutData = async () => {
       const userInfo = await fetchUserContact(currentUser.uid);
+      const defaultAddress = await fetchDefaultAddress(currentUser.uid);
 
-      if (userInfo) {
-        setFormData(prev => ({
-          ...prev,
-          fullName: userInfo.name || '',
-          email: currentUser.email || '', // from auth
-          phone: userInfo.phone || '',
-        }));
-      }
+      setFormData({
+        // CONTACT INFO
+        fullName:
+          defaultAddress?.fullName ||
+          userInfo?.name ||
+          '',
+        email: currentUser.email || '',
+        phone:
+          defaultAddress?.phone ||
+          userInfo?.phone ||
+          '',
+
+        // ADDRESS INFO
+        address: defaultAddress?.street || '',
+        city: defaultAddress?.city || '',
+        postalCode: defaultAddress?.postalCode || '',
+      });
     };
 
-    loadUserContact();
+    loadCheckoutData();
   }, [currentUser]);
-
 
   // Validate form fields
   const validateForm = () => {
@@ -152,7 +182,7 @@ const Checkout = () => {
         // Decrease product quantities
         try {
           await Promise.all(
-            cartItems.map(item => 
+            cartItems.map(item =>
               updateProductQuantity(item.id, -item.quantity)
             )
           );

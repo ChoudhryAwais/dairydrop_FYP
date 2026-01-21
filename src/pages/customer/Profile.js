@@ -187,24 +187,36 @@ const Profile = () => {
   const handleAddAddress = async (e) => {
     e.preventDefault();
 
-    if (!validateAddressForm()) {
-      return;
-    }
+    if (!validateAddressForm()) return;
 
     setSaving(true);
     setErrorMessage('');
     setSuccessMessage('');
 
     try {
-      const newAddress = {
+      let newAddress = {
         id: Date.now().toString(),
         ...addressForm
       };
 
+      // If the new address is marked as default, unset default on all existing addresses
+      if (newAddress.isDefault) {
+        setAddresses(prev =>
+          prev.map(addr => ({ ...addr, isDefault: false }))
+        );
+      }
+
       const result = await addAddress(currentUser.uid, newAddress);
 
       if (result.success) {
-        setAddresses(prev => [...prev, newAddress]);
+        // If new address is default, ensure it's reflected in state
+        setAddresses(prev => {
+          if (newAddress.isDefault) {
+            return [...prev, { ...newAddress, isDefault: true }];
+          }
+          return [...prev, newAddress];
+        });
+
         setAddressForm({
           fullName: '',
           phone: '',
