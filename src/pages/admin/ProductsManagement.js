@@ -179,6 +179,17 @@ const ProductsManagement = () => {
     ? products 
     : products.filter(p => p.category === filterCategory);
 
+  // Calculate statistics
+  const totalProducts = products.length;
+  const inStockProducts = products.filter(p => p.quantity > 0).length;
+  const outOfStockProducts = products.filter(p => !p.quantity || p.quantity === 0).length;
+  const lowStockProducts = products.filter(p => p.quantity > 0 && p.quantity < 10).length;
+  const totalValue = products.reduce((sum, p) => sum + (p.price * (p.quantity || 0)), 0);
+  const categoryCounts = CATEGORIES.reduce((acc, cat) => {
+    acc[cat] = products.filter(p => p.category === cat).length;
+    return acc;
+  }, {});
+
   if (loading) {
     return (
       <>
@@ -210,6 +221,45 @@ const ProductsManagement = () => {
               onDismiss={() => setError(null)}
             />
           )}
+
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <div className="bg-blue-50 p-4 sm:p-6 rounded-xl shadow-md border border-blue-200">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Total Products</h3>
+                <span className="text-2xl sm:text-3xl">📦</span>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-800">{totalProducts}</p>
+              <p className="text-gray-500 text-xs mt-1 sm:mt-2">all categories</p>
+            </div>
+
+            <div className="bg-green-50 p-4 sm:p-6 rounded-xl shadow-md border border-green-200">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-gray-600 font-medium text-xs sm:text-sm">In Stock</h3>
+                <span className="text-2xl sm:text-3xl">✅</span>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-800">{inStockProducts}</p>
+              <p className="text-gray-500 text-xs mt-1 sm:mt-2">available</p>
+            </div>
+
+            <div className="bg-yellow-50 p-4 sm:p-6 rounded-xl shadow-md border border-yellow-200">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Low Stock</h3>
+                <span className="text-2xl sm:text-3xl">⚠️</span>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-800">{lowStockProducts}</p>
+              <p className="text-gray-500 text-xs mt-1 sm:mt-2">&lt;10 units</p>
+            </div>
+
+            <div className="bg-red-50 p-4 sm:p-6 rounded-xl shadow-md border border-red-200">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Out of Stock</h3>
+                <span className="text-2xl sm:text-3xl">❌</span>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-800">{outOfStockProducts}</p>
+              <p className="text-gray-500 text-xs mt-1 sm:mt-2">need restock</p>
+            </div>
+          </div>
 
           {/* Action Bar */}
           <div className="mb-6 flex gap-4 flex-wrap items-center">
