@@ -14,13 +14,18 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All Products');
   const [searchTerm, setSearchTerm] = useState('');
+  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [maxPrice, setMaxPrice] = useState(100);
+  const [selectedBrand, setSelectedBrand] = useState('All Brands');
+  const [selectedFatContent, setSelectedFatContent] = useState('All');
   const [addedNotification, setAddedNotification] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [notificationType, setNotificationType] = useState('success');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const categories = ['All Products', 'Milk', 'Cheese', 'Yogurt', 'Butter'];
+  const categories = ['All Products', 'Milk', 'Cheese', 'Yogurt', 'Butter', 'Cream', 'Ghee', 'Ice Cream', 'Other'];
+  const fatContentOptions = ['All', 'Full Fat', 'Low Fat', 'Fat Free', 'Reduced Fat'];
   const sampleProducts = [
     { id: 1, name: 'Milk', category: 'Milk', price: 2.99 },
     { id: 2, name: 'Cheese', category: 'Cheese', price: 4.99 },
@@ -36,6 +41,13 @@ const Products = () => {
         if (result.success) {
           setProducts(result.products);
           setFilteredProducts(result.products);
+          
+          // Calculate max price
+          if (result.products.length > 0) {
+            const max = Math.max(...result.products.map(p => p.price));
+            setMaxPrice(Math.ceil(max));
+            setPriceRange([0, Math.ceil(max)]);
+          }
         } else {
           setError('Failed to load products');
         }
@@ -63,8 +75,23 @@ const Products = () => {
       );
     }
 
+    // Price range filter
+    filtered = filtered.filter(product => 
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+
+    // Brand filter
+    if (selectedBrand !== 'All Brands') {
+      filtered = filtered.filter(product => product.brand === selectedBrand);
+    }
+
+    // Fat content filter
+    if (selectedFatContent !== 'All') {
+      filtered = filtered.filter(product => product.fatContent === selectedFatContent);
+    }
+
     setFilteredProducts(filtered);
-  }, [selectedCategory, searchTerm, products]);
+  }, [selectedCategory, searchTerm, priceRange, selectedBrand, selectedFatContent, products]);
 
   const handleAddToCart = (product) => {
     const result = addToCart(product, 1);
@@ -128,6 +155,86 @@ const Products = () => {
                 {category}
               </button>
             ))}
+          </div>
+
+          {/* Advanced Filters */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Filter Products</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Price Range Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Price Range: ${priceRange[0]} - ${priceRange[1]}
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max={maxPrice}
+                    value={priceRange[0]}
+                    onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                    className="flex-1"
+                  />
+                  <input
+                    type="range"
+                    min="0"
+                    max={maxPrice}
+                    value={priceRange[1]}
+                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+
+              {/* Brand Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Brand
+                </label>
+                <select
+                  value={selectedBrand}
+                  onChange={(e) => setSelectedBrand(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  <option>All Brands</option>
+                  {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map(brand => (
+                    <option key={brand} value={brand}>{brand}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Fat Content Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Fat Content
+                </label>
+                <select
+                  value={selectedFatContent}
+                  onChange={(e) => setSelectedFatContent(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  {fatContentOptions.map(option => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Clear Filters Button */}
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => {
+                  setSelectedCategory('All Products');
+                  setSearchTerm('');
+                  setPriceRange([0, maxPrice]);
+                  setSelectedBrand('All Brands');
+                  setSelectedFatContent('All');
+                }}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Clear All Filters
+              </button>
+            </div>
           </div>
         </>
       )}

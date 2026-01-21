@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/myContext';
-import { getProductById } from '../../services/products/productService';
+import { getProductById, getProducts } from '../../services/products/productService';
 import { getProductReviews, addReview } from '../../services/reviews/reviewService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -16,6 +16,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [addedNotification, setAddedNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
@@ -32,6 +33,15 @@ const ProductDetail = () => {
         const productResult = await getProductById(id);
         if (productResult.success) {
           setProduct(productResult.product);
+          
+          // Fetch related products (same category, excluding current product)
+          const allProductsResult = await getProducts();
+          if (allProductsResult.success) {
+            const related = allProductsResult.products
+              .filter(p => p.category === productResult.product.category && p.id !== id)
+              .slice(0, 4);
+            setRelatedProducts(related);
+          }
         } else {
           setError('Product not found');
         }
@@ -157,6 +167,24 @@ const ProductDetail = () => {
                   <span className="text-red-600 font-medium">Out of Stock</span>
                 )}
               </div>
+              {product.brand && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Brand:</span>
+                  <span className="text-gray-800 font-medium">{product.brand}</span>
+                </div>
+              )}
+              {product.fatContent && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Fat Content:</span>
+                  <span className="text-gray-800 font-medium">{product.fatContent}</span>
+                </div>
+              )}
+              {product.shelfLife && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Shelf Life:</span>
+                  <span className="text-gray-800 font-medium">{product.shelfLife}</span>
+                </div>
+              )}
               {(() => {
                 const cartItem = cartItems.find(item => item.id === product.id);
                 const currentCartQty = cartItem ? cartItem.quantity : 0;
@@ -252,6 +280,82 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Nutritional Facts */}
+      {product.nutritionalFacts && Object.values(product.nutritionalFacts).some(v => v) && (
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Nutritional Facts</h2>
+          <p className="text-sm text-gray-600 mb-4">Per 100g/ml</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {product.nutritionalFacts.calories && (
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg text-center">
+                <p className="text-3xl font-bold text-blue-600">{product.nutritionalFacts.calories}</p>
+                <p className="text-sm text-gray-600 mt-1">Calories (kcal)</p>
+              </div>
+            )}
+            {product.nutritionalFacts.protein && (
+              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg text-center">
+                <p className="text-3xl font-bold text-green-600">{product.nutritionalFacts.protein}g</p>
+                <p className="text-sm text-gray-600 mt-1">Protein</p>
+              </div>
+            )}
+            {product.nutritionalFacts.fat && (
+              <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-lg text-center">
+                <p className="text-3xl font-bold text-yellow-600">{product.nutritionalFacts.fat}g</p>
+                <p className="text-sm text-gray-600 mt-1">Fat</p>
+              </div>
+            )}
+            {product.nutritionalFacts.carbs && (
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg text-center">
+                <p className="text-3xl font-bold text-purple-600">{product.nutritionalFacts.carbs}g</p>
+                <p className="text-sm text-gray-600 mt-1">Carbs</p>
+              </div>
+            )}
+            {product.nutritionalFacts.calcium && (
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg text-center">
+                <p className="text-3xl font-bold text-orange-600">{product.nutritionalFacts.calcium}mg</p>
+                <p className="text-sm text-gray-600 mt-1">Calcium</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedProducts.map((relatedProduct) => (
+              <Link 
+                key={relatedProduct.id} 
+                to={`/products/${relatedProduct.id}`}
+                className="group"
+              >
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                  <div className="bg-gradient-to-br from-green-100 to-emerald-200 h-48 flex items-center justify-center">
+                    {relatedProduct.imageUrl ? (
+                      <img 
+                        src={relatedProduct.imageUrl} 
+                        alt={relatedProduct.name} 
+                        className="w-full h-full object-contain p-4"
+                      />
+                    ) : (
+                      <div className="text-6xl">🥛</div>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-800 group-hover:text-green-600 transition-colors">
+                      {relatedProduct.name}
+                    </h3>
+                    <p className="text-green-600 font-bold mt-2">${relatedProduct.price}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Reviews Section */}
       <div className="bg-white rounded-xl shadow-lg p-8 space-y-6">
