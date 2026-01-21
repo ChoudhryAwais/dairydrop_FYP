@@ -34,13 +34,48 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Admin Route Component - Only for admin users
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, userDetails } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (userDetails?.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+// Customer Route Component - Only for customer users
+const CustomerRoute = ({ children }) => {
+  const { isAuthenticated, userDetails } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (userDetails?.role === 'admin') {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return children;
+};
+
 function AppContent() {
   const location = useLocation();
+  const { userDetails } = useAuth();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signUp';
+  
+  // Check if admin is on customer pages
+  const isAdminOnCustomerPage = userDetails?.role === 'admin' && 
+    !location.pathname.startsWith('/admin');
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {!isAuthPage && <Header />}
+      {!isAuthPage && <Header hideAuthStatus={isAdminOnCustomerPage} />}
       <main className="flex-grow container mx-auto px-4 py-8 max-w-7xl">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -48,31 +83,31 @@ function AppContent() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={
-            <ProtectedRoute>
+            <CustomerRoute>
               <Checkout />
-            </ProtectedRoute>
+            </CustomerRoute>
           } />
           <Route path="/order-confirmation/:orderId" element={
-            <ProtectedRoute>
+            <CustomerRoute>
               <OrderConfirmation />
-            </ProtectedRoute>
+            </CustomerRoute>
           } />
           <Route path="/profile" element={
-            <ProtectedRoute>
+            <CustomerRoute>
               <Profile />
-            </ProtectedRoute>
+            </CustomerRoute>
           } />
           <Route path="/order-history" element={
-            <ProtectedRoute>
+            <CustomerRoute>
               <OrderHistory />
-            </ProtectedRoute>
+            </CustomerRoute>
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/admin/*" element={
-            <ProtectedRoute>
+            <AdminRoute>
               <AdminLayout />
-            </ProtectedRoute>
+            </AdminRoute>
           }>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="products" element={<ProductsManagement />} />

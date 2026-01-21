@@ -386,15 +386,23 @@ const Profile = () => {
                   <p className="text-xs text-gray-600 font-medium">Member Since</p>
                   <p className="mt-1 text-lg font-bold text-gray-900">
                     {userProfile?.createdAt
-                      ? new Date(userProfile.createdAt.seconds * 1000).toLocaleDateString()
+                      ? new Date(userProfile.createdAt).toLocaleDateString()
                       : 'N/A'
                     }
                   </p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-xs text-gray-600 font-medium">Account Status</p>
-                  <p className="mt-1 text-lg font-bold text-green-600">Active</p>
+                  <p
+                    className={`mt-1 text-lg font-bold ${userProfile?.disabled
+                        ? 'text-red-600'
+                        : 'text-green-600'
+                      }`}
+                  >
+                    {userProfile?.disabled ? 'Disabled' : 'Active'}
+                  </p>
                 </div>
+
               </div>
 
               {/* Submit Button */}

@@ -3,7 +3,7 @@ import { Link, useNavigate,useLocation } from 'react-router-dom';
 import { useAuth } from '../context/myContext';
 import { logoutUser } from '../services/auth/authService';
 
-const Header = () => {
+const Header = ({ hideAuthStatus = false }) => {
   const { isAuthenticated, currentUser, userDetails } = useAuth();
   const navigate = useNavigate();
 
@@ -14,6 +14,9 @@ const Header = () => {
 
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
+
+  // If hideAuthStatus is true, pretend user is not authenticated for UI purposes
+  const showAsAuthenticated = isAuthenticated && !hideAuthStatus;
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -39,7 +42,7 @@ const Header = () => {
                   Products
                 </Link>
 
-                {isAuthenticated && (
+                {showAsAuthenticated && (
                   <>
                     <Link to="/order-history" className="text-gray-700 hover:text-green-600 font-medium hover:underline">
                       Orders
@@ -61,7 +64,7 @@ const Header = () => {
             )}
 
             {/* Auth section (shown on both admin & user pages) */}
-            {isAuthenticated ? (
+            {showAsAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <span className="text-gray-700 font-medium">
                   Welcome, {userDetails?.displayName || 'User'}
