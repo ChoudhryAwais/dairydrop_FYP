@@ -26,7 +26,6 @@ const Sidebar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   const isActive = (path) => {
     return location.pathname === path;
   };
@@ -57,7 +56,7 @@ const Sidebar = () => {
           onClick={toggleSidebar}
           className="fixed left-4 z-50 p-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-colors duration-200 lg:hidden"
           aria-label="Open menu"
-          style={{ top: '108px' }}
+          style={{ top: '88px' }}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -68,9 +67,9 @@ const Sidebar = () => {
       {/* Overlay for mobile */}
       {isMobile && isOpen && (
         <div
-          className="fixed bg-black bg-opacity-50 z-35 lg:hidden"
+          className="fixed bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={closeSidebar}
-          style={{ top: '100px', left: 0, right: 0, bottom: 0 }}
+          style={{ top: '70px', left: 0, right: 0, bottom: 0 }}
         />
       )}
 
@@ -81,7 +80,7 @@ const Sidebar = () => {
             ? `z-40 w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`
             : `z-30 ${isOpen ? 'w-64' : 'w-20'}`
           }`}
-        style={isMobile ? { top: '100px', height: 'calc(100vh - 100px)' } : { top: '64px', height: 'calc(100vh - 64px)' }}
+        style={isMobile ? { top: '70px', height: 'calc(100vh - 70px)' } : { top: '64px', height: 'calc(100vh - 64px)' }}
       >
         {/* Header */}
         <div className="p-4 border-b border-green-500 flex items-center justify-between">

@@ -40,7 +40,7 @@ const AdminDashboard = () => {
         if (ordersResult.success) {
           totalOrders = ordersResult.orders.length;
           totalRevenue = ordersResult.orders.reduce((sum, order) => {
-            const amount = parseFloat(order.totalAmount) || 0;
+            const amount = parseFloat(order.total) || 0;
             return sum + amount;
           }, 0);
 
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
             .map(order => ({
               id: order.id || '#000',
               customer: order.customerInfo.fullName || 'Unknown',
-              amount: `$${(parseFloat(order.totalAmount) || 0).toFixed(2)}`,
+              amount: `$${(parseFloat(order.total) || 0).toFixed(2)}`,
               status: order.status || 'Pending',
               date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'
             }));
