@@ -7,7 +7,8 @@ import {
   getUserProfile,
   updateUserProfile,
   addAddress,
-  removeAddress
+  removeAddress,
+  setAddressAsDefault
 } from '../../services/users/userService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -265,6 +266,29 @@ const Profile = () => {
     }
   };
 
+  const handleSetDefaultAddress = async (addressId) => {
+    setSaving(true);
+    setErrorMessage('');
+
+    try {
+      const result = await setAddressAsDefault(currentUser.uid, addressId);
+
+      if (result.success) {
+        // Update local state with the returned updated list from the service
+        setAddresses(result.addresses);
+        setSuccessMessage('Default address updated successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setErrorMessage(result.error || 'Failed to update default address');
+      }
+    } catch (error) {
+      console.error('Error setting default address:', error);
+      setErrorMessage('An error occurred while updating settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
@@ -395,8 +419,8 @@ const Profile = () => {
                   <p className="text-xs text-gray-600 font-medium">Account Status</p>
                   <p
                     className={`mt-1 text-lg font-bold ${userProfile?.disabled
-                        ? 'text-red-600'
-                        : 'text-green-600'
+                      ? 'text-red-600'
+                      : 'text-green-600'
                       }`}
                   >
                     {userProfile?.disabled ? 'Disabled' : 'Active'}
@@ -555,33 +579,49 @@ const Profile = () => {
                 <h3 className="text-lg font-bold text-gray-900">Your Delivery Addresses</h3>
                 {addresses.map((address) => (
                   <div key={address.id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="text-lg font-bold text-gray-900">{address.fullName}</h4>
-                          {address.isDefault && (
-                            <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                              Default
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-gray-600 mb-1">{address.street}</p>
-                        <p className="text-gray-600 mb-1">{address.city}, {address.postalCode}</p>
-                        <p className="text-gray-600 text-sm">Phone: {address.phone}</p>
-                      </div>
+  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+    
+    {/* Address Text Info */}
+    <div className="flex-1">
+      <div className="flex items-center gap-2 mb-2">
+        <h4 className="text-lg font-bold text-gray-900">{address.fullName}</h4>
+        {address.isDefault && (
+          <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
+            Default
+          </span>
+        )}
+      </div>
+      <p className="text-gray-600 mb-1">{address.street}</p>
+      <p className="text-gray-600 mb-1">{address.city}, {address.postalCode}</p>
+      <p className="text-gray-600 text-sm">Phone: {address.phone}</p>
+    </div>
 
-                      <button
-                        onClick={() => handleRemoveAddress(address)}
-                        disabled={saving}
-                        className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Delete
-                      </button>
-                    </div>
-                  </div>
+    {/* ACTION BUTTONS SECTION */}
+    <div className="flex flex-col sm:flex-row gap-3 sm:items-center mt-4 sm:mt-0">
+      {!address.isDefault && (
+        <button
+          onClick={() => handleSetDefaultAddress(address.id)}
+          disabled={saving}
+          className="text-sm font-medium text-green-600 hover:text-green-700 hover:underline disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          Make Default
+        </button>
+      )}
+
+      <button
+        onClick={() => handleRemoveAddress(address)}
+        disabled={saving}
+        className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Delete
+      </button>
+    </div>
+    
+  </div>
+</div>
                 ))}
               </div>
             ) : (
