@@ -18,7 +18,7 @@ import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import AdminDashboard from './pages/admin/AdminDashBoard';
 import ProductsManagement from './pages/admin/ProductsManagement/ProductsManagement';
-import OrdersManagement from './pages/admin/OrdersManagement';
+import OrdersManagement from './pages/admin/OrdersManagement/OrdersManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import ReviewsManagement from './pages/admin/ReviewsManagement';
 import './App.css';
