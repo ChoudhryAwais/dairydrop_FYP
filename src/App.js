@@ -12,7 +12,7 @@ import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
 import Checkout from './pages/customer/Checkout';
 import OrderConfirmation from './pages/customer/OrderConfirmation';
-import Profile from './pages/customer/Profile';
+import Profile from './pages/customer/profile/Profile';
 import OrderHistory from './pages/customer/OrderHistory';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
