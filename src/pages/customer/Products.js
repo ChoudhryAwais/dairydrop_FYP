@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { getProducts } from '../../services/products/productService';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -10,6 +10,7 @@ import ProductCard from '../../components/ProductCard';
 
 const Products = () => {
   const { addToCart } = useCart();
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All Products');
@@ -61,6 +62,14 @@ const Products = () => {
 
     fetchProducts();
   }, []);
+
+  // Handle category from URL parameter
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    if (categoryFromUrl && categories.includes(categoryFromUrl)) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let filtered = products;
