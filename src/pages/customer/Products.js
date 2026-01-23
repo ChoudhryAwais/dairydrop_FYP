@@ -119,7 +119,7 @@ const Products = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-0">
       {/* Notification */}
       {notificationMessage && (
         <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${
@@ -129,167 +129,231 @@ const Products = () => {
         </div>
       )}
       
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">Our Dairy Products</h1>
-        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-          Explore our fresh selection of dairy products sourced from local farms.
-        </p>
+      {/* Banner Header */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-16 px-6 text-center mb-12">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="text-8xl absolute top-4 left-10">🌿</div>
+          <div className="text-8xl absolute bottom-4 right-10">🌾</div>
+        </div>
+        <div className="relative z-10">
+          <p className="text-sm font-bold tracking-wider uppercase mb-2">100% Organic & Fresh</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">Fresh From The Farm</h1>
+          <p className="text-green-50 text-lg max-w-2xl mx-auto">
+            Browse our wide selection of 100% organic dairy products. Sourced directly from local farmers to your breakfast table.
+          </p>
+        </div>
       </div>
 
-      {products.length > 0 && (
-        <>
-          {/* Search Bar */}
-          <div className="flex justify-center mb-6">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
+      {/* Main Content */}
+      <div className="px-6 space-y-8">
+        {products.length > 0 && (
+          <>
+            {/* Top Bar with Results and Search */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-lg">
+              <div className="text-sm text-gray-600">
+                Showing <span className="font-semibold">{filteredProducts.length}</span> Results
+              </div>
+              <div className="flex-1 sm:flex-none sm:w-64">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
 
-          {/* Filter/Category Section */}
-          <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${selectedCategory === category
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+            {/* Active Filter Tags */}
+            {(selectedCategory !== 'All Products' || searchTerm || selectedBrand !== 'All Brands' || selectedFatContent !== 'All') && (
+              <div className="flex flex-wrap items-center gap-2 bg-white p-4 rounded-lg">
+                <span className="text-sm text-gray-600">Active Filters:</span>
+                {selectedCategory !== 'All Products' && (
+                  <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                    <span>Category: {selectedCategory}</span>
+                    <button onClick={() => setSelectedCategory('All Products')} className="hover:text-green-900">✕</button>
+                  </div>
+                )}
+                <button
+                  onClick={() => {
+                    setSelectedCategory('All Products');
+                    setSearchTerm('');
+                    setPriceRange([0, maxPrice]);
+                    setSelectedBrand('All Brands');
+                    setSelectedFatContent('All');
+                  }}
+                  className="text-sm text-green-600 hover:text-green-700 font-medium"
+                >
+                  Clear All
+                </button>
+              </div>
+            )}
 
-          {/* Advanced Filters */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Filter Products</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Price Range Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price Range: ${priceRange[0]} - ${priceRange[1]}
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max={maxPrice}
-                    value={priceRange[0]}
-                    onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                    className="flex-1"
-                  />
-                  <input
-                    type="range"
-                    min="0"
-                    max={maxPrice}
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                    className="flex-1"
-                  />
+            {/* Filters and Products Container */}
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Sidebar Filters */}
+              <div className="lg:w-56 flex-shrink-0">
+                <div className="space-y-6 bg-white p-6 rounded-lg h-fit">
+                  {/* Category Filter */}
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-3 flex items-center justify-between cursor-pointer">
+                      Category
+                      <span>▼</span>
+                    </h3>
+                    <div className="space-y-2">
+                      {categories.map((category) => (
+                        <label key={category} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedCategory === category}
+                            onChange={() => setSelectedCategory(category)}
+                            className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+                          />
+                          <span className="text-sm text-gray-700 hover:text-gray-900">{category}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Price Range Filter */}
+                  <div className="border-t pt-4">
+                    <h3 className="font-bold text-gray-900 mb-3">Price Range</h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm text-gray-600">
+                        <span>${priceRange[0]}</span>
+                        <span>${priceRange[1]}</span>
+                      </div>
+                      <div className="space-y-2">
+                        <input
+                          type="range"
+                          min="0"
+                          max={maxPrice}
+                          value={priceRange[0]}
+                          onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                          className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+                        />
+                        <input
+                          type="range"
+                          min="0"
+                          max={maxPrice}
+                          value={priceRange[1]}
+                          onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                          className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Fat Content Filter */}
+                  <div className="border-t pt-4">
+                    <h3 className="font-bold text-gray-900 mb-3">Fat Content</h3>
+                    <div className="space-y-2">
+                      {fatContentOptions.map((option) => (
+                        <label key={option} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedFatContent === option}
+                            onChange={() => setSelectedFatContent(option)}
+                            className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+                          />
+                          <span className="text-sm text-gray-700 hover:text-gray-900">{option}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Brand Filter */}
+                  <div className="border-t pt-4">
+                    <h3 className="font-bold text-gray-900 mb-3">Brands</h3>
+                    <div className="space-y-2">
+                      {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).slice(0, 5).map(brand => (
+                        <label key={brand} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedBrand === brand}
+                            onChange={() => setSelectedBrand(brand)}
+                            className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+                          />
+                          <span className="text-sm text-gray-700 hover:text-gray-900">{brand}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Clear Filters Button */}
+                  <div className="border-t pt-4">
+                    <button
+                      onClick={() => {
+                        setSelectedCategory('All Products');
+                        setSearchTerm('');
+                        setPriceRange([0, maxPrice]);
+                        setSelectedBrand('All Brands');
+                        setSelectedFatContent('All');
+                      }}
+                      className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm"
+                    >
+                      Clear All Filters
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Brand Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brand
-                </label>
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                >
-                  <option>All Brands</option>
-                  {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map(brand => (
-                    <option key={brand} value={brand}>{brand}</option>
-                  ))}
-                </select>
-              </div>
+              {/* Products Grid */}
+              <div className="flex-1">
+                {loading ? (
+                  <LoadingSpinner size="md" message="Loading products..." />
+                ) : error ? (
+                  <ErrorMessage message={error} type="error" />
+                ) : products.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="text-6xl mb-4">📦</div>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                      No products available
+                    </h3>
+                    <p className="text-gray-600">
+                      Check back soon for new dairy products!
+                    </p>
+                  </div>
+                ) : filteredProducts.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="text-6xl mb-4">📦</div>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                      No products found
+                    </h3>
+                    <p className="text-gray-600">
+                      Try adjusting your search or filter criteria.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredProducts.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        onAddToCart={() => handleAddToCart(product)}
+                        showAddToCart={true}
+                        showViewDetails={true}
+                        isAdmin={false}
+                      />
+                    ))}
+                  </div>
+                )}
 
-              {/* Fat Content Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Fat Content
-                </label>
-                <select
-                  value={selectedFatContent}
-                  onChange={(e) => setSelectedFatContent(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                >
-                  {fatContentOptions.map(option => (
-                    <option key={option} value={option}>{option}</option>
-                  ))}
-                </select>
+                {/* Pagination */}
+                {filteredProducts.length > 0 && (
+                  <div className="flex items-center justify-center gap-2 mt-8">
+                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Prev</button>
+                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">1</button>
+                    <button className="px-3 py-2 bg-green-600 text-white rounded-lg text-sm">2</button>
+                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">3</button>
+                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Next</button>
+                  </div>
+                )}
               </div>
             </div>
-
-            {/* Clear Filters Button */}
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={() => {
-                  setSelectedCategory('All Products');
-                  setSearchTerm('');
-                  setPriceRange([0, maxPrice]);
-                  setSelectedBrand('All Brands');
-                  setSelectedFatContent('All');
-                }}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
-              >
-                Clear All Filters
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Products Grid */}
-      {loading ? (
-        <LoadingSpinner size="md" message="Loading products..." />
-      ) : error ? (
-        <ErrorMessage message={error} type="error" />
-      ) : products.length === 0 ? (
-        /* No products at all */
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">📦</div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">
-            No products available
-          </h3>
-          <p className="text-gray-600">
-            Check back soon for new dairy products!
-          </p>
-        </div>
-      ) : filteredProducts.length === 0 ? (
-        /* Products exist, but filters returned nothing */
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">📦</div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">
-            No products found
-          </h3>
-          <p className="text-gray-600">
-            Try adjusting your search or filter criteria.
-          </p>
-        </div>
-      ) : (
-        /* Products Grid */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAddToCart={() => handleAddToCart(product)}
-              showAddToCart={true}
-              showViewDetails={true}
-              isAdmin={false}
-            />
-          ))}
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
