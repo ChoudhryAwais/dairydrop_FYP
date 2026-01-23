@@ -75,7 +75,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 bg-gradient-to-b from-green-600 to-emerald-600 text-white transition-all duration-300 shadow-2xl
+        className={`fixed left-0 bg-[#064e3b] text-white transition-all duration-300 shadow-2xl
           ${isMobile
             ? `z-40 w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`
             : `z-30 ${isOpen ? 'w-64' : 'w-20'}`
@@ -123,8 +123,8 @@ const Sidebar = () => {
               to={item.path}
               onClick={isMobile ? closeSidebar : undefined}
               className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 ${isActive(item.path)
-                  ? 'bg-white text-green-600 shadow-lg'
-                  : 'text-white hover:bg-green-500'
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg'
+                  : 'text-[#ffffffb3] hover:bg-white/10'
                 }`}
             >
               <span className="text-xl flex-shrink-0">{item.icon}</span>
