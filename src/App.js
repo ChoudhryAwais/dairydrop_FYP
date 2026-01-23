@@ -68,21 +68,21 @@ function AppContent() {
   const location = useLocation();
   const { userDetails } = useAuth();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signUp';
-  
+
   // Check if admin is on customer pages
-  const isAdminOnCustomerPage = userDetails?.role === 'admin' && 
+  const isAdminOnCustomerPage = userDetails?.role === 'admin' &&
     !location.pathname.startsWith('/admin');
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {!isAuthPage && <Header hideAuthStatus={isAdminOnCustomerPage} />}
       <main
-  className={
-    isAuthPage
-      ? 'flex-grow' // 👈 no padding, no container
-      : 'flex-grow container mx-auto px-4 py-8 max-w-7xl'
-  }
->
+        className={
+          isAuthPage
+            ? 'flex-grow' // 👈 no padding, no container
+            : 'flex-grow '
+        }
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
