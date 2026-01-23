@@ -1,27 +1,58 @@
 import { 
   collection, 
-  addDoc, 
   deleteDoc, 
   doc, 
   getDocs,
   query,
   where,
   orderBy,
-  updateDoc
+  updateDoc,
+  runTransaction,
+  serverTimestamp
 } from "firebase/firestore";
 import { db } from "../firebase";
 
 const REVIEWS_COLLECTION = "reviews";
+const PRODUCTS_COLLECTION = "products";
 
 export const addReview = async (reviewData) => {
+  const { productId, rating } = reviewData;
+
   try {
-    const docRef = await addDoc(collection(db, REVIEWS_COLLECTION), {
-      ...reviewData,
-      createdAt: new Date().toISOString()
+    const productRef = doc(db, PRODUCTS_COLLECTION, productId);
+    const reviewsRef = collection(db, REVIEWS_COLLECTION);
+
+    await runTransaction(db, async (tx) => {
+      const productSnap = await tx.get(productRef);
+
+      if (!productSnap.exists()) {
+        throw new Error("Product does not exist");
+      }
+
+      const productData = productSnap.data();
+      const oldCount = productData.ratingCount || 0;
+      const oldAvg = productData.ratingAvg || 0;
+
+      const newCount = oldCount + 1;
+      const newAvg = (oldAvg * oldCount + rating) / newCount;
+
+      // 1️⃣ create review
+      const newReviewRef = doc(reviewsRef);
+      tx.set(newReviewRef, {
+        ...reviewData,
+        createdAt: serverTimestamp(),
+      });
+
+      // 2️⃣ update product aggregates
+      tx.update(productRef, {
+        ratingCount: newCount,
+        ratingAvg: newAvg,
+      });
     });
 
-    return { success: true, reviewId: docRef.id };
+    return { success: true };
   } catch (error) {
+    console.error("Add review failed:", error);
     return { success: false, error: error.message };
   }
 };

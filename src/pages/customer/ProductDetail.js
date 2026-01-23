@@ -82,10 +82,20 @@ const ProductDetail = () => {
     const result = await addReview(reviewData);
     if (result.success) {
       setReviewForm({ rating: 5, comment: '' });
+      
+      // Refresh product data to get updated rating
+      const productResult = await getProductById(id);
+      if (productResult.success) {
+        setProduct(productResult.product);
+      }
+      
+      // Refresh reviews
       const reviewsResult = await getProductReviews(id);
       if (reviewsResult.success) {
         setReviews(reviewsResult.reviews);
       }
+      
+      alert('Review submitted successfully!');
     } else {
       alert('Failed to submit review');
     }
@@ -144,6 +154,34 @@ const ProductDetail = () => {
               </span>
               <h1 className="text-4xl font-bold text-gray-800 mb-2">{product.name}</h1>
               <p className="text-gray-600">{product.description}</p>
+              
+              {/* Rating Display */}
+              {product.ratingCount > 0 ? (
+                <div className="flex items-center gap-3 mt-3">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <span 
+                        key={i} 
+                        className={`text-2xl ${
+                          i < Math.round(product.ratingAvg) 
+                            ? 'text-yellow-400' 
+                            : 'text-gray-300'
+                        }`}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                  <div className="text-gray-700">
+                    <span className="font-bold text-lg">{product.ratingAvg.toFixed(1)}</span>
+                    <span className="text-gray-500 ml-1">({product.ratingCount} {product.ratingCount === 1 ? 'review' : 'reviews'})</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-gray-500 mt-3 text-sm">
+                  No reviews yet
+                </div>
+              )}
             </div>
 
             <div className="border-t border-b border-gray-200 py-4">
@@ -422,7 +460,7 @@ const ProductDetail = () => {
                     </div>
                   </div>
                   <p className="text-sm text-gray-500">
-                    {new Date(review.createdAt).toLocaleDateString()}
+                    {review.createdAt?.toDate().toLocaleDateString()}
                   </p>
                 </div>
                 <p className="text-gray-700">{review.comment}</p>
