@@ -76,7 +76,13 @@ function AppContent() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {!isAuthPage && <Header hideAuthStatus={isAdminOnCustomerPage} />}
-      <main className="flex-grow container mx-auto px-4 py-8 max-w-7xl">
+      <main
+  className={
+    isAuthPage
+      ? 'flex-grow' // 👈 no padding, no container
+      : 'flex-grow container mx-auto px-4 py-8 max-w-7xl'
+  }
+>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
