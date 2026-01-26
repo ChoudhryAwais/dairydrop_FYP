@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaStar } from "react-icons/fa";
 
 /**
  * ProductCard Component
@@ -50,7 +51,28 @@ const ProductCard = ({
       }
     }
   };
+  const renderRating = () => {
+    if (!product.ratingCount || product.ratingCount === 0) {
+      return (
+        <p className="text-xs text-gray-400 italic">
+          Be the first to review
+        </p>
+      );
+    }
 
+    return (
+      <div className="flex items-center gap-1 text-sm text-gray-600">
+        <FaStar className="text-yellow-400" />
+        <span className="font-medium">
+          {product.ratingAvg?.toFixed(1)}
+        </span>
+        <span className="text-gray-500">
+          ({product.ratingCount})
+        </span>
+      </div>
+    );
+  };
+  
   const isOutOfStock = product.quantity <= 0;
 
   return (
@@ -66,17 +88,25 @@ const ProductCard = ({
         ) : (
           <div className="text-6xl">🥛</div>
         )}
-        
+
         {/* Badges */}
-        <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
-          {!isOutOfStock && product.isNew && (
-            <div className="px-3 py-1 bg-teal-500 text-white text-xs font-bold rounded-lg">
-              NEW
-            </div>
-          )}
-          <div className="px-3 py-1 bg-teal-500 text-white text-xs font-bold rounded-lg">
-            ORGANIC
+        <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
+          {/* Category Badge - Glassmorphism style */}
+          <div className="px-2.5 py-1 bg-white/70 backdrop-blur-md border border-white/20 text-emerald-900 text-[10px] uppercase tracking-wider font-bold rounded-full shadow-sm">
+            {product.category}
           </div>
+
+          {/* NEW badge - Gradient pop style */}
+          {product.createdAt && (() => {
+            const createdDate = new Date(product.createdAt);
+            const now = new Date();
+            const diffInDays = (now - createdDate) / (1000 * 60 * 60 * 24);
+            return diffInDays <= 7;
+          })() && (
+              <div className="px-2.5 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] uppercase tracking-widest font-black rounded-full shadow-md animate-pulse-slow">
+                New
+              </div>
+            )}
         </div>
 
         {/* Add to Cart Button - Floating */}
@@ -84,13 +114,12 @@ const ProductCard = ({
           <button
             onClick={handleAddToCart}
             disabled={isOutOfStock || isLoading}
-            className={`absolute bottom-4 right-4 w-12 h-12 rounded-full font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 ${
-              isAdded
-                ? 'bg-emerald-600 text-white'
-                : isOutOfStock
+            className={`absolute bottom-4 right-4 w-12 h-12 rounded-full font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 ${isAdded
+              ? 'bg-emerald-600 text-white'
+              : isOutOfStock
                 ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
                 : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700'
-            }`}
+              }`}
           >
             {isLoading ? (
               <span className="animate-spin inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full"></span>
@@ -105,10 +134,11 @@ const ProductCard = ({
 
       {/* Product Content */}
       <div className="p-4 flex flex-col flex-grow">
-        {/* Category Badge */}
-        <span className="inline-block text-teal-700 text-xs font-bold uppercase tracking-wider mb-2 w-fit">
-          {product.category}
-        </span>
+
+        {/* Rating */}
+        <div className="mb-1">
+          {renderRating()}
+        </div>
 
         {/* Product Name */}
         <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2 flex-grow">

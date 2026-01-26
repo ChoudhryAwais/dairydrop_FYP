@@ -7,6 +7,7 @@ import { getProducts } from '../../services/products/productService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
 import ProductCard from '../../components/ProductCard';
+import { Leaf } from "lucide-react";
 
 const Products = () => {
   const { addToCart } = useCart();
@@ -27,12 +28,6 @@ const Products = () => {
 
   const categories = ['All Products', 'Milk', 'Cheese', 'Yogurt', 'Butter', 'Cream', 'Ghee', 'Ice Cream', 'Other'];
   const fatContentOptions = ['All', 'Full Fat', 'Low Fat', 'Fat Free', 'Reduced Fat'];
-  const sampleProducts = [
-    { id: 1, name: 'Milk', category: 'Milk', price: 2.99 },
-    { id: 2, name: 'Cheese', category: 'Cheese', price: 4.99 },
-    { id: 3, name: 'Yogurt', category: 'Yogurt', price: 1.99 },
-    { id: 4, name: 'Butter', category: 'Butter', price: 3.99 },
-  ];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -42,7 +37,7 @@ const Products = () => {
         if (result.success) {
           setProducts(result.products);
           setFilteredProducts(result.products);
-          
+
           // Calculate max price
           if (result.products.length > 0) {
             const max = Math.max(...result.products.map(p => p.price));
@@ -85,7 +80,7 @@ const Products = () => {
     }
 
     // Price range filter
-    filtered = filtered.filter(product => 
+    filtered = filtered.filter(product =>
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
@@ -122,18 +117,17 @@ const Products = () => {
     <div className="space-y-0">
       {/* Notification */}
       {notificationMessage && (
-        <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${
-          notificationType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-        }`}>
+        <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${notificationType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+          }`}>
           {notificationMessage}
         </div>
       )}
-      
+
       {/* Banner Header */}
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-16 px-6 text-center mb-12">
+      <div className="relative bg-gradient-to-r from-green-500 to-emerald-600 text-white py-16 px-6 text-center mb-12">
         <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="text-8xl absolute top-4 left-10">🌿</div>
-          <div className="text-8xl absolute bottom-4 right-10">🌾</div>
+          <Leaf className="w-20 h-20 absolute top-6 left-16 scale-x-[-1] text-white" />
+          <Leaf className="w-32 h-32 absolute bottom-6 right-44 scale-x-[-1] rotate-45 text-white" />
         </div>
         <div className="relative z-10">
           <p className="text-sm font-bold tracking-wider uppercase mb-2">100% Organic & Fresh</p>
@@ -146,7 +140,7 @@ const Products = () => {
 
       {/* Main Content */}
       <div className="px-6 space-y-8">
-        {products.length > 0 && (
+        {(loading || products.length > 0) && (
           <>
             {/* Top Bar with Results and Search */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-lg">
@@ -198,7 +192,6 @@ const Products = () => {
                   <div>
                     <h3 className="font-bold text-gray-900 mb-3 flex items-center justify-between cursor-pointer">
                       Category
-                      <span>▼</span>
                     </h3>
                     <div className="space-y-2">
                       {categories.map((category) => (
@@ -301,7 +294,9 @@ const Products = () => {
               {/* Products Grid */}
               <div className="flex-1">
                 {loading ? (
-                  <LoadingSpinner size="md" message="Loading products..." />
+                  <div className="min-h-[60vh] flex items-center justify-center">
+                    <LoadingSpinner size="lg" message="Loading products..." />
+                  </div>
                 ) : error ? (
                   <ErrorMessage message={error} type="error" />
                 ) : products.length === 0 ? (
