@@ -1,21 +1,49 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import home_img from '../../assets/home_img.avif';
+import home_img2 from '../../assets/home_img2.jpg';
+import home1 from '../../assets/home1.png';
+import home2 from '../../assets/home2.png';
 
 const Home = () => {
   return (
     <div className="space-y-16">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl shadow-lg overflow-hidden border border-green-100">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-6 md:px-12 py-12 md:py-16 items-center">
+      {/* Hero Section */}
+      <div
+        className="relative rounded-b-3xl shadow-lg overflow-hidden border border-white"
+        style={{
+          backgroundImage: `url(${home1})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Overlay for readability */}
+        <div className="absolute inset-0 bg-black/30"></div>
+
+        {/* Content */}
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 px-6 md:px-12 py-12 md:py-16 items-center">
           {/* Left Content */}
-          <div>
-            <p className="text-green-600 font-bold text-sm tracking-wider uppercase mb-4">100% Pure & Organic</p>
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-              Farm Fresh Goodness, Delivered to Your <span className="text-green-500">Doorstep</span>
-            </h1>
-            <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-              Experience the taste of purity with our 100% organic, hormone-free dairy products. Freshly sourced every morning from our trusted local farms.
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
+          >
+            <p className="text-green-300 font-bold text-sm tracking-wider uppercase mb-4">
+              100% Pure & Organic
             </p>
+
+            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+              Farm Fresh Goodness, Delivered to Your{' '}
+              <span className="text-green-400">Doorstep</span>
+            </h1>
+
+            <p className="text-gray-100 text-lg mb-8 leading-relaxed">
+              Experience the taste of purity with our 100% organic, hormone-free dairy products.
+              Freshly sourced every morning from our trusted local farms.
+            </p>
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/products"
@@ -23,39 +51,29 @@ const Home = () => {
               >
                 Shop Now
               </Link>
+
               <Link
                 to="/products"
-                className="inline-block border-2 border-gray-800 text-gray-800 px-8 py-3 rounded-full font-bold hover:bg-gray-50 transition-all duration-200 text-center"
+                className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-600 transition-all duration-200 text-center"
               >
                 View Catalog
               </Link>
             </div>
-            <div className="flex gap-12 mt-10">
-              <div>
-                <p className="text-2xl font-bold text-gray-900">15k+</p>
-                <p className="text-gray-600 text-sm">Happy Customers</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">100%</p>
-                <p className="text-gray-600 text-sm">Organic Certified</p>
-              </div>
-            </div>
-          </div>
 
-          {/* Right Image Section */}
-          <div className="relative">
-            <div className="relative bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl overflow-hidden aspect-video shadow-lg">
-              <div className="w-full h-full flex items-center justify-center bg-green-500 text-white text-4xl">
-                🌾
+            <div className="flex gap-12 mt-10 text-white">
+              <div>
+                <p className="text-2xl font-bold">15k+</p>
+                <p className="text-sm">Happy Customers</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold">100%</p>
+                <p className="text-sm">Organic Certified</p>
               </div>
             </div>
-            <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg p-4 max-w-xs">
-              <p className="text-sm font-semibold text-gray-800 mb-1">Fresh Daily</p>
-              <p className="text-xs text-gray-600">Sourced fresh every day</p>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
+
 
       {/* Browse by Category Section */}
       <div className="space-y-8">
