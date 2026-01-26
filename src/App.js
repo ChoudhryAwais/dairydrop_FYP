@@ -16,6 +16,7 @@ import Profile from './pages/customer/profile/Profile';
 import OrderHistory from './pages/customer/OrderHistory';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
+import ForgotPassword from './pages/auth/ForgotPassword';
 import AdminDashboard from './pages/admin/AdminDashBoard';
 import ProductsManagement from './pages/admin/ProductsManagement/ProductsManagement';
 import OrdersManagement from './pages/admin/OrdersManagement/OrdersManagement';
@@ -67,7 +68,7 @@ const CustomerRoute = ({ children }) => {
 function AppContent() {
   const location = useLocation();
   const { userDetails } = useAuth();
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/signUp';
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signUp' || location.pathname === '/forgot-password';
 
   // Check if admin is on customer pages
   const isAdminOnCustomerPage = userDetails?.role === 'admin' &&
@@ -110,6 +111,7 @@ function AppContent() {
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/admin/*" element={
             <AdminRoute>
               <AdminLayout />
