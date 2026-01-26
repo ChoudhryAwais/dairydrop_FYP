@@ -68,9 +68,11 @@ export default function Login() {
 
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-xl">🥛</span>
-            </div>
+              <img
+                src="/logo2.png"
+                alt="DairyDrop Logo"
+                className="h-14 w-auto rounded-[12px] block group-hover:scale-105 transition-transform"
+              />
             <h1 className="text-white text-3xl font-bold">Dairy Drop</h1>
           </div>
         </div>
@@ -190,7 +192,7 @@ export default function Login() {
                 <input type="checkbox" className="w-4 h-4 rounded border-gray-300" />
                 <span className="text-sm text-gray-700">Remember me</span>
               </label>
-              <Link to="#" className="text-sm text-green-600 hover:text-green-700 font-medium">
+              <Link to="/forgot-password" className="text-sm text-green-600 hover:text-green-700 font-medium">
                 Forgot Password?
               </Link>
             </div>
@@ -205,21 +207,6 @@ export default function Login() {
               {loading ? 'Signing in...' : 'Log In'}
             </button>
           </form>
-
-          {/* Social Login */}
-          <div className="mt-8">
-            <p className="text-center text-sm text-gray-500 mb-4">Or continue with</p>
-            <div className="flex gap-4">
-              <button className="flex-1 py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2">
-                <span className="text-lg">🔵</span>
-                <span className="text-sm font-medium text-gray-700">Google</span>
-              </button>
-              <button className="flex-1 py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2">
-                <span className="text-lg">🍎</span>
-                <span className="text-sm font-medium text-gray-700">Apple</span>
-              </button>
-            </div>
-          </div>
 
           {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600 mt-8">
