@@ -8,6 +8,8 @@ import { getProductById, getProducts } from '../../services/products/productServ
 import { getProductReviews, addReview } from '../../services/reviews/reviewService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -35,7 +37,7 @@ const ProductDetail = () => {
         const productResult = await getProductById(id);
         if (productResult.success) {
           setProduct(productResult.product);
-          
+
           // Fetch related products (same category, excluding current product)
           const allProductsResult = await getProducts();
           if (allProductsResult.success) {
@@ -64,6 +66,20 @@ const ProductDetail = () => {
     fetchProductAndReviews();
   }, [id]);
 
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(<FaStar key={i} className="text-yellow-400" />);
+      } else if (rating >= i - 0.5) {
+        stars.push(<FaStarHalfAlt key={i} className="text-yellow-400" />);
+      } else {
+        stars.push(<FaRegStar key={i} className="text-gray-300" />);
+      }
+    }
+    return stars;
+  };
+
   const handleAddReview = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
@@ -84,19 +100,19 @@ const ProductDetail = () => {
     const result = await addReview(reviewData);
     if (result.success) {
       setReviewForm({ rating: 5, comment: '' });
-      
+
       // Refresh product data to get updated rating
       const productResult = await getProductById(id);
       if (productResult.success) {
         setProduct(productResult.product);
       }
-      
+
       // Refresh reviews
       const reviewsResult = await getProductReviews(id);
       if (reviewsResult.success) {
         setReviews(reviewsResult.reviews);
       }
-      
+
       alert('Review submitted successfully!');
     } else {
       alert('Failed to submit review');
@@ -116,13 +132,12 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Notification */}
       {notificationMessage && (
-        <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${
-          notificationType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-        }`}>
+        <div className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg animate-fade-in ${notificationType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+          }`}>
           {notificationMessage}
         </div>
       )}
-      
+
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center space-x-2 text-sm text-gray-600">
@@ -138,14 +153,14 @@ const ProductDetail = () => {
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            
+
             {/* Product Images */}
             <div className="space-y-4">
               <div className="bg-gray-50 rounded-lg flex items-center justify-center h-96 overflow-hidden border border-gray-200">
                 {product.imageUrl ? (
-                  <img 
-                    src={product.imageUrl} 
-                    alt={product.name} 
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
                     className="w-full h-full object-contain"
                   />
                 ) : (
@@ -158,16 +173,15 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-16 h-16 rounded-lg border-2 flex items-center justify-center overflow-hidden transition-all ${
-                      selectedImage === index 
-                        ? 'border-green-600 bg-green-50' 
-                        : 'border-gray-200 bg-gray-100'
-                    }`}
+                    className={`w-16 h-16 rounded-lg border-2 flex items-center justify-center overflow-hidden transition-all ${selectedImage === index
+                      ? 'border-green-600 bg-green-50'
+                      : 'border-gray-200 bg-gray-100'
+                      }`}
                   >
                     {product.imageUrl ? (
-                      <img 
-                        src={product.imageUrl} 
-                        alt={`Thumbnail ${index + 1}`} 
+                      <img
+                        src={product.imageUrl}
+                        alt={`Thumbnail ${index + 1}`}
                         className="w-full h-full object-contain"
                       />
                     ) : (
@@ -180,37 +194,28 @@ const ProductDetail = () => {
 
             {/* Product Information */}
             <div className="space-y-6">
-              
+
               {/* Title and Rating */}
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
-                
+
                 {/* Rating */}
                 {product.ratingCount > 0 ? (
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <span 
-                          key={i} 
-                          className={`text-xl ${
-                            i < Math.round(product.ratingAvg) 
-                              ? 'text-yellow-400' 
-                              : 'text-gray-300'
-                          }`}
-                        >
-                          ★
-                        </span>
-                      ))}
+                    {/* Stars */}
+                    <div className="flex items-center gap-1">
+                      {renderStars(product.ratingAvg)}
                     </div>
+
+                    {/* Average rating and count */}
                     <span className="text-sm text-gray-600">
-                      {product.ratingCount > 0 ? `${product.ratingCount} Reviews` : 'No reviews'}
+                      {product.ratingAvg?.toFixed(1)} | {product.ratingCount} {product.ratingCount === 1 ? 'review' : 'reviews'}
                     </span>
                   </div>
                 ) : (
-                  <div className="text-sm text-gray-500">
-                    No reviews yet
-                  </div>
+                  <div className="text-sm text-gray-500">No reviews yet</div>
                 )}
+
               </div>
 
               {/* Price */}
@@ -255,14 +260,14 @@ const ProductDetail = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center border border-gray-300 rounded-lg bg-white">
-                    <button 
+                    <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       className="px-3 py-2 text-gray-600 hover:bg-gray-50 transition-colors font-bold text-lg w-10 h-10 flex items-center justify-center"
                     >
                       −
                     </button>
                     <span className="flex-1 text-center font-semibold text-base py-2">{quantity}</span>
-                    <button 
+                    <button
                       onClick={() => {
                         const cartItem = cartItems.find(item => item.id === product.id);
                         const currentCartQty = cartItem ? cartItem.quantity : 0;
@@ -279,7 +284,7 @@ const ProductDetail = () => {
                       +
                     </button>
                   </div>
-                  <button 
+                  <button
                     onClick={() => {
                       const result = addToCart(product, quantity);
                       if (result.success) {
@@ -298,11 +303,10 @@ const ProductDetail = () => {
                         }, 3000);
                       }
                     }}
-                    className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed ${
-                      addedNotification
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-green-600 hover:bg-green-700 text-white'
-                    }`}
+                    className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed ${addedNotification
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-green-600 hover:bg-green-700 text-white'
+                      }`}
                     disabled={product.quantity <= 0 || (() => {
                       const cartItem = cartItems.find(item => item.id === product.id);
                       const currentCartQty = cartItem ? cartItem.quantity : 0;
@@ -315,13 +319,13 @@ const ProductDetail = () => {
                     ♡
                   </button>
                 </div>
-                
+
                 {/* Items in Cart Info */}
                 {(() => {
                   const cartItem = cartItems.find(item => item.id === product.id);
                   const currentCartQty = cartItem ? cartItem.quantity : 0;
                   const remaining = product.quantity - currentCartQty;
-                  
+
                   return currentCartQty > 0 ? (
                     <div className="text-sm text-gray-600 flex items-center gap-4">
                       <div className="flex items-center gap-1">
@@ -362,31 +366,28 @@ const ProductDetail = () => {
           <div className="flex gap-8">
             <button
               onClick={() => setActiveTab('description')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'description'
-                  ? 'border-green-600 text-green-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'description'
+                ? 'border-green-600 text-green-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
             >
               Description
             </button>
             <button
               onClick={() => setActiveTab('nutrition')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'nutrition'
-                  ? 'border-green-600 text-green-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'nutrition'
+                ? 'border-green-600 text-green-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
             >
               Nutritional Facts
             </button>
             <button
               onClick={() => setActiveTab('reviews')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'reviews'
-                  ? 'border-green-600 text-green-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'reviews'
+                ? 'border-green-600 text-green-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
             >
               Reviews
             </button>
@@ -397,7 +398,7 @@ const ProductDetail = () => {
       {/* Tab Content */}
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          
+
           {/* Description Tab */}
           {activeTab === 'description' && (
             <div className="space-y-6">
@@ -494,7 +495,7 @@ const ProductDetail = () => {
           {activeTab === 'reviews' && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-8">Customer Reviews</h2>
-              
+
               {/* Review Stats */}
               {reviews.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 pb-8 border-b border-gray-200">
@@ -504,15 +505,14 @@ const ProductDetail = () => {
                       <span className="text-gray-500">out of 5</span>
                     </div>
                     <div className="flex items-center gap-1 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className={i < Math.round(product.ratingAvg) ? 'text-yellow-400' : 'text-gray-300'}>
-                          ★
-                        </span>
-                      ))}
+                      <div className="flex items-center gap-1">
+                        {renderStars(product.ratingAvg)}
+                      </div>
+
                     </div>
                     <p className="text-sm text-gray-600">Based on {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</p>
                   </div>
-                  
+
                   <div className="md:col-span-2 space-y-2">
                     {[5, 4, 3, 2, 1].map((rating) => {
                       const count = reviews.filter(r => r.rating === rating).length;
@@ -592,7 +592,7 @@ const ProductDetail = () => {
                           {review.userName?.charAt(0).toUpperCase() || 'U'}
                         </div>
                       </div>
-                      
+
                       {/* Review Content */}
                       <div className="flex-1">
                         <div className="flex items-start justify-between gap-2 mb-2">
@@ -600,11 +600,10 @@ const ProductDetail = () => {
                             <p className="font-semibold text-gray-900">{review.userName}</p>
                             <div className="flex items-center gap-2">
                               <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                  <span key={i} className={`text-sm ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}>
-                                    ★
-                                  </span>
-                                ))}
+                                <div className="flex items-center gap-1">
+                                  {renderStars(review.rating)}
+                                </div>
+
                               </div>
                               <p className="text-xs text-gray-500">
                                 {review.createdAt?.toDate().toLocaleDateString() || 'Just now'}
@@ -642,17 +641,17 @@ const ProductDetail = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-8">You Might Also Like</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
-                <Link 
-                  key={relatedProduct.id} 
+                <Link
+                  key={relatedProduct.id}
                   to={`/products/${relatedProduct.id}`}
                   className="group"
                 >
                   <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                     <div className="bg-gray-100 h-48 flex items-center justify-center overflow-hidden">
                       {relatedProduct.imageUrl ? (
-                        <img 
-                          src={relatedProduct.imageUrl} 
-                          alt={relatedProduct.name} 
+                        <img
+                          src={relatedProduct.imageUrl}
+                          alt={relatedProduct.name}
                           className="w-full h-full object-contain"
                         />
                       ) : (

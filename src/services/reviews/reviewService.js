@@ -16,37 +16,15 @@ const REVIEWS_COLLECTION = "reviews";
 const PRODUCTS_COLLECTION = "products";
 
 export const addReview = async (reviewData) => {
-  const { productId, rating } = reviewData;
-
   try {
-    const productRef = doc(db, PRODUCTS_COLLECTION, productId);
     const reviewsRef = collection(db, REVIEWS_COLLECTION);
+    const newReviewRef = doc(reviewsRef);
 
     await runTransaction(db, async (tx) => {
-      const productSnap = await tx.get(productRef);
-
-      if (!productSnap.exists()) {
-        throw new Error("Product does not exist");
-      }
-
-      const productData = productSnap.data();
-      const oldCount = productData.ratingCount || 0;
-      const oldAvg = productData.ratingAvg || 0;
-
-      const newCount = oldCount + 1;
-      const newAvg = (oldAvg * oldCount + rating) / newCount;
-
-      // 1️⃣ create review
-      const newReviewRef = doc(reviewsRef);
       tx.set(newReviewRef, {
         ...reviewData,
+        approved: false,              // ⬅️ important
         createdAt: serverTimestamp(),
-      });
-
-      // 2️⃣ update product aggregates
-      tx.update(productRef, {
-        ratingCount: newCount,
-        ratingAvg: newAvg,
       });
     });
 
@@ -56,6 +34,7 @@ export const addReview = async (reviewData) => {
     return { success: false, error: error.message };
   }
 };
+
 
 export const deleteReview = async (reviewId) => {
   try {
@@ -109,15 +88,50 @@ export const getAllReviews = async () => {
 
 export const approveReview = async (reviewId) => {
   try {
-    await updateDoc(doc(db, REVIEWS_COLLECTION, reviewId), {
-      approved: true,
-      approvedAt: new Date().toISOString()
+    const reviewRef = doc(db, REVIEWS_COLLECTION, reviewId);
+
+    await runTransaction(db, async (tx) => {
+      const reviewSnap = await tx.get(reviewRef);
+      if (!reviewSnap.exists()) {
+        throw new Error("Review not found");
+      }
+
+      const review = reviewSnap.data();
+
+      // ⛔ Prevent double approval
+      if (review.approved) return;
+
+      const productRef = doc(db, PRODUCTS_COLLECTION, review.productId);
+      const productSnap = await tx.get(productRef);
+      if (!productSnap.exists()) {
+        throw new Error("Product not found");
+      }
+
+      const { ratingAvg = 0, ratingCount = 0 } = productSnap.data();
+
+      const newCount = ratingCount + 1;
+      const newAvg = (ratingAvg * ratingCount + review.rating) / newCount;
+
+      // 1️⃣ approve review
+      tx.update(reviewRef, {
+        approved: true,
+        approvedAt: serverTimestamp(),
+      });
+
+      // 2️⃣ update product rating
+      tx.update(productRef, {
+        ratingCount: newCount,
+        ratingAvg: newAvg,
+      });
     });
+
     return { success: true };
   } catch (error) {
+    console.error("Approve review failed:", error);
     return { success: false, error: error.message };
   }
 };
+
 
 export const updateReviewContent = async (reviewId, newContent) => {
   try {
