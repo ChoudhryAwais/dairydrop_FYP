@@ -111,7 +111,7 @@ export const CartProvider = ({ children }) => {
               : item
           );
         }
-        return [...prevItems, { ...product, quantity: canAdd }];
+        return [...prevItems, { ...product, stock: product.quantity, quantity: canAdd }];
       });
       return {
         success: true,
@@ -129,7 +129,7 @@ export const CartProvider = ({ children }) => {
             : item
         );
       }
-      return [...prevItems, { ...product, quantity }];
+      return [...prevItems, { ...product, stock: product.quantity, quantity }];
     });
     
     return { success: true, message: 'Added to cart successfully' };
@@ -152,7 +152,7 @@ export const CartProvider = ({ children }) => {
       return { success: false, message: 'Item not found in cart' };
     }
 
-    const availableStock = item.quantity || 0;
+    const availableStock = item.stock || item.quantity || 0;
     
     // Check if new quantity exceeds available stock
     if (quantity > availableStock) {
