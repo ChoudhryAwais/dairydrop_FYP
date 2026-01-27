@@ -10,7 +10,7 @@ import Home from './pages/customer/Home';
 import Products from './pages/customer/Products';
 import ProductDetail from './pages/customer/productDetail/ProductDetail';
 import Cart from './pages/customer/Cart';
-import Checkout from './pages/customer/Checkout';
+import Checkout from './pages/customer/checkout/Checkout';
 import OrderConfirmation from './pages/customer/OrderConfirmation';
 import Profile from './pages/customer/profile/Profile';
 import OrderHistory from './pages/customer/OrderHistory/OrderHistory';
