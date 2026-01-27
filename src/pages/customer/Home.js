@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import home_img from '../../assets/home_img.avif';
-import home_img2 from '../../assets/home_img2.jpg';
 import home1 from '../../assets/home1.png';
-import home2 from '../../assets/home2.png';
+
 
 const Home = () => {
   return (
