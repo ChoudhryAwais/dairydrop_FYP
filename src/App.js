@@ -20,7 +20,7 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import AdminDashboard from './pages/admin/AdminDashBoard/AdminDashBoard';
 import ProductsManagement from './pages/admin/ProductsManagement/ProductsManagement';
 import OrdersManagement from './pages/admin/OrdersManagement/OrdersManagement';
-import UsersManagement from './pages/admin/UsersManagement';
+import UsersManagement from './pages/admin/usersManagement/UsersManagement';
 import ReviewsManagement from './pages/admin/ReviewsManagement';
 import './App.css';
 import AdminLayout from './layout/AdminLayout';
