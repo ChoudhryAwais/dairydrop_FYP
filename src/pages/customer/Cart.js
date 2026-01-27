@@ -82,10 +82,11 @@ const Cart = () => {
                       key={item.id}
                       className="group px-4 sm:px-8 py-8 hover:bg-gray-50/80 transition-all duration-300"
                     >
-                      {/* Mobile Layout */}
-                      <div className="md:hidden space-y-4">
-                        <div className="flex gap-4">
-                          <div className="w-24 h-24 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden border border-gray-100">
+                      {/* Unified Responsive Layout */}
+                      <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-12 md:gap-4 md:items-center">
+                        {/* Product Image & Info */}
+                        <div className="flex gap-4 md:gap-6 md:col-span-6 md:items-center">
+                          <div className="w-24 h-24 md:w-20 md:h-20 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden border border-gray-100 flex-shrink-0">
                             {item.imageUrl ? (
                               <img
                                 src={item.imageUrl}
@@ -93,31 +94,90 @@ const Cart = () => {
                                 className="w-full h-full object-contain p-2"
                               />
                             ) : (
-                              <span className="text-3xl">🥛</span>
+                              <span className="text-3xl md:text-2xl">🥛</span>
                             )}
                           </div>
 
-                          <div className="flex-1">
-                            <h3 className="font-bold text-gray-900 leading-tight mb-1">
+                          <div className="flex-1 md:flex-none">
+                            <h3 className="font-bold text-gray-900 leading-tight mb-1 text-base">
                               {item.name}
                             </h3>
 
-                            {/* Full ID */}
-                            <p className="text-xs text-gray-400 font-mono mb-1">
+                            <p className="text-xs md:text-[11px] text-gray-400 font-mono mb-1 mt-1">
                               ID: {item.id}
                             </p>
 
-                            {/* Stock */}
                             <span
-                              className={`text-[10px] font-bold uppercase tracking-wider ${item.stock > 0 ? "text-emerald-600" : "text-red-500"
-                                }`}
+                              className={`text-[10px] font-bold uppercase tracking-wider ${
+                                item.stock > 0 ? "text-emerald-600" : "text-red-500"
+                              }`}
                             >
                               {item.stock > 0 ? `${item.stock} in stock` : "Out of stock"}
                             </span>
                           </div>
                         </div>
 
-                        <div className="flex justify-between items-end bg-gray-50 p-4 rounded-xl">
+                        {/* Price (Desktop Only) */}
+                        <div className="hidden md:flex md:col-span-2 justify-center">
+                          <p className="font-medium text-gray-500">
+                            ${item.price.toFixed(2)}
+                          </p>
+                        </div>
+
+                        {/* Quantity Controls (Desktop: centered in col-span-2) */}
+                        <div className="hidden md:flex md:col-span-2 justify-center">
+                          <div className="flex items-center bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                            <button
+                              onClick={() =>
+                                handleQuantityUpdate(item.id, Math.max(1, item.quantity - 1))
+                              }
+                              className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-teal-600 transition-colors"
+                            >
+                              −
+                            </button>
+                            <span className="w-10 text-center font-bold text-gray-700 text-sm">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() =>
+                                handleQuantityUpdate(item.id, item.quantity + 1)
+                              }
+                              className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-teal-600 transition-colors"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Total & Remove (Desktop: right-aligned in col-span-2) */}
+                        <div className="hidden md:flex md:col-span-2 items-center justify-end gap-6">
+                          <p className="font-bold text-gray-900 text-lg text-right min-w-[90px]">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </p>
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200"
+                            title="Remove item"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+
+                        {/* Mobile: Quantity & Total Section with Gray Background */}
+                        <div className="flex justify-between items-end bg-gray-50 p-4 rounded-xl md:hidden">
                           <div>
                             <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tight mb-1">
                               Total
@@ -128,7 +188,7 @@ const Cart = () => {
                           </div>
 
                           <div className="flex flex-col items-end gap-3">
-                            <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                               <button
                                 onClick={() =>
                                   handleQuantityUpdate(item.id, Math.max(1, item.quantity - 1))
@@ -157,102 +217,6 @@ const Cart = () => {
                               Remove
                             </button>
                           </div>
-                        </div>
-                      </div>
-
-                      {/* Desktop Layout */}
-                      <div className="hidden md:grid grid-cols-12 gap-4 items-center">
-                        {/* Product Info */}
-                        <div className="col-span-6 flex items-center gap-6">
-                          <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden border border-gray-100">
-                            {item.imageUrl ? (
-                              <img
-                                src={item.imageUrl}
-                                alt={item.name}
-                                className="w-full h-full object-contain p-2"
-                              />
-                            ) : (
-                              <span className="text-2xl">🥛</span>
-                            )}
-                          </div>
-
-                          <div>
-                            <h3 className="font-bold text-gray-900 text-base">
-                              {item.name}
-                            </h3>
-
-                            {/* Full ID */}
-                            <p className="text-[11px] font-mono text-gray-400 mt-1">
-                              ID: {item.id}
-                            </p>
-
-                            {/* Stock under ID */}
-                            <p
-                              className={`text-[10px] font-bold uppercase tracking-wider ${item.stock > 0 ? "text-emerald-600" : "text-red-500"
-                                }`}
-                            >
-                              {item.stock > 0 ? `${item.stock} in stock` : "Out of stock"}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Price */}
-                        <div className="col-span-2 text-center">
-                          <p className="font-medium text-gray-500">
-                            ${item.price.toFixed(2)}
-                          </p>
-                        </div>
-
-                        {/* Quantity */}
-                        <div className="col-span-2 flex justify-center">
-                          <div className="flex items-center bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                            <button
-                              onClick={() =>
-                                handleQuantityUpdate(item.id, Math.max(1, item.quantity - 1))
-                              }
-                              className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-teal-600 transition-colors"
-                            >
-                              −
-                            </button>
-                            <span className="w-10 text-center font-bold text-gray-700 text-sm">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                handleQuantityUpdate(item.id, item.quantity + 1)
-                              }
-                              className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-teal-600 transition-colors"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Total & Remove (properly aligned) */}
-                        <div className="col-span-2 flex items-center justify-end gap-6">
-                          <p className="font-bold text-gray-900 text-lg text-right min-w-[90px]">
-                            ${(item.price * item.quantity).toFixed(2)}
-                          </p>
-                          <button
-                            onClick={() => removeFromCart(item.id)}
-                            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200"
-                            title="Remove item"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
                         </div>
                       </div>
                     </div>
