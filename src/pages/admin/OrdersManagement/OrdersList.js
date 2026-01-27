@@ -20,7 +20,7 @@ const OrdersList = ({
   return (
     <>
       {/* Filters and Search */}
-      <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 mb-6 sm:mb-8">
+      <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           {/* Search */}
           <div>
@@ -30,7 +30,7 @@ const OrdersList = ({
               placeholder="Search by Order ID, Email, or Name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
             />
           </div>
 
@@ -40,7 +40,7 @@ const OrdersList = ({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
             >
               <option value="All">All Statuses</option>
               <option value="Pending">Pending</option>
@@ -55,18 +55,22 @@ const OrdersList = ({
 
       {/* Loading State */}
       {loading ? (
-        <div className="bg-white p-8 sm:p-12 rounded-xl shadow-md border border-gray-200">
+        <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-100">
           <LoadingSpinner size="md" message="Loading orders..." />
         </div>
       ) : filteredOrders.length === 0 ? (
-        <div className="bg-white p-8 sm:p-12 rounded-xl shadow-md border border-gray-200 text-center">
-          <p className="text-gray-600 text-base sm:text-lg">No orders found</p>
+        <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-100 text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">📦</span>
+          </div>
+          <p className="text-gray-600 text-lg font-medium mb-1">No orders found</p>
+          <p className="text-gray-400 text-sm">Try adjusting your search or filters</p>
         </div>
       ) : (
         /* Orders Table/Cards */
         <div>
           {/* Desktop Table View */}
-          <div className="hidden lg:block bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+          <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -82,9 +86,9 @@ const OrdersList = ({
                 </thead>
                 <tbody>
                   {filteredOrders.map((order) => (
-                    <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                    <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                        <span className="text-green-600">{order.id.substring(0, 8)}</span>
+                        <span className="text-teal-600">{order.id.substring(0, 8)}</span>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-700">
                         <div>
@@ -112,7 +116,7 @@ const OrdersList = ({
                             setSelectedOrder(order);
                             setShowDetails(true);
                           }}
-                          className="text-green-600 hover:text-green-700 font-medium transition-colors duration-200"
+                          className="text-teal-600 hover:text-teal-700 font-medium transition-colors duration-200"
                         >
                           View
                         </button>
@@ -127,11 +131,11 @@ const OrdersList = ({
           {/* Mobile Card View */}
           <div className="lg:hidden space-y-4">
             {filteredOrders.map((order) => (
-              <div key={order.id} className="bg-white rounded-xl shadow-md border border-gray-200 p-4">
+              <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
                     <p className="text-xs text-gray-500 mb-1">Order ID</p>
-                    <p className="text-sm font-semibold text-green-600">{order.id.substring(0, 8)}</p>
+                    <p className="text-sm font-semibold text-teal-600">{order.id.substring(0, 8)}</p>
                   </div>
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                     {order.status}
@@ -166,7 +170,7 @@ const OrdersList = ({
                     setSelectedOrder(order);
                     setShowDetails(true);
                   }}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+                  className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
                 >
                   View Details
                 </button>
@@ -180,11 +184,11 @@ const OrdersList = ({
       {showDetails && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
-            <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+            <div className="p-4 sm:p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Order Details</h2>
               <button
                 onClick={() => setShowDetails(false)}
-                className="text-gray-500 hover:text-gray-700 font-bold text-2xl ml-2"
+                className="text-gray-500 hover:text-gray-700 font-bold text-2xl ml-2 transition-colors duration-200"
               >
                 ×
               </button>
@@ -206,7 +210,7 @@ const OrdersList = ({
               </div>
 
               {/* Customer Info */}
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-gray-100">
                 <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3">Customer Information</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
@@ -229,7 +233,7 @@ const OrdersList = ({
               </div>
 
               {/* Order Items */}
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-gray-100">
                 <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3">Items</h3>
                 <div className="space-y-2 max-h-40 sm:max-h-48 overflow-y-auto">
                   {selectedOrder.items?.map((item, idx) => (
@@ -245,7 +249,7 @@ const OrdersList = ({
               </div>
 
               {/* Total Amount */}
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-gray-100">
                 <div className="flex justify-between items-center mb-4">
                   <p className="text-gray-600 font-medium text-sm sm:text-base">Total Amount:</p>
                   <p className="text-xl sm:text-2xl font-bold text-gray-800">${(selectedOrder.total || 0).toFixed(2)}</p>
@@ -262,8 +266,8 @@ const OrdersList = ({
                         disabled={updatingStatus || status === selectedOrder.status}
                         className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-200 ${
                           status === selectedOrder.status
-                            ? 'bg-green-600 text-white cursor-default'
-                            : 'bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50'
+                            ? 'bg-teal-600 text-white cursor-default'
+                            : 'bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50'
                         }`}
                       >
                         {status}

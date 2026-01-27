@@ -120,12 +120,12 @@ const OrdersManagement = () => {
   return (
     <>
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 lg:p-8 transition-all duration-300">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2">Orders Management</h1>
-            <p className="text-sm sm:text-base text-gray-600">Manage all customer orders and track revenue</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-1">Orders Management</h1>
+            <p className="text-sm sm:text-base text-gray-500">Manage all customer orders and track revenue</p>
           </div>
 
           {/* Statistics Cards */}

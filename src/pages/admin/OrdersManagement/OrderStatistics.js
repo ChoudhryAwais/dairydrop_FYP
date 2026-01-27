@@ -10,68 +10,82 @@ const OrderStatistics = ({
   cancelledOrders
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-      <div className="bg-yellow-50 p-4 sm:p-6 rounded-xl shadow-md border border-yellow-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Pending</h3>
-          <span className="text-2xl sm:text-3xl">⏳</span>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Pending</h3>
+          <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">⏳</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">{pendingOrders}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">waiting orders</p>
+        <p className="text-3xl font-bold text-gray-800">{pendingOrders}</p>
+        <p className="text-gray-400 text-xs mt-1">waiting orders</p>
       </div>
 
-      <div className="bg-blue-50 p-4 sm:p-6 rounded-xl shadow-md border border-blue-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Processing</h3>
-          <span className="text-2xl sm:text-3xl">🔄</span>
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Processing</h3>
+          <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">🔄</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">{processingOrders}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">being processed</p>
+        <p className="text-3xl font-bold text-gray-800">{processingOrders}</p>
+        <p className="text-gray-400 text-xs mt-1">being processed</p>
       </div>
 
-      <div className="bg-purple-50 p-4 sm:p-6 rounded-xl shadow-md border border-purple-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Shipped</h3>
-          <span className="text-2xl sm:text-3xl">🚚</span>
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Shipped</h3>
+          <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">🚚</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">{shippedOrders}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">in transit</p>
+        <p className="text-3xl font-bold text-gray-800">{shippedOrders}</p>
+        <p className="text-gray-400 text-xs mt-1">in transit</p>
       </div>
 
-      <div className="bg-green-50 p-4 sm:p-6 rounded-xl shadow-md border border-green-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Delivered</h3>
-          <span className="text-2xl sm:text-3xl">✅</span>
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Delivered</h3>
+          <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">✅</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">{deliveredOrders}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">completed</p>
+        <p className="text-3xl font-bold text-gray-800">{deliveredOrders}</p>
+        <p className="text-gray-400 text-xs mt-1">completed</p>
       </div>
 
-      <div className="bg-red-50 p-4 sm:p-6 rounded-xl shadow-md border border-red-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Cancelled</h3>
-          <span className="text-2xl sm:text-3xl">❌</span>
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Cancelled</h3>
+          <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">❌</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">{cancelledOrders}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">cancelled</p>
+        <p className="text-3xl font-bold text-gray-800">{cancelledOrders}</p>
+        <p className="text-gray-400 text-xs mt-1">cancelled</p>
       </div>
 
-      <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Total Orders</h3>
-          <span className="text-2xl sm:text-3xl">📦</span>
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Total Orders</h3>
+          <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">📦</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">{orders.length}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">all time</p>
+        <p className="text-3xl font-bold text-gray-800">{orders.length}</p>
+        <p className="text-gray-400 text-xs mt-1">all time</p>
       </div>
 
-      <div className="bg-green-50 p-4 sm:p-6 rounded-xl shadow-md border border-green-200 sm:col-span-2">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Total Revenue</h3>
-          <span className="text-2xl sm:text-3xl">💰</span>
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 sm:col-span-2">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-gray-600 font-medium text-sm">Total Revenue</h3>
+          <div className="w-10 h-10 bg-teal-50 rounded-lg flex items-center justify-center">
+            <span className="text-xl">💰</span>
+          </div>
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-800">${totalRevenue.toFixed(2)}</p>
-        <p className="text-gray-500 text-xs mt-1 sm:mt-2">from delivered orders</p>
+        <p className="text-3xl font-bold text-gray-800">${totalRevenue.toFixed(2)}</p>
+        <p className="text-gray-400 text-xs mt-1">from delivered orders</p>
       </div>
     </div>
   );
