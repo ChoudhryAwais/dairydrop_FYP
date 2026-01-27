@@ -295,42 +295,99 @@ const ProductTabs = ({
 
       {/* You Might Also Like Section */}
       {relatedProducts.length > 0 && (
-        <div className="bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">You Might Also Like</h2>
+        <div className="bg-gradient-to-b from-white to-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            {/* Section Header */}
+            <div className="mb-12">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="h-1 w-8 bg-green-600 rounded-full"></div>
+                <span className="text-green-600 font-semibold text-sm uppercase tracking-wide">Recommendations</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">You Might Also Like</h2>
+              <p className="text-gray-600 mt-2">Check out these similar products loved by our customers</p>
+            </div>
+
+            {/* Products Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
-                <Link
-                  key={relatedProduct.id}
-                  to={`/products/${relatedProduct.id}`}
-                  className="group"
-                >
-                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <div className="bg-gray-100 h-48 flex items-center justify-center overflow-hidden">
-                      {relatedProduct.imageUrl ? (
-                        <img
-                          src={relatedProduct.imageUrl}
-                          alt={relatedProduct.name}
-                          className="w-full h-full object-contain"
-                        />
-                      ) : (
-                        <div className="text-6xl">🥛</div>
-                      )}
+                <div key={relatedProduct.id} className="h-full">
+                  <div className="group relative bg-white rounded-xl border border-gray-100 overflow-hidden hover:border-green-200 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                    {/* Product Badge */}
+                    {relatedProduct.quantity < 5 && relatedProduct.quantity > 0 && (
+                      <div className="absolute top-4 right-4 z-10 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        Low Stock
+                      </div>
+                    )}
+
+                    {/* Product Image Container */}
+                    <div className="relative bg-gradient-to-br from-green-50 to-gray-100 h-56 flex items-center justify-center overflow-hidden">
+                      <Link to={`/products/${relatedProduct.id}`} className="w-full h-full flex items-center justify-center">
+                        {relatedProduct.imageUrl ? (
+                          <img
+                            src={relatedProduct.imageUrl}
+                            alt={relatedProduct.name}
+                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                          />
+                        ) : (
+                          <MdLocalDrink className="text-7xl text-gray-300 group-hover:text-green-200 transition-colors duration-300" />
+                        )}
+                      </Link>
+
+                      {/* Quick View Overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
-                        {relatedProduct.name}
-                      </h3>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="text-green-600 font-bold">${relatedProduct.price}</p>
-                        <button className="text-green-600 hover:bg-green-50 p-2 rounded-lg transition-colors">
-                          +
-                        </button>
+
+                    {/* Product Info */}
+                    <div className="p-5 flex-1 flex flex-col">
+                      {/* Product Name */}
+                      <Link to={`/products/${relatedProduct.id}`} className="flex-1">
+                        <h3 className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2 text-sm md:text-base">
+                          {relatedProduct.name}
+                        </h3>
+                      </Link>
+
+                      {/* Rating */}
+                      {relatedProduct.ratingCount > 0 ? (
+                        <div className="flex items-center gap-2 mt-2 mb-3">
+                          <div className="flex items-center gap-0.5">
+                            {renderStars(relatedProduct.ratingAvg)}
+                          </div>
+                          <span className="text-xs text-gray-500">({relatedProduct.ratingCount})</span>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-400 mt-2 mb-3">No reviews yet</p>
+                      )}
+
+                      {/* Price and Action */}
+                      <div className="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
+                        <div>
+                          <p className="text-green-600 font-bold text-lg">${relatedProduct.price}</p>
+                          <p className="text-xs text-gray-500 line-through">${(relatedProduct.price * 1.1).toFixed(2)}</p>
+                        </div>
+                        <Link
+                          to={`/products/${relatedProduct.id}`}
+                          className="flex-1"
+                        >
+                          <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg transition-colors duration-200 font-medium text-sm">
+                            View
+                          </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
+            </div>
+
+            {/* View All CTA */}
+            <div className="mt-12 text-center">
+              <Link
+                to="/products"
+                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-lg"
+              >
+                Explore More Products
+                <span className="text-lg">→</span>
+              </Link>
             </div>
           </div>
         </div>

@@ -89,8 +89,8 @@ const Home = () => {
               to="/products?category=Milk"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/milk.jpg" alt="Milk" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/milk.jpg" alt="Milk" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Milk</h3>
             </Link>
@@ -99,8 +99,8 @@ const Home = () => {
               to="/products?category=Yogurt"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/yoghurt.webp" alt="Yogurt" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/yoghurt.webp" alt="Yogurt" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Yogurt</h3>
             </Link>
@@ -109,8 +109,8 @@ const Home = () => {
               to="/products?category=Cheese"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/cheese.avif" alt="Cheese" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/cheese.avif" alt="Cheese" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Cheese</h3>
             </Link>
@@ -119,8 +119,8 @@ const Home = () => {
               to="/products?category=Butter"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/butter.webp" alt="Butter" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/butter.webp" alt="Butter" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Butter</h3>
             </Link>
@@ -129,8 +129,8 @@ const Home = () => {
               to="/products?category=Cream"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/cream.jpg" alt="Cream" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/cream.jpg" alt="Cream" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Cream</h3>
             </Link>
@@ -139,8 +139,8 @@ const Home = () => {
               to="/products?category=Ghee"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/ghee.jpg" alt="Ghee" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/ghee.jpg" alt="Ghee" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Ghee</h3>
             </Link>
@@ -149,8 +149,8 @@ const Home = () => {
               to="/products?category=Ice Cream"
               className="group flex flex-col items-center text-center transition-all duration-200 transform hover:-translate-y-2"
             >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-shadow duration-200 overflow-hidden border-2 border-gray-200">
-                <img src="/icecream.jpeg" alt="Ice Cream" className="w-full h-full object-cover" />
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-100 group-hover:bg-green-100 flex items-center justify-center text-4xl md:text-5xl shadow-md group-hover:shadow-lg transition-all duration-200 overflow-hidden border-2 border-gray-200 group-hover:border-green-400">
+                <img src="/icecream.jpeg" alt="Ice Cream" className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-125" />
               </div>
               <h3 className="text-base md:text-lg font-semibold text-gray-800 mt-4 group-hover:text-green-600 transition-colors">Ice Cream</h3>
             </Link>
