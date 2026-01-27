@@ -232,22 +232,24 @@ const ProductsManagement = () => {
   }
 
   return (
-    <div className="flex-1 p-8">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Product Management</h1>
-          <p className="text-gray-600">Add, edit, and manage your dairy products</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-1">Product Management</h1>
+          <p className="text-sm sm:text-base text-gray-500">Add, edit, and manage your dairy products</p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <ErrorMessage
-            message={error}
-            type="error"
-            dismissible={true}
-            onDismiss={() => setError(null)}
-          />
+          <div className="mb-6">
+            <ErrorMessage
+              message={error}
+              type="error"
+              dismissible={true}
+              onDismiss={() => setError(null)}
+            />
+          </div>
         )}
 
         <ProductsList

@@ -14,16 +14,29 @@ const ProductForm = ({
   if (!showForm) return null;
 
   return (
-    <div className="mb-8 bg-white p-6 rounded-xl shadow-md border border-gray-200">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        {editingId ? 'Edit Product' : 'Add New Product'}
-      </h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{editingId ? '✏️' : '➕'}</span>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+              {editingId ? 'Edit Product' : 'Add New Product'}
+            </h2>
+          </div>
+          <button
+            onClick={resetForm}
+            className="text-gray-500 hover:text-gray-700 font-bold text-2xl ml-2"
+          >
+            ×
+          </button>
+        </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Product Name */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Product Name *
+            Product Name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -31,7 +44,7 @@ const ProductForm = ({
             value={formData.name}
             onChange={handleInputChange}
             placeholder="e.g., Fresh Whole Milk"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
             required
           />
         </div>
@@ -47,14 +60,14 @@ const ProductForm = ({
             onChange={handleInputChange}
             placeholder="Product description..."
             rows="4"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 resize-none"
           />
         </div>
 
         {/* Price */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Price ($) *
+            Price ($) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -64,7 +77,7 @@ const ProductForm = ({
             placeholder="0.00"
             step="0.01"
             min="0"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
             required
           />
         </div>
@@ -72,13 +85,13 @@ const ProductForm = ({
         {/* Category */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Category *
+            Category <span className="text-red-500">*</span>
           </label>
           <select
             name="category"
             value={formData.category}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
             required
           >
             {CATEGORIES.map(cat => (
@@ -99,7 +112,7 @@ const ProductForm = ({
             onChange={handleInputChange}
             placeholder="0"
             min="0"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
           />
         </div>
 
@@ -114,7 +127,7 @@ const ProductForm = ({
             value={formData.brand}
             onChange={handleInputChange}
             placeholder="e.g., Nestle, Olper's"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
           />
         </div>
 
@@ -127,7 +140,7 @@ const ProductForm = ({
             name="fatContent"
             value={formData.fatContent}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
           >
             <option value="">Select Fat Content</option>
             <option value="Full Fat">Full Fat</option>
@@ -148,7 +161,7 @@ const ProductForm = ({
             value={formData.shelfLife}
             onChange={handleInputChange}
             placeholder="e.g., 7 days, 3 months"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
           />
         </div>
 
@@ -157,7 +170,7 @@ const ProductForm = ({
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Nutritional Facts (per 100g/ml)
           </label>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <div>
               <input
                 type="text"
@@ -165,7 +178,7 @@ const ProductForm = ({
                 value={formData.nutritionalFacts.calories}
                 onChange={handleInputChange}
                 placeholder="Calories (kcal)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 text-sm"
               />
             </div>
             <div>
@@ -175,7 +188,7 @@ const ProductForm = ({
                 value={formData.nutritionalFacts.protein}
                 onChange={handleInputChange}
                 placeholder="Protein (g)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 text-sm"
               />
             </div>
             <div>
@@ -185,7 +198,7 @@ const ProductForm = ({
                 value={formData.nutritionalFacts.fat}
                 onChange={handleInputChange}
                 placeholder="Fat (g)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 text-sm"
               />
             </div>
             <div>
@@ -195,7 +208,7 @@ const ProductForm = ({
                 value={formData.nutritionalFacts.carbs}
                 onChange={handleInputChange}
                 placeholder="Carbs (g)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 text-sm"
               />
             </div>
             <div>
@@ -205,7 +218,7 @@ const ProductForm = ({
                 value={formData.nutritionalFacts.calcium}
                 onChange={handleInputChange}
                 placeholder="Calcium (mg)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 text-sm"
               />
             </div>
           </div>
@@ -216,22 +229,22 @@ const ProductForm = ({
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Product Image (Max 1MB)
           </label>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-start">
             <div className="flex-1">
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
               />
-              <p className="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (max 1MB)</p>
+              <p className="text-xs text-gray-400 mt-2">Supported formats: JPG, PNG, GIF (max 1MB)</p>
             </div>
             {imagePreview && (
-              <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-gray-300 bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center shadow-sm">
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="w-full h-full object-contain p-1"
+                  className="w-full h-full object-cover"
                 />
               </div>
             )}
@@ -239,22 +252,24 @@ const ProductForm = ({
         </div>
 
         {/* Form Actions */}
-        <div className="md:col-span-2 flex gap-4">
+        <div className="md:col-span-2 flex gap-3 pt-2">
           <button
             type="submit"
-            className="flex-1 px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200"
+            className="flex-1 px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md"
           >
-            {editingId ? 'Update Product' : 'Add Product'}
+            {editingId ? '✓ Update Product' : '+ Add Product'}
           </button>
           <button
             type="button"
             onClick={resetForm}
-            className="flex-1 px-6 py-2 bg-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-400 transition-colors duration-200"
+            className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-all duration-200"
           >
-            Clear
+            Cancel
           </button>
         </div>
-      </form>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

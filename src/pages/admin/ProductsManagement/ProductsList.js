@@ -21,49 +21,61 @@ const ProductsList = ({
   return (
     <>
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        <div className="bg-blue-50 p-4 sm:p-6 rounded-xl shadow-md border border-blue-200">
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Total Products</h3>
-            <span className="text-2xl sm:text-3xl">📦</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-gray-600 font-medium text-sm">Total Products</h3>
+            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+              <span className="text-xl">📦</span>
+            </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-bold text-gray-800">{totalProducts}</p>
-          <p className="text-gray-500 text-xs mt-1 sm:mt-2">all categories</p>
+          <p className="text-3xl font-bold text-gray-800">{totalProducts}</p>
+          <p className="text-gray-400 text-xs mt-1">all categories</p>
         </div>
 
-        <div className="bg-green-50 p-4 sm:p-6 rounded-xl shadow-md border border-green-200">
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 className="text-gray-600 font-medium text-xs sm:text-sm">In Stock</h3>
-            <span className="text-2xl sm:text-3xl">✅</span>
+        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-gray-600 font-medium text-sm">In Stock</h3>
+            <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+              <span className="text-xl">✅</span>
+            </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-bold text-gray-800">{inStockProducts}</p>
-          <p className="text-gray-500 text-xs mt-1 sm:mt-2">available</p>
+          <p className="text-3xl font-bold text-gray-800">{inStockProducts}</p>
+          <p className="text-gray-400 text-xs mt-1">available</p>
         </div>
 
-        <div className="bg-yellow-50 p-4 sm:p-6 rounded-xl shadow-md border border-yellow-200">
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Low Stock</h3>
-            <span className="text-2xl sm:text-3xl">⚠️</span>
+        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-gray-600 font-medium text-sm">Low Stock</h3>
+            <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+              <span className="text-xl">⚠️</span>
+            </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-bold text-gray-800">{lowStockProducts}</p>
-          <p className="text-gray-500 text-xs mt-1 sm:mt-2">&lt;10 units</p>
+          <p className="text-3xl font-bold text-gray-800">{lowStockProducts}</p>
+          <p className="text-gray-400 text-xs mt-1">&lt;10 units</p>
         </div>
 
-        <div className="bg-red-50 p-4 sm:p-6 rounded-xl shadow-md border border-red-200">
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 className="text-gray-600 font-medium text-xs sm:text-sm">Out of Stock</h3>
-            <span className="text-2xl sm:text-3xl">❌</span>
+        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-gray-600 font-medium text-sm">Out of Stock</h3>
+            <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+              <span className="text-xl">❌</span>
+            </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-bold text-gray-800">{outOfStockProducts}</p>
-          <p className="text-gray-500 text-xs mt-1 sm:mt-2">need restock</p>
+          <p className="text-3xl font-bold text-gray-800">{outOfStockProducts}</p>
+          <p className="text-gray-400 text-xs mt-1">need restock</p>
         </div>
       </div>
 
       {/* Action Bar */}
-      <div className="mb-6 flex gap-4 flex-wrap items-center">
+      <div className="mb-6 flex gap-3 flex-wrap items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200"
+          className={`px-5 py-2.5 font-medium rounded-lg transition-all duration-200 ${
+            showForm 
+              ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
+              : 'bg-teal-600 text-white hover:bg-teal-700 shadow-sm'
+          }`}
         >
           {showForm ? '✕ Cancel' : '+ Add Product'}
         </button>
@@ -72,7 +84,7 @@ const ProductsList = ({
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+          className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 bg-white text-gray-700 text-sm transition-all duration-200"
         >
           <option>All</option>
           {CATEGORIES.map(cat => (
@@ -80,19 +92,22 @@ const ProductsList = ({
           ))}
         </select>
 
-        <div className="ml-auto text-gray-600">
-          Showing {filteredProducts.length} of {products.length} products
+        <div className="ml-auto text-gray-500 text-sm font-medium">
+          {filteredProducts.length} of {products.length} products
         </div>
       </div>
 
       {/* Products Grid */}
       {filteredProducts.length === 0 ? (
-        <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200 text-center">
-          <p className="text-gray-500 text-lg">No products found</p>
-          <p className="text-gray-400 mt-2">Add your first product to get started</p>
+        <div className="bg-white p-12 rounded-lg shadow-sm border border-gray-100 text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">📦</span>
+          </div>
+          <p className="text-gray-600 text-lg font-medium mb-1">No products found</p>
+          <p className="text-gray-400 text-sm">Add your first product to get started</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProducts.map(product => (
             <ProductCard
               key={product.id}
