@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { MdDashboard, MdShoppingCart, MdLocalShipping, MdPeople, MdStarRate } from 'react-icons/md';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,11 +42,11 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/admin/products', label: 'Products', icon: '🛒' },
-    { path: '/admin/orders', label: 'Orders', icon: '📦' },
-    { path: '/admin/users', label: 'Users', icon: '👥' },
-    { path: '/admin/reviews', label: 'Reviews', icon: '⭐' },
+    { path: '/admin/dashboard', label: 'Dashboard', icon: MdDashboard },
+    { path: '/admin/products', label: 'Products', icon: MdShoppingCart },
+    { path: '/admin/orders', label: 'Orders', icon: MdLocalShipping },
+    { path: '/admin/users', label: 'Users', icon: MdPeople },
+    { path: '/admin/reviews', label: 'Reviews', icon: MdStarRate },
   ];
 
   return (
@@ -117,20 +118,23 @@ const Sidebar = () => {
 
         {/* Menu Items */}
         <nav className="mt-8 space-y-2 px-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 100px)' }}>
-          {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={isMobile ? closeSidebar : undefined}
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 ${isActive(item.path)
-                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg'
-                  : 'text-[#ffffffb3] hover:bg-white/10'
-                }`}
-            >
-              <span className="text-xl flex-shrink-0">{item.icon}</span>
-              {isOpen && <span className="font-medium">{item.label}</span>}
-            </Link>
-          ))}
+          {menuItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={isMobile ? closeSidebar : undefined}
+                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 ${isActive(item.path)
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg'
+                    : 'text-[#ffffffb3] hover:bg-white/10'
+                  }`}
+              >
+                <IconComponent className="text-xl flex-shrink-0" />
+                {isOpen && <span className="font-medium">{item.label}</span>}
+              </Link>
+            );
+          })}
         </nav>
       </div>
 
