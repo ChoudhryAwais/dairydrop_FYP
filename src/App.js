@@ -17,7 +17,7 @@ import OrderHistory from './pages/customer/OrderHistory';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import ForgotPassword from './pages/auth/ForgotPassword';
-import AdminDashboard from './pages/admin/AdminDashBoard';
+import AdminDashboard from './pages/admin/AdminDashBoard/AdminDashBoard';
 import ProductsManagement from './pages/admin/ProductsManagement/ProductsManagement';
 import OrdersManagement from './pages/admin/OrdersManagement/OrdersManagement';
 import UsersManagement from './pages/admin/UsersManagement';
