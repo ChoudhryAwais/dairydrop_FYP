@@ -9,7 +9,13 @@ import { FaJar, FaLeaf } from 'react-icons/fa';
 
 const Home = () => {
   return (
-    <div className="space-y-16">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.45 }}
+      className="space-y-16"
+    >
       {/* Hero Section */}
       {/* Hero Section */}
       <div
@@ -198,7 +204,7 @@ const Home = () => {
           View All Products
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

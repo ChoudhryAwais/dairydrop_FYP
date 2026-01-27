@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { AuthProvider, useAuth } from './context/myContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
@@ -84,7 +85,8 @@ function AppContent() {
             : 'flex-grow '
         }
       >
-        <Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
@@ -123,7 +125,8 @@ function AppContent() {
             <Route path="users" element={<UsersManagement />} />
             <Route path="reviews" element={<ReviewsManagement />} />
           </Route>
-        </Routes>
+          </Routes>
+        </AnimatePresence>
       </main>
       {!isAuthPage && <Footer />}
     </div>

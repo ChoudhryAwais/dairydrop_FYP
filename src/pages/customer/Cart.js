@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { MdLocalDrink, MdShoppingCart } from 'react-icons/md';
@@ -19,7 +20,13 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35 }}
+      className="min-h-screen bg-gray-50"
+    >
       {/* Error Notification */}
       {errorMessage && (
         <div className="fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg bg-red-600 text-white animate-fade-in">
@@ -309,7 +316,7 @@ const Cart = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
