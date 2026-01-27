@@ -1,6 +1,7 @@
 import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import { MdLocalDrink } from 'react-icons/md';
 
 const DashboardCharts = ({
   loading,
@@ -130,7 +131,7 @@ const DashboardCharts = ({
                     {product.image ? (
                       <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-2xl">🥛</span>
+                      <MdLocalDrink className="text-2xl text-gray-400" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdStarRate, MdCheckCircle, MdHourglassEmpty, MdBarChart } from 'react-icons/md';
 
 const ReviewsStats = ({ totalReviews, approvedCount, pendingCount, averageRating }) => {
   return (
@@ -7,7 +8,7 @@ const ReviewsStats = ({ totalReviews, approvedCount, pendingCount, averageRating
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Total Reviews</h3>
           <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">⭐</span>
+            <MdStarRate className="text-xl text-yellow-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{totalReviews}</p>
@@ -18,7 +19,7 @@ const ReviewsStats = ({ totalReviews, approvedCount, pendingCount, averageRating
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Approved</h3>
           <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">✓</span>
+            <MdCheckCircle className="text-xl text-green-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{approvedCount}</p>
@@ -29,7 +30,7 @@ const ReviewsStats = ({ totalReviews, approvedCount, pendingCount, averageRating
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Pending</h3>
           <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">⏳</span>
+            <MdHourglassEmpty className="text-xl text-yellow-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{pendingCount}</p>
@@ -40,7 +41,7 @@ const ReviewsStats = ({ totalReviews, approvedCount, pendingCount, averageRating
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Avg Rating</h3>
           <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">📊</span>
+            <MdBarChart className="text-xl text-blue-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{averageRating}</p>

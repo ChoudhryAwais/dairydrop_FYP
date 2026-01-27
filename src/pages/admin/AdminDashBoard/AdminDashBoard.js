@@ -7,15 +7,16 @@ import { getProducts } from '../../../services/products/productService';
 import { getAllReviews } from '../../../services/reviews/reviewService';
 import DashboardStats from './DashboardStats';
 import DashboardCharts from './DashboardCharts';
+import { MdShoppingCart, MdAttachMoney, MdCheckCircle, MdPeople, MdStorefront, MdStarRate } from 'react-icons/md';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState([
-    { label: 'Total Orders', value: '0', icon: '🛒', bgColor: 'bg-blue-50', iconBg: 'bg-blue-100', subtext: '0% more than last month' },
-    { label: 'Total Revenue', value: '$0', icon: '💰', bgColor: 'bg-green-50', iconBg: 'bg-green-100', subtext: '0% from last month' },
-    { label: 'Delivered Orders', value: '0', icon: '✅', bgColor: 'bg-teal-50', iconBg: 'bg-teal-100', subtext: 'Completed' },
-    { label: 'Total Customers', value: '0', icon: '👥', bgColor: 'bg-purple-50', iconBg: 'bg-purple-100', subtext: 'Active users' },
-    { label: 'Products Listed', value: '0', icon: '🏪', bgColor: 'bg-orange-50', iconBg: 'bg-orange-100', subtext: '0 in stock, 0 out of stock' },
-    { label: 'Average Rating', value: '0', icon: '⭐', bgColor: 'bg-yellow-50', iconBg: 'bg-yellow-100', subtext: 'from 0 reviews, 0 pending' },
+    { label: 'Total Orders', value: '0', icon: MdShoppingCart, bgColor: 'bg-blue-50', iconBg: 'bg-blue-100', subtext: '0% more than last month' },
+    { label: 'Total Revenue', value: '$0', icon: MdAttachMoney, bgColor: 'bg-green-50', iconBg: 'bg-green-100', subtext: '0% from last month' },
+    { label: 'Delivered Orders', value: '0', icon: MdCheckCircle, bgColor: 'bg-teal-50', iconBg: 'bg-teal-100', subtext: 'Completed' },
+    { label: 'Total Customers', value: '0', icon: MdPeople, bgColor: 'bg-purple-50', iconBg: 'bg-purple-100', subtext: 'Active users' },
+    { label: 'Products Listed', value: '0', icon: MdStorefront, bgColor: 'bg-orange-50', iconBg: 'bg-orange-100', subtext: '0 in stock, 0 out of stock' },
+    { label: 'Average Rating', value: '0', icon: MdStarRate, bgColor: 'bg-yellow-50', iconBg: 'bg-yellow-100', subtext: 'from 0 reviews, 0 pending' },
   ]);
 
   const [recentOrders, setRecentOrders] = useState([]);
@@ -197,7 +198,7 @@ const AdminDashboard = () => {
           { 
             label: 'Total Orders', 
             value: totalOrders.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 
-            icon: '🛒', 
+            icon: MdShoppingCart, 
             bgColor: 'bg-blue-50', 
             iconBg: 'bg-blue-100', 
             subtext: formattedOrdersGrowth
@@ -205,7 +206,7 @@ const AdminDashboard = () => {
           { 
             label: 'Total Revenue', 
             value: `$${totalRevenue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`, 
-            icon: '💰', 
+            icon: MdAttachMoney, 
             bgColor: 'bg-green-50', 
             iconBg: 'bg-green-100', 
             subtext: formattedRevenueGrowth
@@ -213,7 +214,7 @@ const AdminDashboard = () => {
           { 
             label: 'Delivered Orders', 
             value: deliveredOrders.toString(), 
-            icon: '✅', 
+            icon: MdCheckCircle, 
             bgColor: 'bg-teal-50', 
             iconBg: 'bg-teal-100', 
             subtext: 'Completed'
@@ -221,7 +222,7 @@ const AdminDashboard = () => {
           { 
             label: 'Total Customers', 
             value: totalCustomers.toString(), 
-            icon: '👥', 
+            icon: MdPeople, 
             bgColor: 'bg-purple-50', 
             iconBg: 'bg-purple-100', 
             subtext: 'Active users'
@@ -229,7 +230,7 @@ const AdminDashboard = () => {
           { 
             label: 'Products Listed', 
             value: totalProducts.toString(), 
-            icon: '🏪', 
+            icon: MdStorefront, 
             bgColor: 'bg-orange-50', 
             iconBg: 'bg-orange-100', 
             subtext: `${inStockProducts} in stock, ${outOfStockProducts} out of stock`
@@ -237,7 +238,7 @@ const AdminDashboard = () => {
           { 
             label: 'Average Rating', 
             value: averageRating || '0', 
-            icon: '⭐', 
+            icon: MdStarRate, 
             bgColor: 'bg-yellow-50', 
             iconBg: 'bg-yellow-100', 
             subtext: `from ${totalReviews} reviews, ${pendingReviews} pending`

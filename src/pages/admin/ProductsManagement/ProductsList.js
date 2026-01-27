@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductCard from '../../../components/ProductCard';
+import { MdInventory, MdCheckCircle, MdWarning, MdCancel, MdClose, MdAdd } from 'react-icons/md';
 
 const ProductsList = ({
   products,
@@ -26,7 +27,7 @@ const ProductsList = ({
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-gray-600 font-medium text-sm">Total Products</h3>
             <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <span className="text-xl">📦</span>
+              <MdInventory className="text-xl text-blue-600" />
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-800">{totalProducts}</p>
@@ -37,7 +38,7 @@ const ProductsList = ({
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-gray-600 font-medium text-sm">In Stock</h3>
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-              <span className="text-xl">✅</span>
+              <MdCheckCircle className="text-xl text-green-600" />
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-800">{inStockProducts}</p>
@@ -48,7 +49,7 @@ const ProductsList = ({
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-gray-600 font-medium text-sm">Low Stock</h3>
             <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
-              <span className="text-xl">⚠️</span>
+              <MdWarning className="text-xl text-yellow-600" />
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-800">{lowStockProducts}</p>
@@ -59,7 +60,7 @@ const ProductsList = ({
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-gray-600 font-medium text-sm">Out of Stock</h3>
             <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
-              <span className="text-xl">❌</span>
+              <MdCancel className="text-xl text-red-600" />
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-800">{outOfStockProducts}</p>
@@ -71,13 +72,23 @@ const ProductsList = ({
       <div className="mb-6 flex gap-3 flex-wrap items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
         <button
           onClick={() => setShowForm(!showForm)}
-          className={`px-5 py-2.5 font-medium rounded-lg transition-all duration-200 ${
+          className={`px-5 py-2.5 font-medium rounded-lg transition-all duration-200 flex items-center gap-2 ${
             showForm 
               ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
               : 'bg-teal-600 text-white hover:bg-teal-700 shadow-sm'
           }`}
         >
-          {showForm ? '✕ Cancel' : '+ Add Product'}
+          {showForm ? (
+            <>
+              <MdClose className="text-lg" />
+              Cancel
+            </>
+          ) : (
+            <>
+              <MdAdd className="text-lg" />
+              Add Product
+            </>
+          )}
         </button>
 
         {/* Category Filter */}
@@ -101,7 +112,7 @@ const ProductsList = ({
       {filteredProducts.length === 0 ? (
         <div className="bg-white p-12 rounded-lg shadow-sm border border-gray-100 text-center">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">📦</span>
+            <MdInventory className="text-3xl text-gray-400" />
           </div>
           <p className="text-gray-600 text-lg font-medium mb-1">No products found</p>
           <p className="text-gray-400 text-sm">Add your first product to get started</p>

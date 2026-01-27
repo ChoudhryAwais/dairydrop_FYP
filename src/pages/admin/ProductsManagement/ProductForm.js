@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdEdit, MdAdd, MdCheck } from 'react-icons/md';
 
 const ProductForm = ({
   showForm,
@@ -18,7 +19,11 @@ const ProductForm = ({
       <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
         <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">{editingId ? '✏️' : '➕'}</span>
+            {editingId ? (
+              <MdEdit className="text-2xl text-teal-600" />
+            ) : (
+              <MdAdd className="text-2xl text-teal-600" />
+            )}
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
               {editingId ? 'Edit Product' : 'Add New Product'}
             </h2>
@@ -255,9 +260,19 @@ const ProductForm = ({
         <div className="md:col-span-2 flex gap-3 pt-2">
           <button
             type="submit"
-            className="flex-1 px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md"
+            className="flex-1 px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2"
           >
-            {editingId ? '✓ Update Product' : '+ Add Product'}
+            {editingId ? (
+              <>
+                <MdCheck className="text-lg" />
+                Update Product
+              </>
+            ) : (
+              <>
+                <MdAdd className="text-lg" />
+                Add Product
+              </>
+            )}
           </button>
           <button
             type="button"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdPeople, MdAdminPanelSettings, MdShoppingBag, MdCheckCircle, MdBlock } from 'react-icons/md';
 
 const UsersStats = ({ stats }) => {
   return (
@@ -7,7 +8,7 @@ const UsersStats = ({ stats }) => {
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Total Users</h3>
           <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">👥</span>
+            <MdPeople className="text-xl text-gray-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{stats.totalUsers}</p>
@@ -16,7 +17,7 @@ const UsersStats = ({ stats }) => {
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Admin</h3>
           <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">🛡️</span>
+            <MdAdminPanelSettings className="text-xl text-blue-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{stats.adminUsers}</p>
@@ -25,7 +26,7 @@ const UsersStats = ({ stats }) => {
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Customers</h3>
           <div className="w-10 h-10 bg-teal-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">🛒</span>
+            <MdShoppingBag className="text-xl text-teal-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{stats.customerUsers}</p>
@@ -34,7 +35,7 @@ const UsersStats = ({ stats }) => {
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Active</h3>
           <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">✅</span>
+            <MdCheckCircle className="text-xl text-green-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{stats.activeUsers}</p>
@@ -43,7 +44,7 @@ const UsersStats = ({ stats }) => {
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-600 font-medium text-sm">Disabled</h3>
           <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
-            <span className="text-xl">🚫</span>
+            <MdBlock className="text-xl text-red-600" />
           </div>
         </div>
         <p className="text-3xl font-bold text-gray-800">{stats.disabledUsers}</p>
