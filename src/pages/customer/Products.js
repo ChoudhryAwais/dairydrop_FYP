@@ -174,9 +174,19 @@ const Products = () => {
             </div>
 
             {/* Active Filter Tags */}
-            {(selectedCategory !== 'All Products' || searchTerm || selectedBrand !== 'All Brands' || selectedFatContent !== 'All') && (
+            {(selectedCategory !== 'All Products' || searchTerm || selectedBrand !== 'All Brands' || selectedFatContent !== 'All' || priceRange[0] !== 0 || priceRange[1] !== maxPrice) && (
               <div className="flex flex-wrap items-center gap-2 bg-white p-4 rounded-lg">
                 <span className="text-sm text-gray-600">Active Filters:</span>
+
+                {searchTerm && (
+                  <div className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
+                    <span>Search: {searchTerm}</span>
+                    <button onClick={() => setSearchTerm('')} className="hover:text-gray-900">
+                      <MdClose />
+                    </button>
+                  </div>
+                )}
+
                 {selectedCategory !== 'All Products' && (
                   <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                     <span>Category: {selectedCategory}</span>
@@ -185,6 +195,34 @@ const Products = () => {
                     </button>
                   </div>
                 )}
+
+                {selectedBrand !== 'All Brands' && (
+                  <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">
+                    <span>Brand: {selectedBrand}</span>
+                    <button onClick={() => setSelectedBrand('All Brands')} className="hover:text-indigo-900">
+                      <MdClose />
+                    </button>
+                  </div>
+                )}
+
+                {selectedFatContent !== 'All' && (
+                  <div className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                    <span>Fat: {selectedFatContent}</span>
+                    <button onClick={() => setSelectedFatContent('All')} className="hover:text-yellow-900">
+                      <MdClose />
+                    </button>
+                  </div>
+                )}
+
+                {(priceRange[0] !== 0 || priceRange[1] !== maxPrice) && (
+                  <div className="inline-flex items-center gap-2 bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm">
+                    <span>Price: ${priceRange[0]} - ${priceRange[1]}</span>
+                    <button onClick={() => setPriceRange([0, maxPrice])} className="hover:text-pink-900">
+                      <MdClose />
+                    </button>
+                  </div>
+                )}
+
                 <button
                   onClick={() => {
                     setSelectedCategory('All Products');
