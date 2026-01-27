@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar } from "react-icons/fa";
+import { MdLocalDrink } from "react-icons/md";
 
 /**
  * ProductCard Component
@@ -78,15 +79,17 @@ const ProductCard = ({
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group h-full flex flex-col border border-gray-100">
       {/* Product Image Container */}
-      <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
+      <div className="relative aspect-square flex items-center justify-center overflow-hidden bg-white">
         {product.imageUrl ? (
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="text-6xl">🥛</div>
+          <div className="bg-gradient-to-br from-gray-50 to-gray-100 w-full h-full flex items-center justify-center">
+            <MdLocalDrink className="text-8xl text-gray-300" />
+          </div>
         )}
 
         {/* Badges */}
