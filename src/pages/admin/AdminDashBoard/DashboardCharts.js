@@ -2,6 +2,7 @@ import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { MdLocalDrink } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 const DashboardCharts = ({
   loading,
@@ -11,7 +12,8 @@ const DashboardCharts = ({
   topProducts,
   categoryData,
   recentOrders,
-  getStatusColor
+  getStatusColor,
+  onViewOrder
 }) => {
   return (
     <>
@@ -124,10 +126,10 @@ const DashboardCharts = ({
               <p className="text-gray-400 text-sm">No products available</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {topProducts.map((product, idx) => (
-                <div key={idx} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal-50 to-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                     {product.image ? (
                       <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                     ) : (
@@ -138,8 +140,9 @@ const DashboardCharts = ({
                     <p className="text-sm font-semibold text-gray-800 truncate">{product.name}</p>
                     <p className="text-xs text-gray-500">{product.category}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex-shrink-0">
                     <p className="text-sm font-bold text-teal-600">{product.price}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{product.salesCount} sold</p>
                   </div>
                 </div>
               ))}
@@ -208,7 +211,7 @@ const DashboardCharts = ({
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-gray-800">Recent Orders</h2>
-            <button className="text-sm text-teal-600 font-medium hover:text-teal-700">View All</button>
+            <Link to="/admin/orders" className="text-sm text-teal-600 font-medium hover:text-teal-700">View All</Link>
           </div>
         </div>
 
@@ -222,18 +225,19 @@ const DashboardCharts = ({
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
                     <LoadingSpinner size="sm" message="Loading orders..." />
                   </td>
                 </tr>
               ) : recentOrders.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
                     No orders yet
                   </td>
                 </tr>
@@ -251,6 +255,14 @@ const DashboardCharts = ({
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                         {order.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      <button
+                        onClick={() => onViewOrder(order.id)}
+                        className="text-teal-600 hover:text-teal-700 font-medium transition-colors duration-200"
+                      >
+                        View
+                      </button>
                     </td>
                   </tr>
                 ))

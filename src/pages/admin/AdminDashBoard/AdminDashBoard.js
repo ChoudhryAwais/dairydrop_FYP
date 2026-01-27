@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { getAllUsers } from '../../../services/users/userService';
-import { getAllOrders } from '../../../services/orders/orderService';
+import { getAllOrders, updateOrderStatus } from '../../../services/orders/orderService';
 import { getProducts } from '../../../services/products/productService';
 import { getAllReviews } from '../../../services/reviews/reviewService';
 import DashboardStats from './DashboardStats';
 import DashboardCharts from './DashboardCharts';
+import OrderDetailsModal from '../OrdersManagement/OrderDetailsModal';
 import { MdShoppingCart, MdAttachMoney, MdCheckCircle, MdPeople, MdStorefront, MdStarRate } from 'react-icons/md';
 
 const AdminDashboard = () => {
@@ -20,6 +21,7 @@ const AdminDashboard = () => {
   ]);
 
   const [recentOrders, setRecentOrders] = useState([]);
+  const [fullOrders, setFullOrders] = useState([]); // Store full order objects for modal
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -27,6 +29,10 @@ const AdminDashboard = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [availableYears, setAvailableYears] = useState([]);
   const [viewMode, setViewMode] = useState('weekly'); // 'weekly', 'monthly', or 'yearly'
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const statusOptions = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -113,9 +119,12 @@ const AdminDashboard = () => {
                    orderDate.getFullYear() === lastMonthYear;
           }).length;
 
-          const recentOrdersList = ordersResult.orders
-            .slice(0, 4)
-            .map(order => ({
+          // Store full order objects for modal
+          const recentOrdersData = ordersResult.orders.slice(0, 4);
+          setFullOrders(recentOrdersData);
+          
+          // Create display data for table
+          const recentOrdersList = recentOrdersData.map(order => ({
               id: order.id || '#000',
               customer: order.customerInfo?.fullName || 'Unknown',
               product: order.items?.[0]?.name || 'Multiple Items',
@@ -149,14 +158,47 @@ const AdminDashboard = () => {
           
           setCategoryData(categoryCounts);
 
-          // Get top products (sorted by some criteria, using first 4 for now)
-          const topProds = productsResult.products.slice(0, 4).map(prod => ({
+          // Calculate top products by sales count (items ordered most frequently)
+          const productSalesMap = {};
+          
+          if (ordersResult.success && ordersResult.orders.length > 0) {
+            ordersResult.orders.forEach(order => {
+              if (order.items && Array.isArray(order.items)) {
+                order.items.forEach(item => {
+                  const productId = item.id || item.name;
+                  if (productId) {
+                    if (!productSalesMap[productId]) {
+                      productSalesMap[productId] = {
+                        ...item,
+                        salesCount: 0
+                      };
+                    }
+                    productSalesMap[productId].salesCount += item.quantity || 1;
+                  }
+                });
+              }
+            });
+          }
+          
+          // Convert map to array and sort by sales count (descending)
+          const topProds = Object.values(productSalesMap)
+            .sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0))
+            .slice(0, 4)
+            .map(prod => ({
+              name: prod.name || 'Unknown Product',
+              price: `$${(parseFloat(prod.price) || 0).toFixed(2)}`,
+              category: prod.category || 'Other',
+              image: prod.imageUrl || '',
+              salesCount: prod.salesCount || 0
+            }));
+          
+          setTopProducts(topProds.length > 0 ? topProds : productsResult.products.slice(0, 4).map(prod => ({
             name: prod.name || 'Unknown Product',
             price: `$${(parseFloat(prod.price) || 0).toFixed(2)}`,
             category: prod.category || 'Other',
-            image: prod.imageUrl || ''
-          }));
-          setTopProducts(topProds);
+            image: prod.imageUrl || '',
+            salesCount: 0
+          })));
         }
 
         if (reviewsResult.success && reviewsResult.reviews.length > 0) {
@@ -350,6 +392,47 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleStatusUpdate = async (orderId, newStatus) => {
+    try {
+      setUpdatingStatus(true);
+      const result = await updateOrderStatus(orderId, newStatus);
+      
+      if (result.success) {
+        // Update the selected order
+        setSelectedOrder(prev => ({
+          ...prev,
+          status: newStatus
+        }));
+        
+        // Update fullOrders array
+        setFullOrders(prev => 
+          prev.map(order => 
+            order.id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+        
+        // Update recentOrders display array
+        setRecentOrders(prev => 
+          prev.map(order => 
+            order.id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
+
+  const handleViewOrder = (orderId) => {
+    const order = fullOrders.find(o => o.id === orderId);
+    if (order) {
+      setSelectedOrder(order);
+      setShowDetails(true);
+    }
+  };
+
   return (
     <>
       {/* Main Content */}
@@ -374,9 +457,20 @@ const AdminDashboard = () => {
             categoryData={categoryData}
             recentOrders={recentOrders}
             getStatusColor={getStatusColor}
+            onViewOrder={handleViewOrder}
           />
         </div>
       </div>
+
+      {/* Order Details Modal */}
+      <OrderDetailsModal
+        show={showDetails}
+        order={selectedOrder}
+        onClose={() => setShowDetails(false)}
+        onStatusUpdate={handleStatusUpdate}
+        updatingStatus={updatingStatus}
+        statusOptions={statusOptions}
+      />
     </>
   );
 };
