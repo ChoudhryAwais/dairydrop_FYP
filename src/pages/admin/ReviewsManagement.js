@@ -173,50 +173,58 @@ const ReviewsManagement = () => {
   return (
     <>
       {/* Main Content */}
-      <div className="flex-1 p-8 transition-all duration-300">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">Reviews Moderation</h1>
-            <p className="text-gray-600">Manage and moderate customer reviews</p>
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-1">Reviews Moderation</h1>
+            <p className="text-sm sm:text-base text-gray-500">Manage and moderate customer reviews</p>
           </div>
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="text-gray-600 font-medium text-sm">Total Reviews</h3>
-                <span className="text-3xl">⭐</span>
+                <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">⭐</span>
+                </div>
               </div>
               <p className="text-3xl font-bold text-gray-800">{totalReviews}</p>
-              <p className="text-gray-500 text-xs mt-2">All reviews</p>
+              <p className="text-gray-400 text-xs mt-1">All reviews</p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="text-gray-600 font-medium text-sm">Approved</h3>
-                <span className="text-3xl">✓</span>
+                <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">✓</span>
+                </div>
               </div>
-              <p className="text-3xl font-bold text-green-600">{approvedCount}</p>
-              <p className="text-gray-500 text-xs mt-2">Published reviews</p>
+              <p className="text-3xl font-bold text-gray-800">{approvedCount}</p>
+              <p className="text-gray-400 text-xs mt-1">Published reviews</p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="text-gray-600 font-medium text-sm">Pending</h3>
-                <span className="text-3xl">⏳</span>
+                <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">⏳</span>
+                </div>
               </div>
-              <p className="text-3xl font-bold text-yellow-600">{pendingCount}</p>
-              <p className="text-gray-500 text-xs mt-2">Awaiting approval</p>
+              <p className="text-3xl font-bold text-gray-800">{pendingCount}</p>
+              <p className="text-gray-400 text-xs mt-1">Awaiting approval</p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="text-gray-600 font-medium text-sm">Avg Rating</h3>
-                <span className="text-3xl">📊</span>
+                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">📊</span>
+                </div>
               </div>
-              <p className="text-3xl font-bold text-blue-600">{averageRating}</p>
-              <p className="text-gray-500 text-xs mt-2">out of 5 stars</p>
+              <p className="text-3xl font-bold text-gray-800">{averageRating}</p>
+              <p className="text-gray-400 text-xs mt-1">out of 5 stars</p>
             </div>
           </div>
 
@@ -241,7 +249,7 @@ const ReviewsManagement = () => {
           )}
 
           {/* Filters and Search */}
-          <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-8">
+          <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100 mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Search */}
               <div>
@@ -251,7 +259,7 @@ const ReviewsManagement = () => {
                   placeholder="Search by author, content, or product ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
                 />
               </div>
 
@@ -261,7 +269,7 @@ const ReviewsManagement = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
                 >
                   <option value="All">All Reviews</option>
                   <option value="Approved">Approved</option>
@@ -273,12 +281,16 @@ const ReviewsManagement = () => {
 
           {/* Loading State */}
           {loading ? (
-            <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200">
+            <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-100">
               <LoadingSpinner size="md" message="Loading reviews..." />
             </div>
           ) : filteredReviews.length === 0 ? (
-            <div className="bg-white p-12 rounded-xl shadow-md border border-gray-200 text-center">
-              <p className="text-gray-600 text-lg">No reviews found</p>
+            <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-100 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">⭐</span>
+              </div>
+              <p className="text-gray-600 text-lg font-medium mb-1">No reviews found</p>
+              <p className="text-gray-400 text-sm">Try adjusting your search or filters</p>
             </div>
           ) : (
             /* Reviews List */
@@ -286,7 +298,7 @@ const ReviewsManagement = () => {
               {filteredReviews.map((review) => (
                 <div
                   key={review.id}
-                  className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200"
+                  className="bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200"
                 >
                   {/* Review Header */}
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
@@ -314,7 +326,7 @@ const ReviewsManagement = () => {
                       <button
                         onClick={() => handleApproveReview(review.id)}
                         disabled={actionInProgress}
-                        className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm disabled:opacity-50"
+                        className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-200 font-medium text-sm disabled:opacity-50 shadow-sm hover:shadow-md"
                       >
                         Approve
                       </button>
@@ -326,14 +338,14 @@ const ReviewsManagement = () => {
                         setShowEditModal(true);
                       }}
                       disabled={actionInProgress}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm disabled:opacity-50"
+                      className="flex-1 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 transition-all duration-200 font-medium text-sm disabled:opacity-50"
                     >
                       Edit Content
                     </button>
                     <button
                       onClick={() => handleDeleteReview(review.id)}
                       disabled={actionInProgress}
-                      className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium text-sm disabled:opacity-50"
+                      className="flex-1 px-4 py-2 bg-red-50 text-red-700 border border-red-200 rounded-lg hover:bg-red-100 transition-all duration-200 font-medium text-sm disabled:opacity-50"
                     >
                       Delete
                     </button>
@@ -349,15 +361,15 @@ const ReviewsManagement = () => {
       {showEditModal && selectedReview && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
-              <h2 className="text-2xl font-bold text-gray-800">Edit Review Content</h2>
+            <div className="p-4 sm:p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Edit Review Content</h2>
               <button
                 onClick={() => {
                   setShowEditModal(false);
                   setEditedContent('');
                   setSelectedReview(null);
                 }}
-                className="text-gray-500 hover:text-gray-700 font-bold text-2xl"
+                className="text-gray-500 hover:text-gray-700 font-bold text-2xl transition-colors duration-200"
               >
                 ×
               </button>
@@ -382,16 +394,16 @@ const ReviewsManagement = () => {
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                   placeholder="Edit the review content..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200 resize-none"
                   rows="6"
                 />
-                <p className="text-gray-500 text-xs mt-2">
+                <p className="text-gray-400 text-xs mt-2">
                   {editedContent.length} / 1000 characters
                 </p>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-gray-200">
+              <div className="flex gap-3 pt-4 border-t border-gray-100">
                 <button
                   onClick={() => {
                     setShowEditModal(false);
@@ -399,14 +411,14 @@ const ReviewsManagement = () => {
                     setSelectedReview(null);
                   }}
                   disabled={actionInProgress}
-                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => handleEditContent(selectedReview.id)}
                   disabled={actionInProgress || editedContent.trim() === ''}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-200 font-medium disabled:opacity-50 shadow-sm hover:shadow-md"
                 >
                   Save Changes
                 </button>

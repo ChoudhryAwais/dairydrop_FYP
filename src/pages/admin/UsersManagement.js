@@ -129,12 +129,12 @@ const UsersManagement = () => {
   return (
     <>
 
-      <div className="flex-1 p-4 sm:p-6 md:p-8">
+      <div className="flex-1 p-4 sm:p-6 md:p-8 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-1 sm:mb-2">Users Management</h1>
-            <p className="text-sm sm:text-base text-gray-600">Manage user roles and account status</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-1">Users Management</h1>
+            <p className="text-sm sm:text-base text-gray-500">Manage user roles and account status</p>
           </div>
 
           {/* Error Alert */}
@@ -148,35 +148,60 @@ const UsersManagement = () => {
           )}
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
-              <p className="text-gray-600 text-xs sm:text-sm font-medium">Total Users</p>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-2">{stats.totalUsers}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-gray-600 font-medium text-sm">Total Users</h3>
+                <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">👥</span>
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-800">{stats.totalUsers}</p>
             </div>
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
-              <p className="text-gray-600 text-xs sm:text-sm font-medium">Admin</p>
-              <p className="text-2xl sm:text-3xl font-bold text-blue-600 mt-2">{stats.adminUsers}</p>
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-gray-600 font-medium text-sm">Admin</h3>
+                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">🛡️</span>
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-800">{stats.adminUsers}</p>
             </div>
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
-              <p className="text-gray-600 text-xs sm:text-sm font-medium">Customers</p>
-              <p className="text-2xl sm:text-3xl font-bold text-green-600 mt-2">{stats.customerUsers}</p>
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-gray-600 font-medium text-sm">Customers</h3>
+                <div className="w-10 h-10 bg-teal-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">🛒</span>
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-800">{stats.customerUsers}</p>
             </div>
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
-              <p className="text-gray-600 text-xs sm:text-sm font-medium">Active</p>
-              <p className="text-2xl sm:text-3xl font-bold text-emerald-600 mt-2">{stats.activeUsers}</p>
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-gray-600 font-medium text-sm">Active</h3>
+                <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">✅</span>
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-800">{stats.activeUsers}</p>
             </div>
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
-              <p className="text-gray-600 text-xs sm:text-sm font-medium">Disabled</p>
-              <p className="text-2xl sm:text-3xl font-bold text-red-600 mt-2">{stats.disabledUsers}</p>
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-gray-600 font-medium text-sm">Disabled</h3>
+                <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+                  <span className="text-xl">🚫</span>
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-800">{stats.disabledUsers}</p>
             </div>
           </div>
 
           {/* Filters and Search */}
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200 mb-6 sm:mb-8">
+          <div className="bg-white p-4 sm:p-5 rounded-lg shadow-sm border border-gray-100 mb-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {/* Search */}
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Search by Email or Name
                 </label>
                 <input
@@ -184,19 +209,19 @@ const UsersManagement = () => {
                   placeholder="Search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
                 />
               </div>
 
               {/* Role Filter */}
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Filter by Role
                 </label>
                 <select
                   value={filterRole}
                   onChange={(e) => setFilterRole(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
                 >
                   <option>All</option>
                   <option>admin</option>
@@ -206,13 +231,13 @@ const UsersManagement = () => {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Filter by Status
                 </label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
                 >
                   <option>All</option>
                   <option>Active</option>
@@ -222,13 +247,13 @@ const UsersManagement = () => {
 
               {/* Sort By */}
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sort By
                 </label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-200"
                 >
                   <option value="createdAt">Join Date</option>
                   <option value="email">Email</option>
@@ -238,24 +263,27 @@ const UsersManagement = () => {
               </div>
             </div>
 
-            <div className="mt-4 text-xs sm:text-sm text-gray-600">
-              Showing {filteredUsers.length} of {users.length} users
+            <div className="mt-4 text-sm text-gray-500 font-medium">
+              {filteredUsers.length} of {users.length} users
             </div>
           </div>
 
           {/* Users Table / Mobile Cards */}
           {filteredUsers.length === 0 ? (
-            <div className="bg-white p-8 sm:p-12 rounded-lg shadow-md border border-gray-200 text-center">
-              <p className="text-gray-500 text-base sm:text-lg">No users found</p>
-              <p className="text-gray-400 text-sm sm:text-base mt-2">Try adjusting your filters</p>
+            <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-100 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">👥</span>
+              </div>
+              <p className="text-gray-600 text-lg font-medium mb-1">No users found</p>
+              <p className="text-gray-400 text-sm">Try adjusting your filters</p>
             </div>
           ) : (
             <>
               {/* Desktop Table View */}
-              <div className="hidden md:block bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+              <div className="hidden md:block bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gray-100 border-b border-gray-200">
+                    <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700">Email</th>
                         <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700">Name</th>
@@ -267,7 +295,7 @@ const UsersManagement = () => {
                     </thead>
                     <tbody>
                       {filteredUsers.map((user, index) => (
-                        <tr key={user.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
                           <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-800">
                             {user.email}
                           </td>
@@ -280,11 +308,11 @@ const UsersManagement = () => {
                             <select
                               value={user.role || 'customer'}
                               onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                              className={`w-full px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium border ${
+                              className={`w-full px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-medium border ${
                                 user.role === 'admin'
-                                  ? 'bg-blue-100 text-blue-700 border-blue-300'
-                                  : 'bg-green-100 text-green-700 border-green-300'
-                              } cursor-pointer hover:opacity-80`}
+                                  ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                  : 'bg-teal-50 text-teal-700 border-teal-200'
+                              } cursor-pointer hover:opacity-80 transition-opacity duration-200`}
                             >
                               <option value="customer">Customer</option>
                               <option value="admin">Admin</option>
@@ -311,10 +339,10 @@ const UsersManagement = () => {
                               onClick={() => 
                                 handleDisableAccount(user.id, !user.disabled)
                               }
-                              className={`px-3 sm:px-4 py-1 rounded text-xs sm:text-sm font-medium transition-colors ${
+                              className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                                 user.disabled
-                                  ? 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-300'
-                                  : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-300'
+                                  ? 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 hover:shadow-sm'
+                                  : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 hover:shadow-sm'
                               }`}
                             >
                               {user.disabled ? 'Enable' : 'Disable'}
@@ -330,7 +358,7 @@ const UsersManagement = () => {
               {/* Mobile Card View */}
               <div className="md:hidden space-y-4">
                 {filteredUsers.map((user) => (
-                  <div key={user.id} className="bg-white rounded-lg shadow-md border border-gray-200 p-4">
+                  <div key={user.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
                     <div className="space-y-3">
                       {/* Email */}
                       <div>
@@ -356,11 +384,11 @@ const UsersManagement = () => {
                           <select
                             value={user.role || 'customer'}
                             onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                            className={`w-full px-2 py-1 rounded text-xs font-medium border ${
+                            className={`w-full px-2 py-1.5 rounded-lg text-xs font-medium border ${
                               user.role === 'admin'
-                                ? 'bg-blue-100 text-blue-700 border-blue-300'
-                                : 'bg-green-100 text-green-700 border-green-300'
-                            } cursor-pointer hover:opacity-80`}
+                                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                : 'bg-teal-50 text-teal-700 border-teal-200'
+                            } cursor-pointer hover:opacity-80 transition-opacity duration-200`}
                           >
                             <option value="customer">Customer</option>
                             <option value="admin">Admin</option>
@@ -397,10 +425,10 @@ const UsersManagement = () => {
                         onClick={() => 
                           handleDisableAccount(user.id, !user.disabled)
                         }
-                        className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors ${
+                        className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           user.disabled
-                            ? 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-300'
-                            : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-300'
+                            ? 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 hover:shadow-sm'
+                            : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 hover:shadow-sm'
                         }`}
                       >
                         {user.disabled ? 'Enable Account' : 'Disable Account'}
@@ -417,28 +445,28 @@ const UsersManagement = () => {
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 max-w-sm w-full mx-auto">
-            <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full mx-auto">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">
               {confirmAction?.type === 'role' ? 'Change User Role?' : 'Change Account Status?'}
             </h3>
-            <p className="text-sm text-gray-600 mb-4 sm:mb-6">
+            <p className="text-sm text-gray-600 mb-6">
               {confirmAction?.type === 'role'
                 ? `Are you sure you want to change this user's role to ${confirmAction?.value}?`
                 : `Are you sure you want to ${confirmAction?.value ? 'disable' : 'enable'} this account?`}
             </p>
-            <div className="flex gap-3 sm:gap-4">
+            <div className="flex gap-3">
               <button
                 onClick={() => {
                   setShowConfirmModal(false);
                   setConfirmAction(null);
                 }}
-                className="flex-1 px-4 py-2 text-sm font-medium bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
+                className="flex-1 px-4 py-2.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmActionHandler}
-                className="flex-1 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2.5 text-sm font-medium bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 Confirm
               </button>
