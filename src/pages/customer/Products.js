@@ -26,6 +26,8 @@ const Products = () => {
   const [notificationType, setNotificationType] = useState('success');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   const categories = ['All Products', 'Milk', 'Cheese', 'Yogurt', 'Butter', 'Cream', 'Ghee', 'Ice Cream', 'Other'];
   const fatContentOptions = ['All', 'Full Fat', 'Low Fat', 'Fat Free', 'Reduced Fat'];
@@ -96,6 +98,7 @@ const Products = () => {
     }
 
     setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [selectedCategory, searchTerm, priceRange, selectedBrand, selectedFatContent, products]);
 
   const handleAddToCart = (product) => {
@@ -113,6 +116,10 @@ const Products = () => {
       setNotificationMessage('');
     }, 3000);
   };
+
+  // Pagination calculation
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   return (
     <div className="space-y-0">
@@ -324,7 +331,7 @@ const Products = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredProducts.map((product) => (
+                    {paginatedProducts.map((product) => (
                       <ProductCard
                         key={product.id}
                         product={product}
@@ -338,13 +345,41 @@ const Products = () => {
                 )}
 
                 {/* Pagination */}
-                {filteredProducts.length > 0 && (
-                  <div className="flex items-center justify-center gap-2 mt-8">
-                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Prev</button>
-                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">1</button>
-                    <button className="px-3 py-2 bg-green-600 text-white rounded-lg text-sm">2</button>
-                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">3</button>
-                    <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Next</button>
+                {filteredProducts.length > itemsPerPage && (
+                  <div className="mt-8 md:mt-10 flex items-center justify-center gap-1.5 md:gap-2">
+                    <button 
+                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center text-gray-600 hover:text-green-600 hover:bg-green-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                    >
+                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`min-w-[32px] h-8 md:min-w-[40px] md:h-10 px-2 md:px-3 rounded-lg font-semibold text-xs md:text-sm transition-all ${
+                          currentPage === page
+                            ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg scale-110'
+                            : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-green-500 hover:text-green-600'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    
+                    <button 
+                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center text-gray-600 hover:text-green-600 hover:bg-green-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                    >
+                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
                 )}
               </div>

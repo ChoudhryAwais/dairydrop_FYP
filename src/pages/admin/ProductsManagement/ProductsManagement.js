@@ -34,6 +34,17 @@ const ProductsManagement = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [filterCategory, setFilterCategory] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
+  // Calculate filtered products
+  const filteredProducts = filterCategory === 'All'
+    ? products
+    : products.filter(product => product.category === filterCategory);
+
+  // Calculate paginated products
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const CATEGORIES = ['Milk', 'Yogurt', 'Cheese', 'Butter', 'Cream', 'Ghee', 'Ice Cream', 'Other'];
 
@@ -217,10 +228,6 @@ const ProductsManagement = () => {
     }
   };
 
-  const filteredProducts = filterCategory === 'All'
-    ? products
-    : products.filter(p => p.category === filterCategory);
-
   if (loading) {
     return (
       <>
@@ -254,14 +261,22 @@ const ProductsManagement = () => {
 
         <ProductsList
           products={products}
-          filteredProducts={filteredProducts}
+          filteredProducts={paginatedProducts}
           filterCategory={filterCategory}
-          setFilterCategory={setFilterCategory}
+          setFilterCategory={(category) => {
+            setFilterCategory(category);
+            setCurrentPage(1); // Reset to first page when filtering
+          }}
           showForm={showForm}
           setShowForm={setShowForm}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
           CATEGORIES={CATEGORIES}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          totalFilteredProducts={filteredProducts.length}
+          itemsPerPage={itemsPerPage}
         />
 
         <ProductForm
