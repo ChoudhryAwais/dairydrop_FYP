@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/myContext';
 import { getUserOrders } from '../../../services/orders/orderService';
@@ -135,7 +136,13 @@ const OrderHistory = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.4 }}
+      className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50"
+    >
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -207,7 +214,7 @@ const OrderHistory = () => {
           setFilterStatus={setFilterStatus}
         />
       </div>
-    </div>
+      </motion.div>
   );
 };
 
