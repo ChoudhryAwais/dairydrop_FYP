@@ -13,7 +13,7 @@ import Cart from './pages/customer/Cart';
 import Checkout from './pages/customer/Checkout';
 import OrderConfirmation from './pages/customer/OrderConfirmation';
 import Profile from './pages/customer/profile/Profile';
-import OrderHistory from './pages/customer/OrderHistory';
+import OrderHistory from './pages/customer/OrderHistory/OrderHistory';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import ForgotPassword from './pages/auth/ForgotPassword';
