@@ -6,6 +6,7 @@ import { resetPassword } from '../../services/auth/authService';
 import ErrorMessage from '../../components/ErrorMessage';
 import { InlineSpinner } from '../../components/LoadingSpinner';
 import auth_bg from '../../assets/login/auth_bg.avif';
+import { MdLock, MdVpnKey, MdEmail } from 'react-icons/md';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -92,7 +93,7 @@ export default function ForgotPassword() {
         {/* Info Card */}
         <div className="relative z-10 bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-30">
           <div className="flex items-start gap-3">
-            <span className="text-2xl">🔒</span>
+            <MdLock className="text-2xl text-white" />
             <div>
               <p className="text-white font-semibold text-sm mb-2">Security First</p>
               <p className="text-white text-opacity-80 text-xs leading-relaxed">
@@ -118,7 +119,7 @@ export default function ForgotPassword() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">🔑</span>
+              <MdVpnKey className="text-3xl text-green-600" />
             </div>
             <h2 className="text-3xl font-bold text-green-900 mb-2">Forgot Password?</h2>
             <p className="text-gray-500 text-sm">
@@ -138,7 +139,7 @@ export default function ForgotPassword() {
           {success ? (
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">✉️</span>
+                <MdEmail className="text-3xl text-green-600" />
               </div>
               <h3 className="text-lg font-semibold text-green-900 mb-2">Check your email</h3>
               <p className="text-gray-600 text-sm mb-6">
@@ -165,7 +166,7 @@ export default function ForgotPassword() {
                   Email Address
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">✉️</span>
+                  <MdEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
                   <input
                     id="email"
                     type="email"

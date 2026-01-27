@@ -7,6 +7,7 @@ import { useAuth } from '../../context/myContext';
 import ErrorMessage from '../../components/ErrorMessage';
 import { InlineSpinner } from '../../components/LoadingSpinner';
 import auth_bg from '../../assets/login/auth_bg.avif';
+import { MdEmail, MdLock, MdVisibility, MdVisibilityOff, MdStar } from 'react-icons/md';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -87,7 +88,7 @@ export default function Login() {
         <div className="relative z-10 bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-30">
           <div className="flex gap-1 mb-4">
             {[...Array(5)].map((_, i) => (
-              <span key={i} className="text-yellow-300 text-lg">★</span>
+              <MdStar key={i} className="text-yellow-300 text-lg" />
             ))}
           </div>
           <p className="text-white text-sm leading-relaxed mb-4">
@@ -149,7 +150,7 @@ export default function Login() {
                 Email or Phone Number
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">✉️</span>
+                <MdEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
                 <input
                   id="email"
                   type="email"
@@ -167,7 +168,7 @@ export default function Login() {
                 Password
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔒</span>
+                <MdLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -181,7 +182,7 @@ export default function Login() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                  {showPassword ? <MdVisibilityOff className="text-xl" /> : <MdVisibility className="text-xl" />}
                 </button>
               </div>
             </div>
