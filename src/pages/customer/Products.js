@@ -8,6 +8,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
 import ProductCard from '../../components/ProductCard';
 import { Leaf } from "lucide-react";
+import { MdClose, MdInventory } from 'react-icons/md';
 
 const Products = () => {
   const { addToCart } = useCart();
@@ -165,7 +166,9 @@ const Products = () => {
                 {selectedCategory !== 'All Products' && (
                   <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                     <span>Category: {selectedCategory}</span>
-                    <button onClick={() => setSelectedCategory('All Products')} className="hover:text-green-900">✕</button>
+                    <button onClick={() => setSelectedCategory('All Products')} className="hover:text-green-900">
+                      <MdClose />
+                    </button>
                   </div>
                 )}
                 <button

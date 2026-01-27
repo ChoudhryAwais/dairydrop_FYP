@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { MdLocalDrink, MdShoppingCart } from 'react-icons/md';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateCartItem, calculateTotals } = useCart();
@@ -94,7 +95,7 @@ const Cart = () => {
                                 className="w-full h-full object-contain p-2"
                               />
                             ) : (
-                              <span className="text-3xl md:text-2xl">🥛</span>
+                              <MdLocalDrink className="text-3xl md:text-2xl text-gray-400" />
                             )}
                           </div>
 
@@ -296,7 +297,7 @@ const Cart = () => {
       ) : (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <div className="text-8xl mb-6">🛒</div>
+            <MdShoppingCart className="text-8xl text-gray-300 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">Start adding some delicious dairy products to your cart!</p>
             <Link

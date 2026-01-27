@@ -5,6 +5,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getOrderById } from '../../services/orders/orderService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
+import { MdCheckCircle, MdLocalDrink } from 'react-icons/md';
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
@@ -61,7 +62,7 @@ const OrderConfirmation = () => {
     <div className="space-y-8">
       {/* Success Message */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-8 text-center">
-        <div className="text-6xl mb-4">✓</div>
+        <MdCheckCircle className="text-6xl text-green-600 mx-auto mb-4" />
         <h1 className="text-4xl font-bold text-green-700 mb-2">Order Confirmed!</h1>
         <p className="text-gray-700 text-lg mb-4">Thank you for your purchase. Your order has been placed successfully.</p>
         <div className="bg-white rounded-lg p-4 inline-block">
@@ -89,7 +90,7 @@ const OrderConfirmation = () => {
                             className="w-full h-full object-contain p-1"
                           />
                         ) : (
-                          <div className="text-4xl">🥛</div>
+                          <MdLocalDrink className="text-4xl text-gray-300" />
                         )}
                       </div>
                       <div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { MdLocalDrink, MdCheckCircle, MdCancel, MdPhone } from 'react-icons/md';
 
 const OrdersList = ({ 
   filteredOrders,
@@ -117,7 +118,7 @@ const OrdersList = ({
                         {item.imageUrl ? (
                           <img src={item.imageUrl} alt={item.name} className="w-full h-full object-contain p-0.5 md:p-1" />
                         ) : (
-                          <span className="text-lg md:text-2xl">🥛</span>
+                          <MdLocalDrink className="text-lg md:text-2xl text-gray-400" />
                         )}
                       </div>
                     ))}
@@ -211,7 +212,7 @@ const OrdersList = ({
                                 : 'bg-white text-gray-400 border-gray-200'
                             }`}
                           >
-                            {getStatusStep(order.status) > index ? '✓' : index + 1}
+                            {getStatusStep(order.status) > index ? <MdCheckCircle /> : index + 1}
                           </div>
                           <p className={`text-[10px] md:text-xs font-semibold mt-2 md:mt-3 text-center max-w-[60px] ${getStatusStep(order.status) >= index ? 'text-gray-900' : 'text-gray-500'}`}>{step}</p>
                         </div>
@@ -311,7 +312,9 @@ const OrdersList = ({
                           <span className="font-semibold text-gray-900 block mb-1 md:mb-2">{order.customerInfo.fullName}</span>
                           {order.customerInfo.address}<br />
                           {order.customerInfo.city}, {order.customerInfo.postalCode}<br />
-                          <span className="font-medium text-gray-900 mt-1 md:mt-2 inline-block">📞 {order.customerInfo.phone}</span>
+                          <span className="font-medium text-gray-900 mt-1 md:mt-2 inline-block flex items-center gap-1">
+                            <MdPhone className="inline" /> {order.customerInfo.phone}
+                          </span>
                         </p>
                       </div>
                     </div>

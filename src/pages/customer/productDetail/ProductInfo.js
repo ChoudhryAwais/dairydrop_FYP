@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { MdLocalDrink, MdInventory, MdCheckCircle, MdShoppingCart, MdFavoriteBorder, MdLocalShipping } from 'react-icons/md';
+import { FaLeaf } from 'react-icons/fa';
 
 const ProductInfo = ({
   product,
@@ -32,7 +34,7 @@ const ProductInfo = ({
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <div className="text-9xl">🥛</div>
+                <MdLocalDrink className="text-9xl text-gray-300" />
               )}
             </div>
             {/* Image Thumbnails */}
@@ -53,7 +55,7 @@ const ProductInfo = ({
                       className="w-full h-full object-contain"
                     />
                   ) : (
-                    <span className="text-2xl">🥛</span>
+                    <MdLocalDrink className="text-2xl text-gray-400" />
                   )}
                 </button>
               ))}
@@ -98,12 +100,12 @@ const ProductInfo = ({
             {/* Product Badges */}
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-green-50 rounded-lg p-3 text-center">
-                <div className="text-green-600 text-lg font-semibold">📦</div>
+                <MdInventory className="text-green-600 text-lg font-semibold mx-auto" />
                 <p className="text-xs text-gray-600 mt-1">Shelf Life</p>
                 <p className="text-sm font-semibold text-gray-900">{product.shelfLife || 'N/A'}</p>
               </div>
               <div className="bg-green-50 rounded-lg p-3 text-center">
-                <div className="text-green-600 text-lg font-semibold">✓</div>
+                <MdCheckCircle className="text-green-600 text-lg font-semibold mx-auto" />
                 <p className="text-xs text-gray-600 mt-1">Pasteurized</p>
                 <p className="text-sm font-semibold text-gray-900">Yes</p>
               </div>
@@ -181,10 +183,10 @@ const ProductInfo = ({
                     return currentCartQty >= product.quantity;
                   })()}
                 >
-                  🛒 Add to Cart
+                  <MdShoppingCart className="inline text-lg" /> Add to Cart
                 </button>
                 <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                  ♡
+                  <MdFavoriteBorder className="text-xl" />
                 </button>
               </div>
 
@@ -214,13 +216,13 @@ const ProductInfo = ({
             {/* Features */}
             <div className="flex gap-4 text-sm text-gray-600 border-t pt-4">
               <div className="flex items-center gap-1">
-                <span className="text-lg">🌿</span> 100% Organic
+                <FaLeaf className="text-lg text-green-600" /> 100% Organic
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-lg">✓</span> Non-GMO
+                <MdCheckCircle className="text-lg text-green-600" /> Non-GMO
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-lg">🚚</span> Free Shipping over $25
+                <MdLocalShipping className="text-lg text-green-600" /> Free Shipping over $25
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { MdCheckCircle, MdLocalDrink } from 'react-icons/md';
 
 const ProductTabs = ({
   product,
@@ -125,23 +126,23 @@ const ProductTabs = ({
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Why Organic?</h3>
                 <ul className="space-y-3">
                   <li className="flex gap-2">
-                    <span className="text-green-600 font-bold">✓</span>
+                    <MdCheckCircle className="text-green-600 font-bold text-xl flex-shrink-0" />
                     <span className="text-gray-700">No synthetic hormones or antibiotics</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-green-600 font-bold">✓</span>
+                    <MdCheckCircle className="text-green-600 font-bold text-xl flex-shrink-0" />
                     <span className="text-gray-700">Cows raised on organic pasture</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-green-600 font-bold">✓</span>
+                    <MdCheckCircle className="text-green-600 font-bold text-xl flex-shrink-0" />
                     <span className="text-gray-700">Higher levels of Omega-3 fatty acids</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-green-600 font-bold">✓</span>
+                    <MdCheckCircle className="text-green-600 font-bold text-xl flex-shrink-0" />
                     <span className="text-gray-700">Support for sustainable farming practices</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-green-600 font-bold">✓</span>
+                    <MdCheckCircle className="text-green-600 font-bold text-xl flex-shrink-0" />
                     <span className="text-gray-700">Never tested on animals</span>
                   </li>
                 </ul>

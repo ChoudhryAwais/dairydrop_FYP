@@ -8,6 +8,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import ErrorMessage from '../../../components/ErrorMessage';
 import OrderFilters from './OrderFilters';
 import OrdersList from './OrdersList';
+import { MdPending, MdSync, MdLocalShipping, MdCheckCircle, MdCancel, MdHelp } from 'react-icons/md';
 
 const OrderHistory = () => {
   const { currentUser, isAuthenticated } = useAuth();
@@ -77,15 +78,16 @@ const OrderHistory = () => {
   };
 
   const getStatusIcon = (status) => {
-    const icons = {
-      'Pending': '📋',
-      'Processing': '⚙️',
-      'Shipped': '🚚',
-      'Out for Delivery': '🚚',
-      'Delivered': '✓',
-      'Cancelled': '✕',
+    const IconMap = {
+      'Pending': MdPending,
+      'Processing': MdSync,
+      'Shipped': MdLocalShipping,
+      'Out for Delivery': MdLocalShipping,
+      'Delivered': MdCheckCircle,
+      'Cancelled': MdCancel,
     };
-    return icons[status] || '❓';
+    const IconComponent = IconMap[status] || MdHelp;
+    return <IconComponent className="inline" />;
   };
 
   const getStatusStep = (status) => {
