@@ -1,6 +1,7 @@
 import React from 'react';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import OrderDetailsModal from './OrderDetailsModal';
+import {MdLocalShipping } from 'react-icons/md';
 
 const OrdersList = ({
   loading,
@@ -62,7 +63,7 @@ const OrdersList = ({
       ) : filteredOrders.length === 0 ? (
         <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-100 text-center">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">📦</span>
+            <span className="text-3xl flex justify-center"><MdLocalShipping/></span>
           </div>
           <p className="text-gray-600 text-lg font-medium mb-1">No orders found</p>
           <p className="text-gray-400 text-sm">Try adjusting your search or filters</p>

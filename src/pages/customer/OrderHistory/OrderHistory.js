@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 import { useAuth } from '../../../context/myContext';
 import { getUserOrders } from '../../../services/orders/orderService';
+import { getProductById } from '../../../services/products/productService';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import ErrorMessage from '../../../components/ErrorMessage';
 import OrderFilters from './OrderFilters';
@@ -23,6 +24,10 @@ const OrderHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState('success');
+  const [showNotification, setShowNotification] = useState(false);
+  const [processingBuyAgain, setProcessingBuyAgain] = useState(false);
 
   const getStatusColor = (status) => {
     const statusStyles = {
@@ -105,33 +110,99 @@ const OrderHistory = () => {
 
   const { clearCart, addToCart } = useCart();
 
-  const handleBuyAgain = (order) => {
+  const handleBuyAgain = async (order) => {
     if (!order || !order.items) return;
 
-    // Clear existing cart and re-add items from the order
-    clearCart();
+    setProcessingBuyAgain(true);
+    const messages = [];
+    let allOutOfStock = true;
+    let hasErrors = false;
 
-    order.items.forEach((item) => {
-      // Build a product object compatible with addToCart
-      const product = {
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        imageUrl: item.imageUrl || item.image || '',
-        // use original stock if available, otherwise fall back to ordered quantity
-        quantity: item.stock ?? item.available ?? item.quantity ?? 0,
-      };
-
-      // Add the same quantity that was ordered
+    // Check stock for each item
+    for (const item of order.items) {
       try {
-        addToCart(product, item.quantity || 1);
-      } catch (err) {
-        console.error('Error adding item to cart during Buy Again:', err);
-      }
-    });
+        // Fetch current product data to get latest stock
+        const result = await getProductById(item.id);
+        
+        if (!result.success || !result.product) {
+          messages.push(`${item.name} is no longer available`);
+          hasErrors = true;
+          continue;
+        }
 
-    // Navigate to cart page to show the restored items
-    navigate('/cart');
+        const currentProduct = result.product;
+        const availableStock = currentProduct.quantity || 0;
+        const requestedQuantity = item.quantity || 1;
+
+        if (availableStock === 0) {
+          messages.push(`${item.name} is out of stock`);
+          hasErrors = true;
+        } else if (availableStock < requestedQuantity) {
+          // Add partial quantity
+          const productToAdd = {
+            id: currentProduct.id,
+            name: currentProduct.name,
+            price: currentProduct.price,
+            imageUrl: currentProduct.imageUrl || currentProduct.image || '',
+            quantity: availableStock,
+          };
+          
+          const addResult = addToCart(productToAdd, availableStock);
+          if (addResult.success) {
+            messages.push(`${item.name}: Only ${availableStock} of ${requestedQuantity} available. Added ${availableStock} to cart.`);
+            allOutOfStock = false;
+          }
+        } else {
+          // Add full quantity
+          const productToAdd = {
+            id: currentProduct.id,
+            name: currentProduct.name,
+            price: currentProduct.price,
+            imageUrl: currentProduct.imageUrl || currentProduct.image || '',
+            quantity: availableStock,
+          };
+          
+          const addResult = addToCart(productToAdd, requestedQuantity);
+          if (addResult.success) {
+            allOutOfStock = false;
+          }
+        }
+      } catch (err) {
+        console.error('Error checking product stock:', err);
+        messages.push(`Error checking ${item.name}`);
+        hasErrors = true;
+      }
+    }
+
+    setProcessingBuyAgain(false);
+
+    // Show notifications
+    if (allOutOfStock) {
+      setNotificationType('error');
+      setNotificationMessage(messages.join(' • '));
+      setShowNotification(true);
+    } else if (hasErrors || messages.length > 0) {
+      setNotificationType('warning');
+      setNotificationMessage(messages.join(' • '));
+      setShowNotification(true);
+    } else {
+      setNotificationType('success');
+      setNotificationMessage('Items added to cart successfully!');
+      setShowNotification(true);
+    }
+
+    // Auto-hide notification after 5 seconds
+    setTimeout(() => {
+      setShowNotification(false);
+      setNotificationMessage('');
+    }, 5000);
+
+    // Navigate to cart only if at least one item was added
+    if (!allOutOfStock) {
+      setTimeout(() => {
+        navigate('/cart');
+      }, 2000);
+    }
   };
 
   const filteredOrders = filterStatus === 'all'
@@ -175,6 +246,82 @@ const OrderHistory = () => {
       transition={{ duration: 0.4 }}
       className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50"
     >
+      {/* Notification Toast */}
+      {showNotification && (
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          className="fixed top-4 right-4 z-50 max-w-md"
+        >
+          <div className={`p-4 rounded-xl shadow-2xl border-2 ${
+            notificationType === 'success' 
+              ? 'bg-green-50 border-green-200' 
+              : notificationType === 'warning'
+              ? 'bg-yellow-50 border-yellow-200'
+              : 'bg-red-50 border-red-200'
+          }`}>
+            <div className="flex items-start gap-3">
+              <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
+                notificationType === 'success'
+                  ? 'bg-green-100'
+                  : notificationType === 'warning'
+                  ? 'bg-yellow-100'
+                  : 'bg-red-100'
+              }`}>
+                {notificationType === 'success' ? (
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : notificationType === 'warning' ? (
+                  <svg className="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className={`text-sm font-semibold ${
+                  notificationType === 'success'
+                    ? 'text-green-900'
+                    : notificationType === 'warning'
+                    ? 'text-yellow-900'
+                    : 'text-red-900'
+                }`}>
+                  {notificationType === 'success' ? 'Success' : notificationType === 'warning' ? 'Partial Success' : 'Error'}
+                </p>
+                <p className={`text-sm mt-1 ${
+                  notificationType === 'success'
+                    ? 'text-green-700'
+                    : notificationType === 'warning'
+                    ? 'text-yellow-700'
+                    : 'text-red-700'
+                }`}>
+                  {notificationMessage}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowNotification(false)}
+                className={`flex-shrink-0 ${
+                  notificationType === 'success'
+                    ? 'text-green-400 hover:text-green-600'
+                    : notificationType === 'warning'
+                    ? 'text-yellow-400 hover:text-yellow-600'
+                    : 'text-red-400 hover:text-red-600'
+                }`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -245,6 +392,7 @@ const OrderHistory = () => {
           setSearchQuery={setSearchQuery}
           setFilterStatus={setFilterStatus}
           onBuyAgain={handleBuyAgain}
+          processingBuyAgain={processingBuyAgain}
         />
       </div>
       </motion.div>
