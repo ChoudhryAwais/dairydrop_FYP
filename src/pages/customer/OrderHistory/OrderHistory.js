@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../../context/CartContext';
 import { useAuth } from '../../../context/myContext';
 import { getUserOrders } from '../../../services/orders/orderService';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -100,6 +101,37 @@ const OrderHistory = () => {
       'Cancelled': -1, // Cancelled is not shown in timeline
     };
     return steps[status] ?? 0;
+  };
+
+  const { clearCart, addToCart } = useCart();
+
+  const handleBuyAgain = (order) => {
+    if (!order || !order.items) return;
+
+    // Clear existing cart and re-add items from the order
+    clearCart();
+
+    order.items.forEach((item) => {
+      // Build a product object compatible with addToCart
+      const product = {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        imageUrl: item.imageUrl || item.image || '',
+        // use original stock if available, otherwise fall back to ordered quantity
+        quantity: item.stock ?? item.available ?? item.quantity ?? 0,
+      };
+
+      // Add the same quantity that was ordered
+      try {
+        addToCart(product, item.quantity || 1);
+      } catch (err) {
+        console.error('Error adding item to cart during Buy Again:', err);
+      }
+    });
+
+    // Navigate to cart page to show the restored items
+    navigate('/cart');
   };
 
   const filteredOrders = filterStatus === 'all'
@@ -212,6 +244,7 @@ const OrderHistory = () => {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           setFilterStatus={setFilterStatus}
+          onBuyAgain={handleBuyAgain}
         />
       </div>
       </motion.div>
