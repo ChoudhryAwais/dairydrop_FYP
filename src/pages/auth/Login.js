@@ -46,7 +46,10 @@ export default function Login() {
     if (result.success) {
       // Role-based routing is handled by the useEffect above
     } else {
-      setError(result.error || 'Failed to login');
+      // Log the original error for debugging
+      console.log('[Login Error]', result.error);
+      // Show only a user-friendly message
+      setError('Incorrect email or password.');
     }
     setLoading(false);
   };

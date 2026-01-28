@@ -55,6 +55,14 @@ export default function SignUp() {
       return;
     }
 
+    // Check if email is valid (exists syntactically)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
@@ -75,7 +83,14 @@ export default function SignUp() {
     if (result.success) {
       navigate('/');
     } else {
-      setError(result.error || 'Failed to create account');
+      // Log the original error for debugging
+      console.log('[SignUp Error]', result.error);
+      // Show a user-friendly error for common email issues
+      if (result.error && result.error.toLowerCase().includes('email')) {
+        setError('This email is already in use or invalid.');
+      } else {
+        setError('Failed to create account. Please try again.');
+      }
     }
     setLoading(false);
   };
