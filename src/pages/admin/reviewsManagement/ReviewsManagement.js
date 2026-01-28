@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import ErrorMessage from '../../../components/ErrorMessage';
 import { getAllReviews, deleteReview, approveReview, updateReviewContent } from '../../../services/reviews/reviewService';
 import ReviewsStats from './ReviewsStats';
@@ -69,26 +70,45 @@ const ReviewsManagement = () => {
   }, [reviews, statusFilter, searchTerm]);
 
   // Handle delete review
-  const handleDeleteReview = async (reviewId) => {
-    if (window.confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
-      try {
-        setActionInProgress(true);
-        const result = await deleteReview(reviewId);
-        if (result.success) {
-          setReviews(reviews.filter(r => r.id !== reviewId));
-          setSuccessMessage('Review deleted successfully');
-          setTimeout(() => setSuccessMessage(''), 3000);
-          setError('');
-        } else {
-          setError('Failed to delete review');
-        }
-      } catch (err) {
-        setError('Error deleting review');
-        console.log('[v0] Error deleting review:', err);
-      } finally {
-        setActionInProgress(false);
-      }
-    }
+  const handleDeleteReview = (reviewId) => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <span className="text-gray-800 text-sm">Are you sure you want to delete this review? This action cannot be undone.</span>
+        <div className="flex gap-2 mt-1">
+          <button
+            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-xs font-semibold"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              setActionInProgress(true);
+              try {
+                const result = await deleteReview(reviewId);
+                if (result.success) {
+                  setReviews(reviews.filter(r => r.id !== reviewId));
+                  setSuccessMessage('Review deleted successfully');
+                  setTimeout(() => setSuccessMessage(''), 3000);
+                  setError('');
+                } else {
+                  setError('Failed to delete review');
+                }
+              } catch (err) {
+                setError('Error deleting review');
+                console.log('[v0] Error deleting review:', err);
+              } finally {
+                setActionInProgress(false);
+              }
+            }}
+          >
+            Delete
+          </button>
+          <button
+            className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 text-xs font-semibold"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: 8000 });
   };
 
   // Handle approve review

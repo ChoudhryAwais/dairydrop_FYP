@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/myContext';
@@ -27,6 +28,7 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [editingAddressId, setEditingAddressId] = useState(null);
+  // Remove toast confirm state
 
   // Form states
   const [profileForm, setProfileForm] = useState({
@@ -241,30 +243,45 @@ const Profile = () => {
     }
   };
 
-  const handleRemoveAddress = async (addressToRemove) => {
-    if (!window.confirm('Are you sure you want to delete this address?')) {
-      return;
-    }
-
-    setSaving(true);
-    setErrorMessage('');
-
-    try {
-      const result = await removeAddress(currentUser.uid, addressToRemove);
-
-      if (result.success) {
-        setAddresses(prev => prev.filter(addr => addr.id !== addressToRemove.id));
-        setSuccessMessage('Address removed successfully!');
-        setTimeout(() => setSuccessMessage(''), 3000);
-      } else {
-        setErrorMessage(result.error || 'Failed to remove address');
-      }
-    } catch (error) {
-      console.error('[v0] Error removing address:', error);
-      setErrorMessage('An error occurred while removing the address');
-    } finally {
-      setSaving(false);
-    }
+  const handleRemoveAddress = (addressToRemove) => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <span className="text-gray-800 text-sm">Are you sure you want to delete this address?</span>
+        <div className="flex gap-2 mt-1">
+          <button
+            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-xs font-semibold"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              setSaving(true);
+              setErrorMessage('');
+              try {
+                const result = await removeAddress(currentUser.uid, addressToRemove);
+                if (result.success) {
+                  setAddresses(prev => prev.filter(addr => addr.id !== addressToRemove.id));
+                  setSuccessMessage('Address removed successfully!');
+                  setTimeout(() => setSuccessMessage(''), 3000);
+                } else {
+                  setErrorMessage(result.error || 'Failed to remove address');
+                }
+              } catch (error) {
+                console.error('[v0] Error removing address:', error);
+                setErrorMessage('An error occurred while removing the address');
+              } finally {
+                setSaving(false);
+              }
+            }}
+          >
+            Delete
+          </button>
+          <button
+            className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 text-xs font-semibold"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: 8000 });
   };
 
   const handleSetDefaultAddress = async (addressId) => {

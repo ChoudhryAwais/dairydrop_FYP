@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../../../services/products/productService';
 import ErrorMessage from '../../../components/ErrorMessage';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -212,20 +213,39 @@ const ProductsManagement = () => {
     setShowForm(true);
   };
 
-  const handleDelete = async (id, imageUrl) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        const result = await deleteProduct(id, imageUrl);
-        if (result.success) {
-          setError(null);
-          fetchProducts();
-        } else {
-          setError(result.error || 'Failed to delete product');
-        }
-      } catch (err) {
-        setError(err.message);
-      }
-    }
+  const handleDelete = (id, imageUrl) => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <span className="text-gray-800 text-sm">Are you sure you want to delete this product?</span>
+        <div className="flex gap-2 mt-1">
+          <button
+            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-xs font-semibold"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const result = await deleteProduct(id, imageUrl);
+                if (result.success) {
+                  setError(null);
+                  fetchProducts();
+                } else {
+                  setError(result.error || 'Failed to delete product');
+                }
+              } catch (err) {
+                setError(err.message);
+              }
+            }}
+          >
+            Delete
+          </button>
+          <button
+            className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 text-xs font-semibold"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: 8000 });
   };
 
   if (loading) {

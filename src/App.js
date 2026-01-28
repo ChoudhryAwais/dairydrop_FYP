@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AuthProvider, useAuth } from './context/myContext';
@@ -133,12 +134,18 @@ function AppContent() {
   );
 }
 
+
 function App() {
   return (
     <Router>
       <AuthProvider>
         <CartProvider>
-          <AppContent />
+          <>
+            <Toaster position="bottom-center" toastOptions={{
+              style: { fontSize: '0.95rem' },
+            }} />
+            <AppContent />
+          </>
         </CartProvider>
       </AuthProvider>
     </Router>
