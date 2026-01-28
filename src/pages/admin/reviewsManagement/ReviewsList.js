@@ -49,7 +49,7 @@ const ReviewsList = ({
               {getStarRating(review.rating || 0)}
             </div>
             <p className="text-gray-500 text-xs mt-3 md:mt-0">
-              {new Date(review.createdAt).toLocaleDateString()}
+              {review.createdAt?.toDate().toLocaleDateString()}
             </p>
           </div>
 

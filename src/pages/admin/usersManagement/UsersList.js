@@ -40,9 +40,7 @@ const UsersList = ({
                     {user.email}
                   </td>
                   <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-800">
-                    {user.firstName && user.lastName 
-                      ? `${user.firstName} ${user.lastName}` 
-                      : user.firstName || user.lastName || 'N/A'}
+                    {user.name || 'N/A'}
                   </td>
                   <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm">
                     <select
@@ -110,9 +108,7 @@ const UsersList = ({
               <div>
                 <p className="text-xs font-medium text-gray-600">Name</p>
                 <p className="text-sm text-gray-800">
-                  {user.firstName && user.lastName 
-                    ? `${user.firstName} ${user.lastName}` 
-                    : user.firstName || user.lastName || 'N/A'}
+                  {user.name || 'N/A'}
                 </p>
               </div>
 

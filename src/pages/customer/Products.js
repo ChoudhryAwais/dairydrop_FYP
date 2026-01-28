@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
 import ProductCard from '../../components/ProductCard';
 import { Leaf } from "lucide-react";
-import { MdClose, MdInventory } from 'react-icons/md';
+import { MdClose, MdLocalShipping } from 'react-icons/md';
 
 const Products = () => {
   const { addToCart } = useCart();
@@ -155,7 +155,7 @@ const Products = () => {
 
       {/* Main Content */}
       <div className="px-6 space-y-8">
-        {(loading || products.length > 0) && (
+        {
           <>
             {/* Top Bar with Results and Search */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-lg">
@@ -356,7 +356,7 @@ const Products = () => {
                   <ErrorMessage message={error} type="error" />
                 ) : products.length === 0 ? (
                   <div className="text-center py-12">
-                    <div className="text-6xl mb-4">📦</div>
+                    <div className="text-6xl mb-4 flex justify-center"><MdLocalShipping/></div>
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
                       No products available
                     </h3>
@@ -366,7 +366,7 @@ const Products = () => {
                   </div>
                 ) : filteredProducts.length === 0 ? (
                   <div className="text-center py-12">
-                    <div className="text-6xl mb-4">📦</div>
+                    <div className="text-6xl mb-4 flex justify-center"><MdLocalShipping/></div>
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
                       No products found
                     </h3>
@@ -430,7 +430,7 @@ const Products = () => {
               </div>
             </div>
           </>
-        )}
+        }
       </div>
     </motion.div>
   );
