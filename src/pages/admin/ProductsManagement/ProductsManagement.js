@@ -14,6 +14,7 @@ const ProductsManagement = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -38,11 +39,17 @@ const ProductsManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  // Calculate filtered products
-  const filteredProducts = filterCategory === 'All'
+  // Calculate filtered products (category + search)
+  let filteredProducts = filterCategory === 'All'
     ? products
     : products.filter(product => product.category === filterCategory);
-
+  if (searchTerm.trim()) {
+    filteredProducts = filteredProducts.filter(product =>
+      (product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  }
   // Calculate paginated products
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -287,6 +294,8 @@ const ProductsManagement = () => {
             setFilterCategory(category);
             setCurrentPage(1); // Reset to first page when filtering
           }}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           showForm={showForm}
           setShowForm={setShowForm}
           handleEdit={handleEdit}

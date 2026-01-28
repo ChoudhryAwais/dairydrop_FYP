@@ -7,6 +7,8 @@ const ProductsList = ({
   filteredProducts,
   filterCategory,
   setFilterCategory,
+  searchTerm,
+  setSearchTerm,
   showForm,
   setShowForm,
   handleEdit,
@@ -107,6 +109,16 @@ const ProductsList = ({
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
+
+        {/* Search Input */}
+        <input
+          type="text"
+          placeholder="Search by name, description, or brand..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 bg-white text-gray-700 text-sm transition-all duration-200 w-80"
+          style={{ minWidth: 200 }}
+        />
 
         <div className="ml-auto text-gray-500 text-sm font-medium">
           {filteredProducts.length} of {products.length} products
